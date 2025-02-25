@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+@layer components {
+  .bg-pastel-purple {
+    @apply bg-[#CB9DF0];
+  }
+
+  .bg-pastel-pink {
+    @apply bg-[#F0C1E1];
+  }
+
+  .bg-pastel-peach {
+    @apply bg-[#FDDBBB];
+  }
+
+  .bg-pastel-yellow {
+    @apply bg-[#FFF9BF];
+  }
+
+  .btn-yellow {
+    @apply bg-[#FCE77E] hover:bg-[#e3d171] transition-colors duration-200;
+  }
+}
