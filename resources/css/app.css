@@ -6,6 +6,18 @@
     display: none;
 }
 
+@layer base {
+    html {
+        font-family: 'Roboto', system-ui, sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(to bottom right, #ffffff 0%, #FDDBBB 100%);
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        background-position: center;
+    }
+}
+
+
 @layer components {
   .bg-pastel-purple {
     @apply bg-[#CB9DF0];
@@ -26,4 +38,22 @@
   .btn-yellow {
     @apply bg-[#FCE77E] hover:bg-[#e3d171] transition-colors duration-200;
   }
+}
+
+@layer utilities {
+    .bg-glass {
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Ajout des classes pour le breakpoint 770px */
+    @media (min-width: 770px) {
+        .min-\[770px\]\:hidden {
+            display: none;
+        }
+        .min-\[770px\]\:flex {
+            display: flex;
+        }
+    }
 }

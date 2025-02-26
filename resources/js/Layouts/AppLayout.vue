@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import ApplicationMark from "@/Components/ApplicationMark.vue";
 import Banner from "@/Components/Banner.vue";
@@ -21,7 +21,7 @@ const switchToTeam = (team) => {
             team_id: team.id,
         },
         {
-            preserveState: false,
+            preserveScroll: false,
         }
     );
 };
@@ -29,81 +29,70 @@ const switchToTeam = (team) => {
 const logout = () => {
     router.post(route("logout"));
 };
+
+// Fonction pour fermer le menu
+const closeMenu = () => {
+    showingNavigationDropdown.value = false;
+};
+
+// Gestionnaire de clic en dehors du menu
+const handleClickOutside = (event) => {
+    const menu = document.getElementById("mobile-menu");
+    const hamburgerButton = document.getElementById("hamburger-button");
+
+    if (
+        menu &&
+        !menu.contains(event.target) &&
+        !hamburgerButton.contains(event.target)
+    ) {
+        closeMenu();
+    }
+};
+
+// Ajout/suppression des event listeners
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+});
+
+onUnmounted(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <template>
     <div>
         <Head :title="title" />
-
         <Banner />
 
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav
-                class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
-            >
-                <!-- Primary Navigation Menu -->
+        <div class="min-h-screen">
+            <nav class="border-b border-gray-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <!-- Logo -->
+                        <!-- Logo et Nom -->
+                        <div class="flex items-center">
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('welcome')">
-                                    <ApplicationMark class="block h-9 w-auto" />
+                                <Link :href="route('home')">
+                                    <img
+                                        src="/images/logo.png"
+                                        alt="Effy Nails"
+                                        class="h-8 w-auto"
+                                    />
                                 </Link>
                             </div>
-
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                            <span class="ml-3 text-xl font-bold font-caveat"
+                                >EFFYNAILS</span
                             >
-                                <NavLink
-                                    :href="route('welcome')"
-                                    :active="route().current('welcome')"
-                                >
-                                    Accueil
-                                </NavLink>
-                                <NavLink
-                                    :href="route('presentation')"
-                                    :active="route().current('presentation')"
-                                >
-                                    Présentation
-                                </NavLink>
-                                <NavLink
-                                    :href="route('tarifs')"
-                                    :active="route().current('tarifs')"
-                                >
-                                    Tarifs
-                                </NavLink>
-                                <NavLink
-                                    :href="route('portfolio')"
-                                    :active="route().current('portfolio')"
-                                >
-                                    Portfolio
-                                </NavLink>
-                                <NavLink
-                                    :href="route('contact')"
-                                    :active="route().current('contact')"
-                                >
-                                    Contact
-                                </NavLink>
-                                <NavLink
-                                    :href="route('reservation')"
-                                    :active="route().current('reservation')"
-                                    class="bg-[#FF2D20] text-white px-4 py-2 rounded-md hover:bg-[#FF2D20]/80"
-                                >
-                                    Réservation
-                                </NavLink>
-                            </div>
                         </div>
 
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
+                        <!-- Bouton hamburger -->
+                        <div class="min-[770px]:hidden flex items-center">
                             <button
+                                id="hamburger-button"
                                 @click="
                                     showingNavigationDropdown =
                                         !showingNavigationDropdown
                                 "
-                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-black hover:text-gray-700 focus:outline-none"
                             >
                                 <svg
                                     class="h-6 w-6"
@@ -136,66 +125,151 @@ const logout = () => {
                                 </svg>
                             </button>
                         </div>
+
+                        <!-- Navigation Links Desktop -->
+                        <div
+                            class="hidden min-[770px]:flex space-x-8 items-center"
+                        >
+                            <NavLink
+                                v-for="(link, index) in [
+                                    { name: 'Accueil', route: 'home' },
+                                    {
+                                        name: 'Présentation',
+                                        route: 'presentation',
+                                    },
+                                    { name: 'Tarifs', route: 'tarifs' },
+                                    { name: 'Portfolio', route: 'portfolio' },
+                                    { name: 'Contact', route: 'contact' },
+                                ]"
+                                :key="index"
+                                :href="route(link.route)"
+                                :active="route().current(link.route)"
+                            >
+                                {{ link.name }}
+                            </NavLink>
+                            <Link
+                                :href="route('reservation')"
+                                class="ml-4 px-4 py-2 bg-pastel-yellow-btn text-sm font-medium rounded-md hover:bg-pastel-yellow transition-colors duration-300"
+                            >
+                                Réservation
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Responsive Navigation Menu -->
+                <!-- Menu Mobile -->
                 <div
+                    id="mobile-menu"
                     :class="{
                         block: showingNavigationDropdown,
                         hidden: !showingNavigationDropdown,
                     }"
-                    class="sm:hidden"
+                    class="min-[770px]:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            :href="route('welcome')"
-                            :active="route().current('welcome')"
+                            v-for="(link, index) in [
+                                { name: 'Accueil', route: 'home' },
+                                { name: 'Présentation', route: 'presentation' },
+                                { name: 'Tarifs', route: 'tarifs' },
+                                { name: 'Portfolio', route: 'portfolio' },
+                                { name: 'Contact', route: 'contact' },
+                            ]"
+                            :key="index"
+                            :href="route(link.route)"
+                            :active="route().current(link.route)"
                         >
-                            Accueil
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('presentation')"
-                            :active="route().current('presentation')"
-                        >
-                            Présentation
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('tarifs')"
-                            :active="route().current('tarifs')"
-                        >
-                            Tarifs
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('portfolio')"
-                            :active="route().current('portfolio')"
-                        >
-                            Portfolio
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('contact')"
-                            :active="route().current('contact')"
-                        >
-                            Contact
+                            {{ link.name }}
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('reservation')"
-                            :active="route().current('reservation')"
-                            class="bg-[#FF2D20] text-white"
+                            class="bg-pastel-yellow-btn hover:bg-pastel-yellow"
                         >
                             Réservation
                         </ResponsiveNavLink>
+
+                        <!-- Séparation Administrative -->
+                        <div v-if="$page.props.auth.user" class="my-3">
+                            <div class="border-t-4 border-pink-200"></div>
+                            <div
+                                class="py-3 px-3 bg-gradient-to-r from-pink-100 to-purple-100"
+                            >
+                                <div
+                                    class="text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                                >
+                                    Mode Administration
+                                </div>
+                            </div>
+                            <ResponsiveNavLink
+                                v-for="(link, index) in [
+                                    { name: 'Dashboard', route: 'dashboard' },
+                                    {
+                                        name: 'Tarifs Admin',
+                                        route: 'admin.tarifsadmin',
+                                    },
+                                    {
+                                        name: 'Portfolio Admin',
+                                        route: 'admin.portfolioadmin',
+                                    },
+                                ]"
+                                :key="'admin-' + index"
+                                :href="route(link.route)"
+                                :active="route().current(link.route)"
+                                class="bg-gray-50"
+                            >
+                                {{ link.name }}
+                            </ResponsiveNavLink>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Navigation Administrative Desktop -->
+            <nav
+                v-if="$page.props.auth.user"
+                class="hidden min-[770px]:block border-b border-gray-100 bg-gradient-to-r from-pink-100 to-purple-100"
+            >
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-12">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >Mode Administration</span
+                            >
+                            <NavLink
+                                v-for="(link, index) in [
+                                    { name: 'Dashboard', route: 'dashboard' },
+                                    {
+                                        name: 'Tarifs Admin',
+                                        route: 'admin.tarifsadmin',
+                                    },
+                                    {
+                                        name: 'Portfolio Admin',
+                                        route: 'admin.portfolioadmin',
+                                    },
+                                ]"
+                                :key="index"
+                                :href="route(link.route)"
+                                :active="route().current(link.route)"
+                                class="text-sm font-medium text-gray-600 hover:text-gray-900"
+                            >
+                                {{ link.name }}
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
             </nav>
 
             <!-- Page Content -->
-            <main>
-                <div class="py-12">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <slot />
+            <main class="bg-transparent">
+                <div
+                    v-if="$slots.header"
+                    class="bg-white dark:bg-gray-800 shadow"
+                >
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        <slot name="header" />
                     </div>
                 </div>
+                <slot />
             </main>
         </div>
     </div>
