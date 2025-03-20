@@ -76,31 +76,39 @@ function handleImageError() {
                 Mes dernières créations
             </h2>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Grille en mosaïque -->
+            <div class="grid grid-cols-3 grid-rows-3 gap-4">
+                <!-- Image 1 -->
+                <div class="col-span-2 row-span-2 relative">
+                    <div class="relative group">
+                        <img
+                            :src="latestPortfolio[0]?.image_url"
+                            :alt="latestPortfolio[0]?.title"
+                            class="w-full h-full object-cover rounded-lg shadow-md"
+                        />
+                        <div
+                            class="absolute inset-0 flex items-center justify-center text-white text-opacity-50 font-bold text-2xl pointer-events-none"
+                        >
+                            EFFYNAILS
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images 2 à 9 -->
                 <div
-                    v-for="image in latestPortfolio"
-                    :key="image.id"
-                    :class="{ 'col-span-2 row-span-2': image.is_featured }"
-                    class="relative group overflow-hidden rounded-lg"
+                    v-for="(image, index) in latestPortfolio.slice(1, 9)"
+                    :key="index"
+                    class="relative group col-span-1 row-span-1"
                 >
                     <img
                         :src="image.image_url"
                         :alt="image.title"
-                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        class="w-full h-full object-cover rounded-lg shadow-md"
                     />
-                    <!-- Copyright Watermark -->
                     <div
-                        class="absolute bottom-2 right-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded"
+                        class="absolute inset-0 flex items-center justify-center text-white text-opacity-50 font-bold text-2xl pointer-events-none"
                     >
-                        © EFFYNAILS
-                    </div>
-                    <!-- Hover Overlay -->
-                    <div
-                        class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                    >
-                        <p class="text-white text-center p-4">
-                            {{ image.description }}
-                        </p>
+                        EFFYNAILS
                     </div>
                 </div>
             </div>
