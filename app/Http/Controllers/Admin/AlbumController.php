@@ -2,28 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Album;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Http\Controllers\Controller;
 
 class AlbumController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
-            'order' => 'integer',
+            'order' => 'integer|nullable',
         ]);
+
+        // Ajout d'un ordre par défaut si non spécifié
+        if (!isset($validated['order'])) {
+            $validated['order'] = Album::max('order') + 1;
+        }
 
         Album::create($validated);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Album créé avec succès');
     }
 
     // Nouvelle méthode pour la mise à jour
