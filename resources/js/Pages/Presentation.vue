@@ -8,9 +8,7 @@ import { Head } from "@inertiajs/vue3";
 
     <AppLayout>
         <template #header>
-            <h2
-                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
-            >
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Présentation
             </h2>
         </template>
@@ -19,20 +17,16 @@ import { Head } from "@inertiajs/vue3";
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-transparent overflow-hidden sm:rounded-lg">
                     <div class="p-6 lg:p-8">
-                        <h1
-                            class="text-2xl font-medium text-gray-900 dark:text-gray-100"
-                        >
+                        <h1 class="text-2xl font-medium text-gray-900">
                             Bienvenue dans mon univers
                         </h1>
 
-                        <div
-                            class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed"
-                        >
+                        <div class="mt-6 text-gray-500 leading-relaxed">
                             <!-- Contenu à personnaliser -->
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div class="space-y-4">
                                     <h2
-                                        class="text-xl font-semibold text-gray-700 dark:text-gray-300"
+                                        class="text-xl font-semibold text-gray-700"
                                     >
                                         À propos de moi
                                     </h2>

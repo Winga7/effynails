@@ -62,9 +62,7 @@ onMounted(() => {
 
     <AppLayout>
         <template #header>
-            <h2
-                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
-            >
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Réservation
             </h2>
         </template>
@@ -80,13 +78,8 @@ onMounted(() => {
                             class="w-full min-h-[600px]"
                             data-cal-embed
                             data-cal-link="votre-nom/service-manucure"
-                            <!--
-                            À
-                            personnaliser
-                            --
-                        >
-                            data-cal-config='{"layout":"month_view"}' >
-                        </div>
+                            data-cal-config='{"layout":"month_view"}'
+                        ></div>
                     </div>
                 </div>
             </div>

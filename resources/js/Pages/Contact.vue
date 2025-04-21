@@ -20,9 +20,7 @@ const submit = () => {
 
     <AppLayout>
         <template #header>
-            <h2
-                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
-            >
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Contact
             </h2>
         </template>
@@ -30,20 +28,16 @@ const submit = () => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div
-                    class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg"
+                    class="bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg"
                 >
                     <div class="p-6 lg:p-8">
                         <div class="grid md:grid-cols-2 gap-6">
                             <!-- Informations de contact -->
                             <div class="space-y-6">
-                                <h3
-                                    class="text-lg font-semibold text-gray-900 dark:text-gray-100"
-                                >
+                                <h3 class="text-lg font-semibold text-gray-100">
                                     Coordonnées
                                 </h3>
-                                <div
-                                    class="space-y-4 text-gray-600 dark:text-gray-400"
-                                >
+                                <div class="space-y-4 text-gray-400">
                                     <p class="flex items-center">
                                         <svg
                                             class="w-5 h-5 mr-2"
@@ -89,7 +83,7 @@ const submit = () => {
                             <form @submit.prevent="submit" class="space-y-6">
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                        class="block text-sm font-medium text-gray-300"
                                     >
                                         Nom
                                     </label>
@@ -102,7 +96,7 @@ const submit = () => {
 
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                        class="block text-sm font-medium text-gray-300"
                                     >
                                         Email
                                     </label>
@@ -115,7 +109,7 @@ const submit = () => {
 
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                        class="block text-sm font-medium text-gray-300"
                                     >
                                         Message
                                     </label>

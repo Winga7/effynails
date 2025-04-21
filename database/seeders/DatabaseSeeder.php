@@ -31,5 +31,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'owner',
         ]);
+
+        // Seed des tarifs
+        $this->call(TarifSeeder::class);
     }
 }
