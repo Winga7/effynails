@@ -38,6 +38,25 @@ Route::get('/reservation', function () {
     return Inertia::render('Reservation');
 })->name('reservation');
 
+// Routes pour les pages légales
+Route::get('/mentions-legales', function () {
+    return Inertia::render('MentionsLegales');
+})->name('mentions-legales');
+
+Route::get('/plan-du-site', function () {
+    return Inertia::render('PlanDuSite');
+})->name('plan-du-site');
+
+Route::get('/politique-confidentialite', function () {
+    $policyFile = resource_path('markdown/policy.md');
+    $policy = file_exists($policyFile)
+        ? file_get_contents($policyFile)
+        : 'La politique de confidentialité n\'a pas encore été rédigée.';
+    return Inertia::render('PolitiqueConfidentialite', [
+        'policy' => $policy,
+    ]);
+})->name('politique-confidentialite');
+
 // Routes administrateur (nécessitent une connexion)
 Route::middleware([
     'auth:sanctum',

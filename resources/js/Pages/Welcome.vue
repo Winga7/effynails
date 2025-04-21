@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 
 defineProps({
@@ -24,11 +24,18 @@ function handleImageError() {
 
         <!-- Section Héro -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <!-- Image à gauche -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center"
+            >
+                <!-- Image à gauche avec effet d'ombrage moderne -->
                 <div class="relative">
+                    <!-- Container principal de l'image -->
                     <div
-                        class="aspect-square rounded-3xl overflow-hidden shadow-xl"
+                        class="relative rounded-3xl overflow-hidden z-20"
+                        style="
+                            box-shadow: 0 10px 25px -5px rgba(240, 193, 225, 0.6),
+                                0 8px 10px -6px rgba(240, 193, 225, 0.4);
+                        "
                     >
                         <img
                             src="/images/hero-nails.jpg"
@@ -36,14 +43,15 @@ function handleImageError() {
                             class="w-full h-full object-cover"
                         />
                     </div>
-                    <!-- Effet décoratif rose clair derrière l'image -->
+
+                    <!-- Effet décoratif rose clair derrière l'image - Plus visible maintenant -->
                     <div
-                        class="absolute -top-4 -left-4 w-full h-full bg-pastel-pink rounded-3xl -z-10"
+                        class="absolute -top-5 -left-5 w-[95%] h-[95%] bg-gradient-to-br from-pastel-pink to-white rounded-3xl z-10"
                     ></div>
                 </div>
 
                 <!-- Contenu à droite -->
-                <div class="space-y-6">
+                <div class="space-y-7">
                     <h1 class="text-5xl font-caveat">EFFYNAILS</h1>
                     <div class="space-y-4 text-gray-600">
                         <p>
@@ -61,11 +69,12 @@ function handleImageError() {
                             Cupiditate Et Veritas Dolorem.
                         </p>
                     </div>
-                    <button
-                        class="bg-pastel-yellow-btn hover:bg-pastel-yellow px-6 py-3 rounded-full text-sm font-medium transition-colors duration-300"
+                    <Link
+                        :href="route('reservation')"
+                        class="inline-block bg-pastel-yellow-btn hover:bg-pastel-yellow px-8 py-3 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
                     >
-                        Contactez-nous
-                    </button>
+                        Réserver
+                    </Link>
                 </div>
             </div>
         </div>
@@ -115,3 +124,11 @@ function handleImageError() {
         </div>
     </AppLayout>
 </template>
+
+<style>
+/* Ajoutez ces styles à la fin pour renforcer l'effet visuel */
+.pastel-shadow {
+    box-shadow: 0 10px 25px -5px rgba(240, 193, 225, 0.6),
+        0 8px 10px -6px rgba(240, 193, 225, 0.4);
+}
+</style>

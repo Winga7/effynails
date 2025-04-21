@@ -44,26 +44,26 @@
         <!-- Mentions légales -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-center space-x-4 text-sm">
-                <a
-                    href="#"
+                <Link
+                    :href="route('mentions-legales')"
                     class="hover:underline text-gray-700 hover:text-gray-900"
                 >
                     Mentions légales
-                </a>
+                </Link>
                 <span>|</span>
-                <a
-                    href="#"
+                <Link
+                    :href="route('plan-du-site')"
                     class="hover:underline text-gray-700 hover:text-gray-900"
                 >
                     Plan du site
-                </a>
+                </Link>
                 <span>|</span>
-                <a
-                    href="#"
+                <Link
+                    :href="route('politique-confidentialite')"
                     class="hover:underline text-gray-700 hover:text-gray-900"
                 >
-                    Charte d'utilisation des données personnelles
-                </a>
+                    Politique de confidentialité
+                </Link>
             </div>
         </div>
 
@@ -73,14 +73,15 @@
         <!-- Made with ❤️ -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center text-sm text-gray-600">
-                Made with ❤️ by Winga &copy; {{ new Date().getFullYear() }}
+                Made with ❤️ by <a href="https://www.winga.be">Winga</a> &copy;
+                {{ new Date().getFullYear() }}
             </div>
         </div>
     </footer>
 </template>
 
 <script setup>
-// Aucune logique nécessaire pour ce composant
+import { Link } from "@inertiajs/vue3";
 </script>
 
 <style scoped>

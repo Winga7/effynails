@@ -1,6 +1,6 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+import { Head } from "@inertiajs/vue3";
+import AppLayout from "@/Layouts/AppLayout.vue";
 
 defineProps({
     terms: String,
@@ -8,17 +8,28 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Terms of Service" />
+    <Head title="Conditions d'Utilisation" />
 
-    <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
-        <div class="pt-4 bg-gray-100 dark:bg-gray-900">
-            <div class="min-h-screen flex flex-col items-center pt-6 sm:pt-0">
-                <div>
-                    <AuthenticationCardLogo />
+    <AppLayout class="bg-gradient-to-br from-white to-pastel-purple">
+        <template #header>
+            <h2
+                class="font-semibold text-3xl text-gray-800 font-caveat leading-tight"
+            >
+                Conditions d'Utilisation
+            </h2>
+        </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div
+                    class="bg-white/80 backdrop-blur-sm overflow-hidden shadow-sm rounded-lg"
+                >
+                    <div
+                        class="p-6 lg:p-8 prose max-w-none text-gray-700"
+                        v-html="terms"
+                    />
                 </div>
-
-                <div class="w-full sm:max-w-2xl mt-6 p-6 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg prose dark:prose-invert" v-html="terms" />
             </div>
         </div>
-    </div>
+    </AppLayout>
 </template>

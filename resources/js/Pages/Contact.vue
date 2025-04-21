@@ -20,7 +20,9 @@ const submit = () => {
 
     <AppLayout class="bg-gradient-to-br from-white to-pastel-pink">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2
+                class="font-semibold text-2xl text-gray-800 font-caveat leading-tight"
+            >
                 Contact
             </h2>
         </template>

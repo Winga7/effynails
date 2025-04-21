@@ -103,102 +103,118 @@ async function deleteTarif(id) {
 <template>
     <Head title="Administration des Tarifs" />
 
-    <AppLayout class="bg-gradient-to-br from-white to-pastel-purple">
+    <AppLayout class="bg-gradient-to-br from-white to-pastel-pink">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2
+                class="font-semibold text-3xl text-gray-800 font-caveat leading-tight"
+            >
                 Administration des Tarifs
             </h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- Indicateur de chargement -->
                 <div
-                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg p-6"
+                    v-if="loading"
+                    class="flex justify-center items-center py-4 mb-6"
                 >
-                    <!-- Message d'erreur -->
                     <div
-                        v-if="error"
-                        class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"
-                    >
-                        {{ error }}
-                    </div>
+                        class="animate-spin rounded-full h-10 w-10 border-4 border-pink-200 border-t-pink-500"
+                    ></div>
+                </div>
 
-                    <!-- Indicateur de chargement -->
-                    <div
-                        v-if="loading"
-                        class="flex justify-center items-center py-4"
-                    >
-                        <div
-                            class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"
-                        ></div>
-                    </div>
+                <!-- Message d'erreur -->
+                <div
+                    v-if="error"
+                    class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg shadow-sm"
+                >
+                    {{ error }}
+                </div>
 
-                    <!-- Tableau des tarifs existants -->
-                    <div class="mb-8">
-                        <h3 class="text-lg font-medium mb-4">
-                            Liste des tarifs
-                        </h3>
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
+                <!-- Tableau des tarifs existants -->
+                <div
+                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg p-6 mb-8"
+                >
+                    <h3
+                        class="text-xl font-semibold font-caveat text-pink-500 mb-4"
+                    >
+                        Liste des tarifs
+                    </h3>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-pink-100">
+                            <thead class="bg-pink-50">
                                 <tr>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        class="px-6 py-3 text-left text-xs font-medium text-pink-500 uppercase tracking-wider"
                                     >
                                         Nom
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        class="px-6 py-3 text-left text-xs font-medium text-pink-500 uppercase tracking-wider"
                                     >
                                         Prix (€)
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        class="px-6 py-3 text-left text-xs font-medium text-pink-500 uppercase tracking-wider"
                                     >
                                         Durée (min)
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        class="px-6 py-3 text-left text-xs font-medium text-pink-500 uppercase tracking-wider"
                                     >
                                         Description
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        class="px-6 py-3 text-left text-xs font-medium text-pink-500 uppercase tracking-wider"
                                     >
                                         Actions
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody
-                                class="bg-white dark:bg-gray-800 divide-y divide-gray-200"
-                            >
+                            <tbody class="bg-white divide-y divide-pink-100">
                                 <tr
                                     v-for="tarif in tarifs"
                                     :key="tarif.id"
-                                    class="hover:bg-gray-50 dark:hover:bg-gray-700"
+                                    class="hover:bg-pink-50 transition-colors duration-150"
                                 >
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ tarif.nom }}
+                                        <span class="font-medium">{{
+                                            tarif.nom
+                                        }}</span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-pink-500 font-semibold"
+                                    >
                                         {{ tarif.prix }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ tarif.duree }}
+                                        <div class="flex items-center">
+                                            <i
+                                                class="fas fa-clock text-pastel-pink mr-2"
+                                            ></i>
+                                            {{ tarif.duree }}
+                                        </div>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 max-w-md truncate">
                                         {{ tarif.description }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <button
                                             @click="editTarif(tarif)"
-                                            class="text-indigo-600 hover:text-indigo-900 mr-2"
+                                            class="mr-2 px-3 py-1 bg-pink-100 text-pink-700 rounded-full hover:bg-pink-200 transition-colors"
                                         >
+                                            <i class="fas fa-edit mr-1"></i>
                                             Modifier
                                         </button>
                                         <button
                                             @click="deleteTarif(tarif.id)"
-                                            class="text-red-600 hover:text-red-900"
+                                            class="px-3 py-1 bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors"
                                         >
+                                            <i
+                                                class="fas fa-trash-alt mr-1"
+                                            ></i>
                                             Supprimer
                                         </button>
                                     </td>
@@ -206,143 +222,177 @@ async function deleteTarif(id) {
                                 <tr v-if="tarifs.length === 0 && !loading">
                                     <td
                                         colspan="5"
-                                        class="px-6 py-4 text-center text-gray-500"
+                                        class="px-6 py-8 text-center text-gray-500"
                                     >
-                                        Aucun tarif disponible
+                                        <div class="flex flex-col items-center">
+                                            <i
+                                                class="fas fa-list text-4xl text-pink-200 mb-2"
+                                            ></i>
+                                            Aucun tarif disponible
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                </div>
 
-                    <!-- Formulaire d'édition -->
-                    <div v-if="editingTarif" class="mt-6 p-4 border rounded-lg">
-                        <h3 class="text-lg font-medium mb-4">
+                <!-- Formulaire d'édition -->
+                <div
+                    v-if="editingTarif"
+                    class="bg-white/90 backdrop-blur-sm shadow-xl sm:rounded-lg p-6 mb-8 border-l-4 border-pink-500"
+                >
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-edit text-pink-500 mr-2 text-xl"></i>
+                        <h3
+                            class="text-xl font-semibold font-caveat text-pink-500"
+                        >
                             Modifier un tarif
                         </h3>
-                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Nom</label
-                                >
-                                <input
-                                    type="text"
-                                    v-model="editingTarif.nom"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Prix (€)</label
-                                >
-                                <input
-                                    type="number"
-                                    v-model="editingTarif.prix"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Durée (min)</label
-                                >
-                                <input
-                                    type="number"
-                                    v-model="editingTarif.duree"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Description</label
-                                >
-                                <textarea
-                                    v-model="editingTarif.description"
-                                    rows="3"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                ></textarea>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex justify-end space-x-3">
-                            <button
-                                @click="cancelEdit"
-                                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                            >
-                                Annuler
-                            </button>
-                            <button
-                                @click="saveTarif"
-                                :disabled="loading"
-                                class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
-                            >
-                                Enregistrer
-                            </button>
-                        </div>
                     </div>
 
-                    <!-- Formulaire d'ajout -->
-                    <div class="mt-8 p-4 border rounded-lg">
-                        <h3 class="text-lg font-medium mb-4">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Nom</label
+                            >
+                            <input
+                                type="text"
+                                v-model="editingTarif.nom"
+                                class="block w-full rounded-md border-pink-200 shadow-sm focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Prix (€)</label
+                            >
+                            <input
+                                type="number"
+                                v-model="editingTarif.prix"
+                                class="block w-full rounded-md border-pink-200 shadow-sm focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all"
+                                min="0"
+                                step="0.01"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Durée (min)</label
+                            >
+                            <input
+                                type="number"
+                                v-model="editingTarif.duree"
+                                class="block w-full rounded-md border-pink-200 shadow-sm focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all"
+                                min="0"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Description</label
+                            >
+                            <textarea
+                                v-model="editingTarif.description"
+                                rows="3"
+                                class="block w-full rounded-md border-pink-200 shadow-sm focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button
+                            @click="cancelEdit"
+                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors flex items-center"
+                        >
+                            <i class="fas fa-times mr-1"></i> Annuler
+                        </button>
+                        <button
+                            @click="saveTarif"
+                            :disabled="loading"
+                            class="px-4 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 disabled:opacity-50 transition-colors flex items-center"
+                        >
+                            <i class="fas fa-save mr-1"></i> Enregistrer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Formulaire d'ajout -->
+                <div
+                    class="bg-white/90 backdrop-blur-sm shadow-xl sm:rounded-lg p-6 border-t-4 border-pastel-yellow-btn"
+                >
+                    <div class="flex items-center mb-4">
+                        <i
+                            class="fas fa-plus-circle text-pastel-yellow-btn mr-2 text-xl"
+                        ></i>
+                        <h3
+                            class="text-xl font-semibold font-caveat text-gray-800"
+                        >
                             Ajouter un nouveau tarif
                         </h3>
-                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Nom</label
-                                >
-                                <input
-                                    type="text"
-                                    v-model="nouveauTarif.nom"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Prix (€)</label
-                                >
-                                <input
-                                    type="number"
-                                    v-model="nouveauTarif.prix"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Durée (min)</label
-                                >
-                                <input
-                                    type="number"
-                                    v-model="nouveauTarif.duree"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Description</label
-                                >
-                                <textarea
-                                    v-model="nouveauTarif.description"
-                                    rows="3"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                ></textarea>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex justify-end">
-                            <button
-                                @click="addTarif"
-                                :disabled="loading"
-                                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Nom</label
                             >
-                                Ajouter
-                            </button>
+                            <input
+                                type="text"
+                                v-model="nouveauTarif.nom"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pastel-yellow-btn focus:ring focus:ring-yellow-100 focus:ring-opacity-50 transition-all"
+                                placeholder="Ex: Manucure simple"
+                            />
                         </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Prix (€)</label
+                            >
+                            <input
+                                type="number"
+                                v-model="nouveauTarif.prix"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pastel-yellow-btn focus:ring focus:ring-yellow-100 focus:ring-opacity-50 transition-all"
+                                min="0"
+                                step="0.01"
+                                placeholder="Ex: 25"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Durée (min)</label
+                            >
+                            <input
+                                type="number"
+                                v-model="nouveauTarif.duree"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pastel-yellow-btn focus:ring focus:ring-yellow-100 focus:ring-opacity-50 transition-all"
+                                min="0"
+                                placeholder="Ex: 30"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1"
+                                >Description</label
+                            >
+                            <textarea
+                                v-model="nouveauTarif.description"
+                                rows="3"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pastel-yellow-btn focus:ring focus:ring-yellow-100 focus:ring-opacity-50 transition-all"
+                                placeholder="Ex: Soin des ongles et des cuticules"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button
+                            @click="addTarif"
+                            :disabled="loading"
+                            class="px-4 py-2 bg-pastel-yellow-btn text-white rounded-full hover:bg-pastel-yellow hover:text-gray-800 disabled:opacity-50 transition-all flex items-center shadow-sm"
+                        >
+                            <i class="fas fa-plus mr-1"></i> Ajouter
+                        </button>
                     </div>
                 </div>
             </div>

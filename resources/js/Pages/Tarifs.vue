@@ -28,68 +28,98 @@ onMounted(async () => {
 
     <AppLayout class="bg-gradient-to-br from-white to-pastel-pink">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2
+                class="font-semibold text-2xl text-gray-800 leading-tight font-caveat"
+            >
                 Nos Tarifs
             </h2>
         </template>
 
         <div class="py-12 min-h-screen">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- Indicateur de chargement -->
                 <div
-                    class="bg-white/70 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg"
+                    v-if="loading"
+                    class="flex justify-center items-center py-8"
                 >
-                    <div class="p-6 lg:p-8">
-                        <!-- Indicateur de chargement -->
+                    <div
+                        class="animate-spin rounded-full h-10 w-10 border-4 border-pink-200 border-t-pink-400"
+                    ></div>
+                </div>
+
+                <!-- Message d'erreur -->
+                <div
+                    v-if="error"
+                    class="text-center py-8 text-pink-500 bg-pink-50 rounded-lg shadow-sm"
+                >
+                    {{ error }}
+                </div>
+
+                <!-- Grille des tarifs -->
+                <div
+                    v-if="!loading && !error"
+                    class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                    <!-- Cartes de tarifs dynamiques -->
+                    <div
+                        v-for="tarif in tarifs"
+                        :key="tarif.id"
+                        class="relative bg-white rounded-2xl p-6 shadow-md transform transition-all duration-300 hover:scale-102 hover:shadow-lg overflow-hidden group"
+                    >
+                        <!-- Effet décoratif en haut à gauche -->
                         <div
-                            v-if="loading"
-                            class="flex justify-center items-center py-8"
-                        >
+                            class="absolute -top-10 -left-10 bg-pastel-pink w-20 h-20 rounded-full opacity-50"
+                        ></div>
+
+                        <!-- Effet décoratif en bas à droite -->
+                        <div
+                            class="absolute -bottom-10 -right-10 bg-pastel-peach w-20 h-20 rounded-full opacity-50"
+                        ></div>
+
+                        <div class="relative z-10">
+                            <h3
+                                class="text-xl font-caveat font-semibold text-gray-800"
+                            >
+                                {{ tarif.nom }}
+                            </h3>
                             <div
-                                class="animate-spin rounded-full h-10 w-10 border-b-2 border-pink-300"
+                                class="mt-2 text-3xl font-caveat text-pink-500"
+                            >
+                                {{ tarif.prix }}€
+                            </div>
+                            <div
+                                class="w-16 h-1 bg-gradient-to-r from-pastel-pink to-pastel-peach my-3 rounded-full"
                             ></div>
-                        </div>
+                            <div class="mt-2 space-y-1 text-gray-600">
+                                <p class="flex items-center">
+                                    <i
+                                        class="fas fa-clock text-pastel-pink mr-2"
+                                    ></i>
+                                    {{ tarif.duree }} minutes
+                                </p>
+                                <p class="pt-1">{{ tarif.description }}</p>
+                            </div>
 
-                        <!-- Message d'erreur -->
-                        <div
-                            v-if="error"
-                            class="text-center py-8 text-pink-300"
-                        >
-                            {{ error }}
-                        </div>
-
-                        <!-- Grille des tarifs -->
-                        <div
-                            v-if="!loading && !error"
-                            class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                        >
-                            <!-- Cartes de tarifs dynamiques -->
+                            <!-- Bouton réserver au survol -->
                             <div
-                                v-for="tarif in tarifs"
-                                :key="tarif.id"
-                                class="bg-pink-900/80 rounded-lg p-6 shadow-md transform transition duration-300 hover:scale-105"
+                                class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                             >
-                                <h3 class="text-lg font-semibold text-pink-100">
-                                    {{ tarif.nom }}
-                                </h3>
-                                <div
-                                    class="mt-4 text-3xl font-bold text-pink-300"
+                                <a
+                                    href="#"
+                                    class="inline-block px-5 py-1.5 bg-pastel-yellow-btn hover:bg-pastel-yellow text-sm font-medium rounded-full transition-colors duration-300"
                                 >
-                                    {{ tarif.prix }}€
-                                </div>
-                                <div class="mt-4 space-y-2 text-pink-100">
-                                    <p>• Durée : {{ tarif.duree }} minutes</p>
-                                    <p>{{ tarif.description }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Message si aucun tarif -->
-                            <div
-                                v-if="tarifs.length === 0"
-                                class="col-span-full text-center py-10 text-pink-200"
-                            >
-                                Aucun tarif disponible pour le moment.
+                                    Réserver
+                                </a>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Message si aucun tarif -->
+                    <div
+                        v-if="tarifs.length === 0"
+                        class="col-span-full text-center py-10 text-gray-500 bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm"
+                    >
+                        Aucun tarif disponible pour le moment.
                     </div>
                 </div>
             </div>
