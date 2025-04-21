@@ -18,7 +18,7 @@ const submit = () => {
 <template>
     <Head title="Contact" />
 
-    <AppLayout>
+    <AppLayout class="bg-gradient-to-br from-white to-pastel-pink">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Contact

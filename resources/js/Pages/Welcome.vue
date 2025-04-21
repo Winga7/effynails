@@ -19,11 +19,11 @@ function handleImageError() {
 </script>
 
 <template>
-    <AppLayout>
+    <AppLayout class="bg-gradient-to-br from-white to-pastel-peach">
         <Head title="Accueil - EFFYNAILS" />
 
         <!-- Section Héro -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <!-- Image à gauche -->
                 <div class="relative">

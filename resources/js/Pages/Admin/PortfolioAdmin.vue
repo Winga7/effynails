@@ -121,7 +121,7 @@ const handleImageUpload = (event) => {
 <template>
     <Head title="Gestion du Portfolio" />
 
-    <AppLayout>
+    <AppLayout class="bg-gradient-to-br from-white to-pastel-peach">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Gestion du Portfolio

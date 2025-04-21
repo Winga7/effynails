@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import { Head, Link, router } from "@inertiajs/vue3";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import ApplicationMark from "@/Components/ApplicationMark.vue";
 import Banner from "@/Components/Banner.vue";
 import Dropdown from "@/Components/Dropdown.vue";
@@ -14,6 +14,30 @@ defineProps({
 });
 
 const showingNavigationDropdown = ref(false);
+
+// Obtenir la route actuelle
+const page = usePage();
+const currentRoute = computed(() => route().current());
+
+// Définir les couleurs de fond pour chaque page
+const headerBackgroundClass = computed(() => {
+    switch (currentRoute.value) {
+        case "home":
+            return "bg-gradient-to-r from-white to-pastel-peach";
+        case "presentation":
+            return "bg-gradient-to-r from-white to-pastel-purple";
+        case "tarifs":
+            return "bg-gradient-to-r from-white to-pastel-pink";
+        case "portfolio":
+            return "bg-gradient-to-r from-white to-pastel-peach";
+        case "contact":
+            return "bg-gradient-to-r from-white to-pastel-pink";
+        case "reservation":
+            return "bg-gradient-to-r from-white to-pastel-purple";
+        default:
+            return "bg-white bg-opacity-50"; // Fallback pour les autres pages
+    }
+});
 
 const switchToTeam = (team) => {
     router.put(
@@ -66,7 +90,12 @@ onUnmounted(() => {
         <Banner />
 
         <div class="min-h-screen">
-            <nav class="bg-transparent">
+            <nav
+                :class="[
+                    headerBackgroundClass,
+                    'transition-colors duration-300',
+                ]"
+            >
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <!-- Logo et Nom -->

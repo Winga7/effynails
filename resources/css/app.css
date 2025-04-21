@@ -1,4 +1,4 @@
-@import '@fortawesome/fontawesome-free/css/all.css';
+@import "@fortawesome/fontawesome-free/css/all.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,36 +9,35 @@
 
 @layer base {
     html {
-        font-family: 'Roboto', system-ui, sans-serif;
+        font-family: "Roboto", system-ui, sans-serif;
         min-height: 100vh;
-        background: linear-gradient(to bottom right, #ffffff 0%, #FDDBBB 100%);
+        /* background: linear-gradient(to bottom right, #ffffff 0%, #FDDBBB 100%); */
         background-attachment: fixed;
         background-size: 100% 100%;
         background-position: center;
     }
 }
 
-
 @layer components {
-  .bg-pastel-purple {
-    @apply bg-[#CB9DF0];
-  }
+    .bg-pastel-purple {
+        @apply bg-[#CB9DF0];
+    }
 
-  .bg-pastel-pink {
-    @apply bg-[#F0C1E1];
-  }
+    .bg-pastel-pink {
+        @apply bg-[#F0C1E1];
+    }
 
-  .bg-pastel-peach {
-    @apply bg-[#FDDBBB];
-  }
+    .bg-pastel-peach {
+        @apply bg-[#FDDBBB];
+    }
 
-  .bg-pastel-yellow {
-    @apply bg-[#FFF9BF];
-  }
+    .bg-pastel-yellow {
+        @apply bg-[#FFF9BF];
+    }
 
-  .btn-yellow {
-    @apply bg-[#FCE77E] hover:bg-[#e3d171] transition-colors duration-200;
-  }
+    .btn-yellow {
+        @apply bg-[#FCE77E] hover:bg-[#e3d171] transition-colors duration-200;
+    }
 }
 
 @layer utilities {

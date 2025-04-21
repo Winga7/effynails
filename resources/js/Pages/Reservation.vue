@@ -60,7 +60,7 @@ onMounted(() => {
 <template>
     <Head title="Réservation" />
 
-    <AppLayout>
+    <AppLayout class="bg-gradient-to-br from-white to-pastel-purple">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Réservation
