@@ -53,20 +53,19 @@ function handleImageError() {
                 <!-- Contenu à droite -->
                 <div class="space-y-7">
                     <h1 class="text-5xl font-caveat">EFFYNAILS</h1>
-                    <div class="space-y-4 text-gray-600">
+                    <div class="space-y-4 text-gray-600 text-justif">
                         <p>
-                            Lorem Ipsum Dolor Sit Amet, Aut Esse Voluptas Non
-                            Ipsum Voluptatem Et Quod. Ut Quis Laudantium Aut
-                            Tempore In Dolor Error Qui Harum Omnis Est Autem
-                            Ipsa.
+                            Bienvenue dans mon univers dédié à la beauté des
+                            ongles !
                         </p>
                         <p>
-                            Eos Minima Voluptatum Est Unde Est Nihil Fugit Ut
-                            Quis Sequi Et Aspernatur Consequatur. His Velit
-                            Dolores Ex Modi Laboriosam Hic Harum 33 Maiores
-                            Similique. Ad Error LaudantiumEt Repellat Sed
-                            Delectus Amet Aut Nisi Sint Eum Dignissimos
-                            Cupiditate Et Veritas Dolorem.
+                            Je suis une prothésiste ongulaire passionnée et
+                            fraîchement diplômée, prête à sublimer vos mains
+                            avec des poses d'ongles soignées et personnalisées.
+                        </p>
+                        <p>
+                            Découvrez mes services et n'hésitez pas à me
+                            contacter pour prendre rendez-vous!
                         </p>
                     </div>
                     <Link

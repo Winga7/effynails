@@ -7,6 +7,7 @@ use App\Models\Album;
 use App\Http\Controllers\Admin\AlbumController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\TarifController;
+use App\Http\Controllers\ContactController;
 
 // Routes publiques (accessibles sans connexion)
 Route::get('/', function () {
@@ -30,9 +31,9 @@ Route::get('/portfolio', function () {
     return Inertia::render('Portfolio');
 })->name('portfolio');
 
-Route::get('/contact', function () {
-    return Inertia::render('Contact');
-})->name('contact');
+// Routes pour la page de contact
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact-send', [ContactController::class, 'send'])->name('contact.send');
 
 Route::get('/reservation', function () {
     return Inertia::render('Reservation');

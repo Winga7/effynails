@@ -113,4 +113,16 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Global "To" Address for Contact Form
+    |--------------------------------------------------------------------------
+    |
+    | This is the email address that will receive all contact form submissions.
+    | It is stored in the .env file to keep it secure and not expose it in
+    | the source code.
+    |
+    */
+    'to_address' => env('MAIL_TO_ADDRESS', 'contact@example.com'),
+
 ];

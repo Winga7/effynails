@@ -8,6 +8,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import Footer from "@/Components/Footer.vue";
+import CookieConsent from "@/Components/CookieConsent.vue";
 
 defineProps({
     title: String,
@@ -380,5 +381,6 @@ onUnmounted(() => {
         </div>
 
         <Footer />
+        <CookieConsent />
     </div>
 </template>

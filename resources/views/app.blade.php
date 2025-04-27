@@ -11,6 +11,27 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
+        <!-- Google Analytics - Chargement avec consentement par défaut désactivé -->
+        @if(env('GOOGLE_ANALYTICS_ID'))
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GOOGLE_ANALYTICS_ID') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            
+            // Configuration avec consentement par défaut désactivé
+            gtag('config', '{{ env('GOOGLE_ANALYTICS_ID') }}', {
+                'cookie_flags': 'SameSite=None;Secure',
+                'consent': 'default'
+            });
+            
+            // Activation du mode de consentement
+            gtag('consent', 'default', {
+                'analytics_storage': 'denied'
+            });
+        </script>
+        @endif
+
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
