@@ -15,14 +15,17 @@ Route::get('/', function () {
     $latestPortfolio = \App\Models\Portfolio::orderBy('created_at', 'desc')
         ->take(9)
         ->get();
-        
+
     return Inertia::render('Welcome', [
         'latestPortfolio' => $latestPortfolio
     ]);
 })->name('home');
 
 Route::get('/presentation', function () {
-    return Inertia::render('Presentation');
+    $presentation = \App\Models\Presentation::first() ?? new \App\Models\Presentation();
+    return Inertia::render('Presentation', [
+        'presentation' => $presentation
+    ]);
 })->name('presentation');
 
 Route::get('/tarifs', [TarifController::class, 'publicPage'])->name('tarifs');
@@ -82,6 +85,12 @@ Route::middleware([
                 'albums' => Album::with('portfolios')->get(),
             ]);
         })->name('portfolioadmin');
+
+        // Gestion de la présentation
+        Route::get('/presentation', [App\Http\Controllers\Admin\PresentationController::class, 'edit'])
+            ->name('presentation.edit');
+        Route::put('/presentation', [App\Http\Controllers\Admin\PresentationController::class, 'update'])
+            ->name('presentation.update');
 
         // Routes API pour les albums
         Route::post('/albums', [AlbumController::class, 'store'])->name('albums.store');

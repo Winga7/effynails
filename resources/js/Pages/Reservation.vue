@@ -43,24 +43,22 @@ onMounted(() => {
             };
     })(window, "https://app.cal.com/embed/embed.js", "init");
 
-    Cal("init", "15min", { origin: "https://cal.com" });
+    Cal("init", "2h", { origin: "https://cal.com" });
 
     // Définir l'intégration inline
-    Cal.ns["15min"]("inline", {
+    Cal.ns["2h"]("inline", {
         elementOrSelector: "#my-cal-inline",
-        config: { layout: "month_view" },
-        calLink: "effynails-ow8b66/15min",
+        config: {
+            layout: "month_view",
+            theme: "light"
+        },
+        calLink: "effynailss",
     });
 
     // Paramètres d'interface
-    Cal.ns["15min"]("ui", {
+    Cal.ns["2h"]("ui", {
         hideEventTypeDetails: false,
         layout: "month_view",
-        styles: {
-            branding: {
-                brandColor: "#e91e63",
-            },
-        },
     });
 });
 </script>

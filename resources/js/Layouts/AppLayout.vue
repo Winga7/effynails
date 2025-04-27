@@ -15,6 +15,7 @@ defineProps({
 });
 
 const showingNavigationDropdown = ref(false);
+const showScrollButton = ref(false);
 
 // Obtenir la route actuelle
 const page = usePage();
@@ -75,13 +76,28 @@ const handleClickOutside = (event) => {
     }
 };
 
+// Fonction pour gérer l'affichage du bouton de retour en haut
+const handleScroll = () => {
+    showScrollButton.value = window.scrollY > 300;
+};
+
+// Fonction pour remonter en haut
+const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+};
+
 // Ajout/suppression des event listeners
 onMounted(() => {
     document.addEventListener("click", handleClickOutside);
+    window.addEventListener('scroll', handleScroll);
 });
 
 onUnmounted(() => {
     document.removeEventListener("click", handleClickOutside);
+    window.removeEventListener('scroll', handleScroll);
 });
 </script>
 
@@ -234,14 +250,9 @@ onUnmounted(() => {
                             <ResponsiveNavLink
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
-                                    {
-                                        name: 'Tarifs Admin',
-                                        route: 'admin.tarifsadmin',
-                                    },
-                                    {
-                                        name: 'Portfolio Admin',
-                                        route: 'admin.portfolioadmin',
-                                    },
+                                    { name: 'Tarifs Admin', route: 'admin.tarifsadmin' },
+                                    { name: 'Portfolio Admin', route: 'admin.portfolioadmin' },
+                                    { name: 'Présentation', route: 'admin.presentation.edit' }
                                 ]"
                                 :key="'admin-' + index"
                                 :href="route(link.route)"
@@ -304,14 +315,9 @@ onUnmounted(() => {
                             <NavLink
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
-                                    {
-                                        name: 'Tarifs Admin',
-                                        route: 'admin.tarifsadmin',
-                                    },
-                                    {
-                                        name: 'Portfolio Admin',
-                                        route: 'admin.portfolioadmin',
-                                    },
+                                    { name: 'Tarifs Admin', route: 'admin.tarifsadmin' },
+                                    { name: 'Portfolio Admin', route: 'admin.portfolioadmin' },
+                                    { name: 'Présentation', route: 'admin.presentation.edit' },
                                 ]"
                                 :key="index"
                                 :href="route(link.route)"
@@ -382,5 +388,36 @@ onUnmounted(() => {
 
         <Footer />
         <CookieConsent />
+
+        <!-- Bouton retour en haut -->
+        <transition
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="transform translate-y-10 opacity-0"
+            enter-to-class="transform translate-y-0 opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="transform translate-y-0 opacity-100"
+            leave-to-class="transform translate-y-10 opacity-0"
+        >
+            <button
+                v-show="showScrollButton"
+                @click="scrollToTop"
+                class="fixed bottom-8 right-8 bg-pastel-yellow-btn hover:bg-pastel-yellow text-gray-700 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-pastel-yellow focus:ring-offset-2 z-50"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 10l7-7m0 0l7 7m-7-7v18"
+                    />
+                </svg>
+            </button>
+        </transition>
     </div>
 </template>

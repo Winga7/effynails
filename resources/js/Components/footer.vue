@@ -25,10 +25,10 @@
                     rel="noopener noreferrer"
                     class="text-gray-700 hover:text-gray-900"
                 >
-                    <i class="fab fa-pinterest text-2xl"></i>
+                    <i class="fab fa-threads text-2xl"></i>
                 </a>
                 <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/nailseffy/"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-700 hover:text-gray-900"
