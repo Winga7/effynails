@@ -19,32 +19,31 @@ import { Head } from "@inertiajs/vue3";
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-transparent overflow-hidden sm:rounded-lg">
                     <div class="p-6 lg:p-8">
-                        <h1 class="text-2xl font-medium text-gray-900">
+                        <h1 class="text-3xl font-medium text-gray-900 text-center mb-12 font-caveat">
                             Bienvenue dans mon univers
                         </h1>
 
                         <div class="mt-6 text-gray-500 leading-relaxed">
                             <!-- Contenu à personnaliser -->
                             <div class="grid md:grid-cols-2 gap-6">
-                                <div class="space-y-4">
+                                <div class="flex flex-col justify-center">
                                     <h2
-                                        class="text-xl font-semibold text-gray-700"
+                                        class="text-xl font-semibold text-gray-700 mb-4"
                                     >
                                         À propos de moi
                                     </h2>
-                                    <p>Votre texte de présentation ici...</p>
+                                    <div class="space-y-4">
+                                        <p>Votre texte de présentation ici...</p>
+                                    </div>
                                 </div>
                                 <div
-                                    class="rounded-lg overflow-hidden shadow-lg"
+                                    class="flex items-start justify-center h-auto"
                                 >
-                                    <!-- Emplacement pour une image -->
-                                    <div
-                                        class="bg-gray-200 dark:bg-gray-700 h-64 flex items-center justify-center"
-                                    >
-                                        <span class="text-gray-400"
-                                            >Image à venir</span
-                                        >
-                                    </div>
+                                    <img
+                                        src="/images/Fifi.jpg"
+                                        alt="Photo de présentation"
+                                        class="max-h-[400px] w-auto object-contain rounded-lg border-4 border-pastel-purple/30"
+                                    />
                                 </div>
                             </div>
                         </div>
