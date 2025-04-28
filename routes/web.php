@@ -11,8 +11,9 @@ use App\Http\Controllers\ContactController;
 
 // Routes publiques (accessibles sans connexion)
 Route::get('/', function () {
-    // Récupération des dernières images du portfolio
-    $latestPortfolio = \App\Models\Portfolio::orderBy('created_at', 'desc')
+    // Récupération des dernières images du portfolio avec leurs albums
+    $latestPortfolio = \App\Models\Portfolio::with('album')
+        ->orderBy('created_at', 'desc')
         ->take(9)
         ->get();
 
@@ -30,9 +31,8 @@ Route::get('/presentation', function () {
 
 Route::get('/tarifs', [TarifController::class, 'publicPage'])->name('tarifs');
 
-Route::get('/portfolio', function () {
-    return Inertia::render('Portfolio');
-})->name('portfolio');
+Route::get('/portfolio', [App\Http\Controllers\PortfolioController::class, 'index'])->name('portfolio');
+Route::get('/portfolio/{album}', [App\Http\Controllers\PortfolioController::class, 'show'])->name('portfolio.show');
 
 // Routes pour la page de contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');

@@ -12,25 +12,25 @@
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
         <!-- Google Analytics - Chargement avec consentement par défaut désactivé -->
-        @if(env('GOOGLE_ANALYTICS_ID'))
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GOOGLE_ANALYTICS_ID') }}"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-G9F0ZJNSLP"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            
+
             // Configuration avec consentement par défaut désactivé
-            gtag('config', '{{ env('GOOGLE_ANALYTICS_ID') }}', {
-                'cookie_flags': 'SameSite=None;Secure',
-                'consent': 'default'
+            const isProduction = window.location.protocol === 'https:';
+            gtag('config', 'G-G9F0ZJNSLP', {
+                'cookie_flags': isProduction ? 'SameSite=None;Secure' : 'SameSite=Lax',
+                'consent': 'default',
+                'debug_mode': !isProduction
             });
-            
+
             // Activation du mode de consentement
             gtag('consent', 'default', {
                 'analytics_storage': 'denied'
             });
         </script>
-        @endif
 
         <!-- Scripts -->
         @routes

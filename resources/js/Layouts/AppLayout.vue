@@ -85,19 +85,19 @@ const handleScroll = () => {
 const scrollToTop = () => {
     window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth",
     });
 };
 
 // Ajout/suppression des event listeners
 onMounted(() => {
     document.addEventListener("click", handleClickOutside);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 });
 
 onUnmounted(() => {
     document.removeEventListener("click", handleClickOutside);
-    window.removeEventListener('scroll', handleScroll);
+    window.removeEventListener("scroll", handleScroll);
 });
 </script>
 
@@ -250,9 +250,18 @@ onUnmounted(() => {
                             <ResponsiveNavLink
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
-                                    { name: 'Tarifs Admin', route: 'admin.tarifsadmin' },
-                                    { name: 'Portfolio Admin', route: 'admin.portfolioadmin' },
-                                    { name: 'Présentation', route: 'admin.presentation.edit' }
+                                    {
+                                        name: 'Tarifs Admin',
+                                        route: 'admin.tarifsadmin',
+                                    },
+                                    {
+                                        name: 'Portfolio Admin',
+                                        route: 'admin.portfolioadmin',
+                                    },
+                                    {
+                                        name: 'Présentation',
+                                        route: 'admin.presentation.edit',
+                                    },
                                 ]"
                                 :key="'admin-' + index"
                                 :href="route(link.route)"
@@ -315,9 +324,18 @@ onUnmounted(() => {
                             <NavLink
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
-                                    { name: 'Tarifs Admin', route: 'admin.tarifsadmin' },
-                                    { name: 'Portfolio Admin', route: 'admin.portfolioadmin' },
-                                    { name: 'Présentation', route: 'admin.presentation.edit' },
+                                    {
+                                        name: 'Tarifs Admin',
+                                        route: 'admin.tarifsadmin',
+                                    },
+                                    {
+                                        name: 'Portfolio Admin',
+                                        route: 'admin.portfolioadmin',
+                                    },
+                                    {
+                                        name: 'Présentation',
+                                        route: 'admin.presentation.edit',
+                                    },
                                 ]"
                                 :key="index"
                                 :href="route(link.route)"

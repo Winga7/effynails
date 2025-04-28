@@ -27,6 +27,9 @@ export default {
                     "yellow-btn": "#FCE77E",
                 },
             },
+            height: {
+                85: "21.25rem", // 340px
+            },
         },
     },
 

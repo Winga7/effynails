@@ -33,12 +33,12 @@ const rejectCookies = () => {
     consentGiven.value = false;
     showBanner.value = false;
     // Désactiver Google Analytics si refusé
-    window["ga-disable-" + import.meta.env.VITE_GOOGLE_ANALYTICS_ID] = true;
+    window["ga-disable-G-G9F0ZJNSLP"] = true;
 };
 
 const initializeGoogleAnalytics = () => {
     // Cette fonction sera appelée uniquement si le consentement est donné
-    if (window.gtag && import.meta.env.VITE_GOOGLE_ANALYTICS_ID) {
+    if (window.gtag) {
         window.gtag("consent", "update", {
             analytics_storage: "granted",
         });

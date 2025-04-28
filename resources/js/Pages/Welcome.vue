@@ -1,14 +1,51 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { ref } from "vue";
+import ImageModal from "@/Components/ImageModal.vue";
 
-defineProps({
+const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
-    latestPortfolio: Array, // Nouvelles images du portfolio
+    latestPortfolio: {
+        type: Array,
+        default: () => [],
+    },
 });
+
+// État pour le modal
+const showModal = ref(false);
+const selectedImage = ref({
+    title: "",
+    description: "",
+    image_path: "",
+});
+
+// Fonction pour générer l'URL de l'image
+const getImageUrl = (imagePath) => {
+    return `/storage/${imagePath}`;
+};
+
+// Fonction pour ouvrir le modal avec une image
+const openImageModal = (image) => {
+    selectedImage.value = {
+        ...image,
+        image_path: getImageUrl(image.image_path),
+    };
+    showModal.value = true;
+};
+
+// Fonction pour fermer le modal
+const closeModal = () => {
+    showModal.value = false;
+    selectedImage.value = {
+        title: "",
+        description: "",
+        image_path: "",
+    };
+};
 
 function handleImageError() {
     document.getElementById("screenshot-container")?.classList.add("!hidden");
@@ -23,7 +60,7 @@ function handleImageError() {
         <Head title="Accueil - EFFYNAILS" />
 
         <!-- Section Héro -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div
                 class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center"
             >
@@ -79,48 +116,236 @@ function handleImageError() {
         </div>
 
         <!-- Section Portfolio -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h2 class="text-3xl font-caveat text-center mb-8">
-                Mes dernières créations
-            </h2>
+        <div class="py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-caveat text-pink-600 mb-8">
+                        Mes dernières réalisations
+                    </h2>
+                </div>
 
-            <!-- Grille en mosaïque -->
-            <div class="grid grid-cols-3 grid-rows-3 gap-4">
-                <!-- Image 1 -->
-                <div class="col-span-2 row-span-2 relative">
-                    <div class="relative group">
-                        <img
-                            :src="latestPortfolio[0]?.image_url"
-                            :alt="latestPortfolio[0]?.title"
-                            class="w-full h-full object-cover rounded-lg shadow-md"
-                        />
+                <!-- Mosaïque des dernières photos -->
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Première colonne -->
+                    <div class="flex flex-col gap-4">
+                        <!-- Image 1 -->
                         <div
-                            class="absolute inset-0 flex items-center justify-center text-white text-opacity-50 font-bold text-2xl pointer-events-none"
+                            v-if="latestPortfolio.length > 0"
+                            class="h-48 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[0])"
                         >
-                            EFFYNAILS
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[0].image_path)
+                                "
+                                :alt="latestPortfolio[0].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[0].title
+                                }}</span>
+                            </div>
+                        </div>
+                        <!-- Image 2 -->
+                        <div
+                            v-if="latestPortfolio.length > 1"
+                            class="h-85 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[1])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[1].image_path)
+                                "
+                                :alt="latestPortfolio[1].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[1].title
+                                }}</span>
+                            </div>
+                        </div>
+                        <!-- Image 3 -->
+                        <div
+                            v-if="latestPortfolio.length > 2"
+                            class="h-64 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[2])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[2].image_path)
+                                "
+                                :alt="latestPortfolio[2].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[2].title
+                                }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deuxième colonne -->
+                    <div class="flex flex-col gap-4">
+                        <!-- Image 4 -->
+                        <div
+                            v-if="latestPortfolio.length > 3"
+                            class="h-85 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[3])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[3].image_path)
+                                "
+                                :alt="latestPortfolio[3].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[3].title
+                                }}</span>
+                            </div>
+                        </div>
+                        <!-- Image 5 -->
+                        <div
+                            v-if="latestPortfolio.length > 4"
+                            class="h-64 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[4])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[4].image_path)
+                                "
+                                :alt="latestPortfolio[4].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[4].title
+                                }}</span>
+                            </div>
+                        </div>
+                        <!-- Image 6 -->
+                        <div
+                            v-if="latestPortfolio.length > 5"
+                            class="h-48 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[5])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[5].image_path)
+                                "
+                                :alt="latestPortfolio[5].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[5].title
+                                }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Troisième colonne -->
+                    <div class="flex flex-col gap-4">
+                        <!-- Image 7 -->
+                        <div
+                            v-if="latestPortfolio.length > 6"
+                            class="h-48 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[6])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[6].image_path)
+                                "
+                                :alt="latestPortfolio[6].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[6].title
+                                }}</span>
+                            </div>
+                        </div>
+                        <!-- Image 8 -->
+                        <div
+                            v-if="latestPortfolio.length > 7"
+                            class="h-64 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[7])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[7].image_path)
+                                "
+                                :alt="latestPortfolio[7].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[7].title
+                                }}</span>
+                            </div>
+                        </div>
+                        <!-- Image 9 -->
+                        <div
+                            v-if="latestPortfolio.length > 8"
+                            class="h-85 relative group cursor-pointer"
+                            @click="openImageModal(latestPortfolio[8])"
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(latestPortfolio[8].image_path)
+                                "
+                                :alt="latestPortfolio[8].title"
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    latestPortfolio[8].title
+                                }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Images 2 à 9 -->
-                <div
-                    v-for="(image, index) in latestPortfolio.slice(1, 9)"
-                    :key="index"
-                    class="relative group col-span-1 row-span-1"
-                >
-                    <img
-                        :src="image.image_url"
-                        :alt="image.title"
-                        class="w-full h-full object-cover rounded-lg shadow-md"
-                    />
-                    <div
-                        class="absolute inset-0 flex items-center justify-center text-white text-opacity-50 font-bold text-2xl pointer-events-none"
+                <!-- Lien vers le portfolio complet -->
+                <div class="text-center mt-8">
+                    <a
+                        :href="route('portfolio')"
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700"
                     >
-                        EFFYNAILS
-                    </div>
+                        Voir tout le portfolio
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- Modal pour l'image en grand -->
+        <ImageModal
+            :show="showModal"
+            :image="selectedImage"
+            @close="closeModal"
+        />
     </AppLayout>
 </template>
 

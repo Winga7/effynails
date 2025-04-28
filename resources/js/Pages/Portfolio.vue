@@ -25,6 +25,11 @@ const hasPagination = () => {
         props.pagination && props.pagination.total > props.pagination.per_page
     );
 };
+
+// Fonction pour générer l'URL de l'image
+const getImageUrl = (imagePath) => {
+    return `/storage/${imagePath}`;
+};
 </script>
 
 <template>
@@ -92,31 +97,83 @@ const hasPagination = () => {
 
                         <!-- Contenu dynamique - quand des albums existent -->
                         <div v-else>
-                            <!-- Filtres de catégories - à afficher uniquement si des albums existent -->
-                            <div
-                                class="flex flex-wrap justify-center gap-2 mb-8"
-                            >
-                                <button
-                                    class="px-4 py-2 rounded-full bg-pink-100 text-pink-700 hover:bg-pink-200 transition duration-300 text-sm font-medium"
-                                >
-                                    Tous
-                                </button>
-                                <!-- Les filtres de catégories seraient générés dynamiquement en fonction des catégories disponibles -->
-                            </div>
-
-                            <!-- Grille d'albums dynamique -->
+                            <!-- Grille d'albums -->
                             <div
                                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
                             >
-                                <!-- La boucle v-for pour les albums irait ici -->
+                                <div
+                                    v-for="album in albums"
+                                    :key="album.id"
+                                    class="group"
+                                >
+                                    <a
+                                        :href="
+                                            route('portfolio.show', album.id)
+                                        "
+                                        class="block"
+                                    >
+                                        <div
+                                            class="relative overflow-hidden rounded-lg shadow-lg"
+                                        >
+                                            <!-- Album Title -->
+                                            <h4
+                                                class="absolute top-0 left-0 right-0 bg-black/50 text-white p-4 z-10"
+                                            >
+                                                {{ album.title }}
+                                            </h4>
+
+                                            <!-- Album Images Grid -->
+                                            <div class="grid grid-cols-2 gap-1">
+                                                <div
+                                                    v-for="portfolio in album.portfolios.slice(
+                                                        0,
+                                                        4
+                                                    )"
+                                                    :key="portfolio.id"
+                                                    class="aspect-square overflow-hidden"
+                                                >
+                                                    <img
+                                                        :src="
+                                                            getImageUrl(
+                                                                portfolio.image_path
+                                                            )
+                                                        "
+                                                        :alt="portfolio.title"
+                                                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <!-- Album Info Overlay -->
+                                            <div
+                                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-white p-4"
+                                            >
+                                                <p
+                                                    class="text-lg font-semibold mb-2"
+                                                >
+                                                    {{ album.title }}
+                                                </p>
+                                                <p class="text-sm text-center">
+                                                    {{ album.description }}
+                                                </p>
+                                                <p class="mt-2 text-sm">
+                                                    {{
+                                                        album.portfolios.length
+                                                    }}
+                                                    photos
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
 
-                            <!-- Pagination - à afficher uniquement si nécessaire -->
+                            <!-- Pagination -->
                             <div
                                 v-if="hasPagination()"
                                 class="mt-8 flex justify-center"
                             >
-                                <!-- Composant de pagination ici -->
+                                <!-- Ajouter la pagination si nécessaire -->
                             </div>
                         </div>
                     </div>
