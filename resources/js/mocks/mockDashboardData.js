@@ -21,7 +21,7 @@ export const derniersRendezVousMock = [
     {
         id: 2,
         client: "Sophie Martin",
-        service: "Pédicure",
+        service: "Ongle en gel",
         date: "15:30",
         statut: "en attente",
     },
@@ -50,7 +50,7 @@ export const derniersRendezVousMock = [
 
 export const servicesPopulairesMock = [
     { nom: "Manucure", nombre: 45 },
-    { nom: "Pédicure", nombre: 32 },
+    { nom: "Ongle en gel", nombre: 32 },
     { nom: "Nail Art", nombre: 28 },
     { nom: "Pose de vernis", nombre: 22 },
     { nom: "Dépose", nombre: 15 },
