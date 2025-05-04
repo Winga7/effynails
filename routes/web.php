@@ -100,6 +100,8 @@ Route::middleware([
 
         // Routes API pour les portfolios
         Route::post('/portfolios', [PortfolioController::class, 'store'])->name('portfolios.store');
+        Route::put('/portfolios/{portfolio}', [PortfolioController::class, 'update'])->name('portfolios.update');
+        Route::delete('/portfolios/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy');
 
         // Routes d'administration des tarifs
         Route::get('/tarifs', [TarifController::class, 'adminPage'])->name('admin.tarifs');

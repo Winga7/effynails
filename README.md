@@ -1,66 +1,130 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# EFFYNAILS - Site Web Professionnel de Prothèse Ongulaire
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/images/logo.png" alt="Logo EFFYNAILS" width="200">
 </p>
 
-## About Laravel
+## À propos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+EFFYNAILS est un site web professionnel pour une prothésiste ongulaire indépendante. Le site présente les services proposés, un portfolio des réalisations, et offre aux clients la possibilité de prendre rendez-vous en ligne.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fonctionnalités principales
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Présentation des services et tarifs**
+- **Portfolio des réalisations**
+- **Système de prise de rendez-vous en ligne**
+- **Témoignages clients**
+- **Espace administrateur pour gérer les rendez-vous et les contenus**
+- **Design responsive adapté à tous les appareils**
 
-## Learning Laravel
+## Technologies utilisées
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Frontend**: Vue.js 3, Inertia.js, TailwindCSS
+- **Backend**: Laravel 10
+- **Base de données**: MySQL
+- **Système d'authentification**: Laravel Breeze/Jetstream
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prérequis
 
-## Laravel Sponsors
+- PHP 8.1 ou supérieur
+- Composer
+- Node.js et NPM
+- MySQL ou MariaDB
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Étapes d'installation
 
-### Premium Partners
+1. **Cloner le dépôt**
+   ```bash
+   git clone https://github.com/votre-compte/effynails.git
+   cd effynails
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+2. **Installer les dépendances PHP**
+   ```bash
+   composer install
+   ```
 
-## Contributing
+3. **Installer les dépendances JavaScript**
+   ```bash
+   npm install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. **Configurer le fichier d'environnement**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Code of Conduct
+5. **Configurer la base de données**
+   - Modifiez le fichier `.env` pour y mettre vos informations de connexion à la base de données
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. **Migrer la base de données**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-## Security Vulnerabilities
+7. **Créer un lien symbolique pour le stockage**
+   ```bash
+   php artisan storage:link
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8. **Compiler les assets**
+   ```bash
+   npm run dev
+   ```
+   
+   Pour la production :
+   ```bash
+   npm run build
+   ```
 
-## License
+9. **Démarrer le serveur de développement**
+   ```bash
+   php artisan serve
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Structure du projet
+
+- `app/` - Le cœur de l'application Laravel
+- `resources/js/` - Composants Vue.js et logique frontend
+- `resources/css/` - Styles CSS et configurations TailwindCSS
+- `resources/js/Pages/` - Pages principales du site
+- `resources/js/Components/` - Composants réutilisables
+- `database/migrations/` - Migrations de base de données
+- `public/` - Fichiers accessibles publiquement
+
+## Documentation
+
+Pour plus de détails sur l'architecture et le fonctionnement du site :
+
+- [Diagramme de Classes](docs/DiagrammeClasses.md)
+- [Manuel d'utilisation](docs/ManuelUtilisation.md)
+
+## Déploiement
+
+Le site peut être déployé sur n'importe quel hébergement supportant PHP 8.1+ et MySQL. Pour des performances optimales, nous recommandons :
+
+- Serveur dédié ou VPS
+- Serveur web nginx ou Apache
+- Certificat SSL (Let's Encrypt)
+- Cache opcode PHP activé
+
+## Maintenance
+
+Pour maintenir le site à jour :
+
+1. Appliquer régulièrement les mises à jour de sécurité Laravel
+2. Maintenir à jour les dépendances NPM
+3. Faire des sauvegardes régulières de la base de données
+4. Surveiller les logs d'erreurs
+
+## Licence
+
+Ce projet est propriétaire et destiné exclusivement à l'usage d'EFFYNAILS.
+
+## Contact
+
+Pour toute question concernant le développement ou la maintenance de ce site :
+- Email de développement: andywinga@hotmail.be

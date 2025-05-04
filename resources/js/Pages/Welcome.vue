@@ -1,8 +1,9 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import ImageModal from "@/Components/ImageModal.vue";
+import { avisMock, avisConfig } from "@/mocks/mockAvis";
 
 const props = defineProps({
     canLogin: Boolean,
@@ -45,6 +46,61 @@ const closeModal = () => {
         description: "",
         image_path: "",
     };
+};
+
+// Fonction pour générer des étoiles selon la note
+const getStars = (note) => {
+    return Array(5)
+        .fill(0)
+        .map((_, index) => index < note);
+};
+
+// Logique pour le carrousel d'avis
+const currentAvisIndex = ref(0);
+const avisPagination = ref({
+    desktop: 3, // Nombre d'avis visibles sur desktop
+    mobile: 2, // Nombre d'avis visibles sur mobile
+});
+
+// Fonction pour déterminer le nombre d'avis visibles selon la taille d'écran
+const visibleAvis = computed(() => {
+    // Pour la simplicité, nous utilisons une approche conditionnelle dans le template
+    // Une vraie implémentation utiliserait un listener de resize pour mettre à jour cette valeur
+    return avisMock.slice(
+        currentAvisIndex.value,
+        currentAvisIndex.value + avisPagination.value.desktop
+    );
+});
+
+// Fonction pour naviguer vers les avis précédents
+const previousAvis = () => {
+    // Navigation par page complète - recule de desktop éléments
+    if (currentAvisIndex.value === 0) {
+        // Si on est au début, aller à la dernière page
+        const lastPageStart =
+            Math.floor((avisMock.length - 1) / avisPagination.value.desktop) *
+            avisPagination.value.desktop;
+        currentAvisIndex.value = lastPageStart;
+    } else {
+        // Sinon reculer d'une page complète
+        currentAvisIndex.value = Math.max(
+            0,
+            currentAvisIndex.value - avisPagination.value.desktop
+        );
+    }
+};
+
+// Fonction pour naviguer vers les avis suivants
+const nextAvis = () => {
+    // Navigation par page complète - avance de desktop éléments
+    const nextIndex = currentAvisIndex.value + avisPagination.value.desktop;
+
+    // Si on dépasse le nombre d'avis disponibles, revenir au début
+    if (nextIndex >= avisMock.length) {
+        currentAvisIndex.value = 0;
+    } else {
+        currentAvisIndex.value = nextIndex;
+    }
 };
 
 function handleImageError() {
@@ -336,6 +392,330 @@ function handleImageError() {
                     >
                         Voir tout le portfolio
                     </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Avis Clients -->
+        <div
+            v-if="avisConfig.enabled"
+            class="py-12 bg-gradient-to-br from-white to-pastel-pink"
+        >
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-caveat text-pink-600">
+                        Ce que disent mes clientes
+                    </h2>
+                    <p class="mt-3 text-gray-600">
+                        Découvrez les témoignages de mes clientes satisfaites
+                    </p>
+                </div>
+
+                <!-- Carrousel d'avis clients -->
+                <div class="relative">
+                    <!-- Flèche gauche -->
+                    <button
+                        @click="previousAvis"
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        aria-label="Témoignages précédents"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 text-pink-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 19l-7-7 7-7"
+                            />
+                        </svg>
+                    </button>
+
+                    <!-- Container du carrousel -->
+                    <div class="overflow-hidden">
+                        <!-- Desktop: 3 avis par ligne -->
+                        <div class="hidden md:grid md:grid-cols-3 gap-6">
+                            <div
+                                v-for="avis in visibleAvis"
+                                :key="avis.id"
+                                class="bg-white rounded-xl shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                            >
+                                <div class="p-6">
+                                    <!-- Avatar et nom -->
+                                    <div class="flex items-center mb-4">
+                                        <div
+                                            class="w-12 h-12 rounded-full bg-pastel-pink flex items-center justify-center overflow-hidden mr-4"
+                                        >
+                                            <span
+                                                v-if="!avis.photo"
+                                                class="text-white text-xl font-semibold"
+                                                >{{ avis.nom.charAt(0) }}</span
+                                            >
+                                            <img
+                                                v-else
+                                                :src="avis.photo"
+                                                :alt="avis.nom"
+                                                class="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div>
+                                            <h3
+                                                class="font-semibold text-gray-800"
+                                            >
+                                                {{ avis.nom }}
+                                            </h3>
+                                            <p class="text-xs text-gray-500">
+                                                {{ avis.date }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Service reçu -->
+                                    <div class="mb-3">
+                                        <span
+                                            class="inline-block bg-pastel-peach px-3 py-1 rounded-full text-xs"
+                                        >
+                                            {{ avis.service }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Note en étoiles -->
+                                    <div class="flex mb-3">
+                                        <template
+                                            v-for="(filled, index) in getStars(
+                                                avis.note
+                                            )"
+                                            :key="index"
+                                        >
+                                            <svg
+                                                v-if="filled"
+                                                class="w-5 h-5 text-yellow-400"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                                ></path>
+                                            </svg>
+                                            <svg
+                                                v-else
+                                                class="w-5 h-5 text-gray-300"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                                ></path>
+                                            </svg>
+                                        </template>
+                                    </div>
+
+                                    <!-- Commentaire -->
+                                    <p class="text-gray-600 italic text-sm">
+                                        {{ avis.commentaire }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile: 1 colonne avec 2 avis -->
+                        <div class="md:hidden grid grid-cols-1 gap-4">
+                            <div
+                                v-for="i in 2"
+                                :key="i"
+                                v-if="avisMock[currentAvisIndex + i - 1]"
+                                class="bg-white rounded-xl shadow-md overflow-hidden"
+                            >
+                                <div class="p-4">
+                                    <!-- Avatar et nom -->
+                                    <div class="flex items-center mb-3">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-pastel-pink flex items-center justify-center overflow-hidden mr-3"
+                                        >
+                                            <span
+                                                v-if="
+                                                    !avisMock[
+                                                        currentAvisIndex + i - 1
+                                                    ].photo
+                                                "
+                                                class="text-white text-lg font-semibold"
+                                            >
+                                                {{
+                                                    avisMock[
+                                                        currentAvisIndex + i - 1
+                                                    ].nom.charAt(0)
+                                                }}
+                                            </span>
+                                            <img
+                                                v-else
+                                                :src="
+                                                    avisMock[
+                                                        currentAvisIndex + i - 1
+                                                    ].photo
+                                                "
+                                                :alt="
+                                                    avisMock[
+                                                        currentAvisIndex + i - 1
+                                                    ].nom
+                                                "
+                                                class="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div>
+                                            <h3
+                                                class="font-semibold text-gray-800 text-sm"
+                                            >
+                                                {{
+                                                    avisMock[
+                                                        currentAvisIndex + i - 1
+                                                    ].nom
+                                                }}
+                                            </h3>
+                                            <p class="text-xs text-gray-500">
+                                                {{
+                                                    avisMock[
+                                                        currentAvisIndex + i - 1
+                                                    ].date
+                                                }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Service reçu -->
+                                    <div class="mb-2">
+                                        <span
+                                            class="inline-block bg-pastel-peach px-2 py-0.5 rounded-full text-xs"
+                                        >
+                                            {{
+                                                avisMock[
+                                                    currentAvisIndex + i - 1
+                                                ].service
+                                            }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Note en étoiles -->
+                                    <div class="flex mb-2">
+                                        <template
+                                            v-for="(filled, index) in getStars(
+                                                avisMock[
+                                                    currentAvisIndex + i - 1
+                                                ].note
+                                            )"
+                                            :key="index"
+                                        >
+                                            <svg
+                                                v-if="filled"
+                                                class="w-4 h-4 text-yellow-400"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                                ></path>
+                                            </svg>
+                                            <svg
+                                                v-else
+                                                class="w-4 h-4 text-gray-300"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                                ></path>
+                                            </svg>
+                                        </template>
+                                    </div>
+
+                                    <!-- Commentaire -->
+                                    <p class="text-gray-600 italic text-xs">
+                                        {{
+                                            avisMock[currentAvisIndex + i - 1]
+                                                .commentaire
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flèche droite -->
+                    <button
+                        @click="nextAvis"
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        aria-label="Témoignages suivants"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 text-pink-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
+                    </button>
+
+                    <!-- Indicateurs de pagination (points) -->
+                    <div class="flex justify-center mt-6 space-x-2">
+                        <template
+                            v-for="(_, index) in Math.ceil(
+                                avisMock.length / avisPagination.desktop
+                            )"
+                            :key="index"
+                        >
+                            <button
+                                @click="
+                                    currentAvisIndex =
+                                        index * avisPagination.desktop
+                                "
+                                :class="[
+                                    'w-2.5 h-2.5 rounded-full transition-all duration-300',
+                                    currentAvisIndex ===
+                                    index * avisPagination.desktop
+                                        ? 'bg-pink-600 scale-110'
+                                        : 'bg-gray-300 hover:bg-gray-400',
+                                ]"
+                                :aria-label="`Page d'avis ${index + 1}`"
+                            ></button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Bouton pour laisser un avis -->
+                <div class="mt-10 text-center">
+                    <button
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                    >
+                        <span class="mr-2">Laisser un avis</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-5 h-5"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                            />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>

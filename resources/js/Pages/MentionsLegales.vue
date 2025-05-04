@@ -34,20 +34,32 @@ import { Head } from "@inertiajs/vue3";
                                 individuelle
                             </li>
                             <li>
-                                <strong>Adresse :</strong> [Votre adresse
-                                complète]
+                                <strong>Adresse :</strong> [À COMPLÉTER - Votre
+                                adresse complète]
                             </li>
                             <li>
-                                <strong>Numéro de téléphone :</strong> [Votre
-                                numéro de téléphone]
+                                <strong>Numéro de téléphone :</strong>
+                                <a
+                                    href="tel:+32XXXXXXXXX"
+                                    class="text-pink-500 hover:underline"
+                                    >0474 XX XX XX</a
+                                >
                             </li>
-                            <li><strong>Email :</strong> [Votre email]</li>
                             <li>
-                                <strong>Numéro d'entreprise :</strong> [Votre
-                                numéro BCE]
+                                <strong>Email :</strong>
+                                <a
+                                    href="mailto:effynails2@gmail.com"
+                                    class="text-pink-500 hover:underline"
+                                    >effynails2@gmail.com</a
+                                >
                             </li>
                             <li>
-                                <strong>TVA :</strong> [Votre numéro de TVA]
+                                <strong>Numéro d'entreprise :</strong> [À
+                                COMPLÉTER - Votre numéro BCE]
+                            </li>
+                            <li>
+                                <strong>TVA :</strong> [À COMPLÉTER - Votre
+                                numéro de TVA]
                             </li>
                         </ul>
 
@@ -59,7 +71,7 @@ import { Head } from "@inertiajs/vue3";
                             <ul class="list-disc pl-5 space-y-2 mt-2">
                                 <li>
                                     <strong>Nom de l'hébergeur :</strong>
-                                    o2switch
+                                    O2switch
                                 </li>
                                 <li>
                                     <strong>Adresse :</strong> 222-224 Boulevard
@@ -93,6 +105,12 @@ import { Head } from "@inertiajs/vue3";
                                 documents téléchargeables et les représentations
                                 iconographiques et photographiques.
                             </p>
+                            <p class="mt-2">
+                                Les photos des réalisations sont publiées
+                                uniquement avec l'accord des clients. Le contenu
+                                textuel et les éléments graphiques du site sont
+                                la propriété exclusive d'EFFYNAILS.
+                            </p>
                         </div>
 
                         <div class="pt-4">
@@ -111,7 +129,12 @@ import { Head } from "@inertiajs/vue3";
                             </p>
                             <p class="mt-2">
                                 Pour exercer ces droits, vous pouvez nous
-                                contacter par email à [votre email].
+                                contacter par email à
+                                <a
+                                    href="mailto:effynails2@gmail.com"
+                                    class="text-pink-500 hover:underline"
+                                    >effynails2@gmail.com</a
+                                >.
                             </p>
                             <p class="mt-2">
                                 Pour plus de détails sur le traitement de vos
@@ -146,6 +169,29 @@ import { Head } from "@inertiajs/vue3";
                                 Les présentes mentions légales sont soumises à
                                 la loi belge. En cas de litige, les tribunaux
                                 belges seront seuls compétents.
+                            </p>
+                        </div>
+
+                        <div class="pt-4">
+                            <h3 class="text-xl font-semibold text-pink-500">
+                                Responsabilité
+                            </h3>
+                            <p class="mt-2">
+                                EFFYNAILS met tout en œuvre pour offrir des
+                                informations à jour, exactes et complètes.
+                                Malgré tous les soins apportés, le site peut
+                                présenter des erreurs que nous nous engageons à
+                                corriger dès qu'elles sont portées à notre
+                                connaissance.
+                            </p>
+                            <p class="mt-2">
+                                Les informations fournies sur ce site le sont à
+                                titre indicatif et ne sauraient engager la
+                                responsabilité d'EFFYNAILS. Notre site utilise
+                                les technologies standard du web et respecte les
+                                meilleures pratiques en matière de sécurité pour
+                                vous offrir une expérience de navigation
+                                optimale.
                             </p>
                         </div>
                     </div>
