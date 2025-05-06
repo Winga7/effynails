@@ -55,51 +55,28 @@ const getStars = (note) => {
         .map((_, index) => index < note);
 };
 
-// Logique pour le carrousel d'avis
-const currentAvisIndex = ref(0);
-const avisPagination = ref({
-    desktop: 3, // Nombre d'avis visibles sur desktop
-    mobile: 2, // Nombre d'avis visibles sur mobile
-});
+// SUPPRESSION DE TOUTE LA LOGIQUE DE CARROUSEL COMPLEXE
+// Garder uniquement une gestion très simple
+const currentMobileIndex = ref(0);
 
-// Fonction pour déterminer le nombre d'avis visibles selon la taille d'écran
-const visibleAvis = computed(() => {
-    // Pour la simplicité, nous utilisons une approche conditionnelle dans le template
-    // Une vraie implémentation utiliserait un listener de resize pour mettre à jour cette valeur
-    return avisMock.slice(
-        currentAvisIndex.value,
-        currentAvisIndex.value + avisPagination.value.desktop
-    );
-});
-
-// Fonction pour naviguer vers les avis précédents
-const previousAvis = () => {
-    // Navigation par page complète - recule de desktop éléments
-    if (currentAvisIndex.value === 0) {
-        // Si on est au début, aller à la dernière page
-        const lastPageStart =
-            Math.floor((avisMock.length - 1) / avisPagination.value.desktop) *
-            avisPagination.value.desktop;
-        currentAvisIndex.value = lastPageStart;
+const nextMobileImage = () => {
+    if (
+        currentMobileIndex.value < Math.min(5, props.latestPortfolio.length - 1)
+    ) {
+        currentMobileIndex.value++;
     } else {
-        // Sinon reculer d'une page complète
-        currentAvisIndex.value = Math.max(
-            0,
-            currentAvisIndex.value - avisPagination.value.desktop
-        );
+        currentMobileIndex.value = 0;
     }
 };
 
-// Fonction pour naviguer vers les avis suivants
-const nextAvis = () => {
-    // Navigation par page complète - avance de desktop éléments
-    const nextIndex = currentAvisIndex.value + avisPagination.value.desktop;
-
-    // Si on dépasse le nombre d'avis disponibles, revenir au début
-    if (nextIndex >= avisMock.length) {
-        currentAvisIndex.value = 0;
+const prevMobileImage = () => {
+    if (currentMobileIndex.value > 0) {
+        currentMobileIndex.value--;
     } else {
-        currentAvisIndex.value = nextIndex;
+        currentMobileIndex.value = Math.min(
+            5,
+            props.latestPortfolio.length - 1
+        );
     }
 };
 
@@ -109,6 +86,55 @@ function handleImageError() {
     document.getElementById("docs-card-content")?.classList.add("!flex-row");
     document.getElementById("background")?.classList.add("!hidden");
 }
+
+// Logique pour le carrousel d'avis
+const currentAvisIndex = ref(0);
+// Valeurs fixes au lieu d'un objet pour éviter les erreurs .value
+const AVIS_PER_PAGE_DESKTOP = 3;
+const AVIS_PER_PAGE_MOBILE = 1;
+
+// Calcul des pages pour le desktop
+const desktopTotalPages = computed(() => {
+    return Math.ceil(avisMock.length / AVIS_PER_PAGE_DESKTOP);
+});
+
+// Calcul des pages pour le mobile
+const mobileTotalPages = computed(() => {
+    return Math.ceil(avisMock.length / AVIS_PER_PAGE_MOBILE);
+});
+
+// Avis visibles sur desktop
+const desktopVisibleAvis = computed(() => {
+    return avisMock.slice(
+        currentAvisIndex.value,
+        currentAvisIndex.value + AVIS_PER_PAGE_DESKTOP
+    );
+});
+
+// Fonction simplifiée pour naviguer vers les avis précédents
+const previousAvis = () => {
+    if (currentAvisIndex.value === 0) {
+        // Si on est au début, aller à la fin
+        currentAvisIndex.value = Math.max(
+            0,
+            avisMock.length - AVIS_PER_PAGE_DESKTOP
+        );
+    } else {
+        // Sinon reculer d'un élément
+        currentAvisIndex.value = Math.max(0, currentAvisIndex.value - 1);
+    }
+};
+
+// Fonction simplifiée pour naviguer vers les avis suivants
+const nextAvis = () => {
+    if (currentAvisIndex.value + AVIS_PER_PAGE_DESKTOP >= avisMock.length) {
+        // Si on est à la fin, revenir au début
+        currentAvisIndex.value = 0;
+    } else {
+        // Sinon avancer d'un élément
+        currentAvisIndex.value++;
+    }
+};
 </script>
 
 <template>
@@ -181,7 +207,8 @@ function handleImageError() {
                 </div>
 
                 <!-- Mosaïque des dernières photos -->
-                <div class="grid grid-cols-3 gap-4">
+                <!-- Desktop: 3 colonnes -->
+                <div class="hidden md:grid md:grid-cols-3 gap-4">
                     <!-- Première colonne -->
                     <div class="flex flex-col gap-4">
                         <!-- Image 1 -->
@@ -384,6 +411,115 @@ function handleImageError() {
                     </div>
                 </div>
 
+                <!-- Mobile: Simple carrousel d'une image à la fois -->
+                <div class="md:hidden relative">
+                    <!-- Flèche gauche -->
+                    <button
+                        v-if="props.latestPortfolio.length > 1"
+                        @click="prevMobileImage"
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        aria-label="Image précédente"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 text-pink-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 19l-7-7 7-7"
+                            />
+                        </svg>
+                    </button>
+
+                    <!-- Image courante -->
+                    <div
+                        class="px-8 mb-4"
+                        v-if="props.latestPortfolio.length > 0"
+                    >
+                        <div
+                            class="h-64 relative group cursor-pointer"
+                            @click="
+                                openImageModal(
+                                    props.latestPortfolio[currentMobileIndex]
+                                )
+                            "
+                        >
+                            <img
+                                :src="
+                                    getImageUrl(
+                                        props.latestPortfolio[
+                                            currentMobileIndex
+                                        ].image_path
+                                    )
+                                "
+                                :alt="
+                                    props.latestPortfolio[currentMobileIndex]
+                                        .title
+                                "
+                                class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                            >
+                                <span class="text-sm">{{
+                                    props.latestPortfolio[currentMobileIndex]
+                                        .title
+                                }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flèche droite -->
+                    <button
+                        v-if="props.latestPortfolio.length > 1"
+                        @click="nextMobileImage"
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        aria-label="Image suivante"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 text-pink-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
+                    </button>
+
+                    <!-- Indicateurs de pagination (points) -->
+                    <div
+                        class="flex justify-center mt-2 space-x-2"
+                        v-if="props.latestPortfolio.length > 1"
+                    >
+                        <button
+                            v-for="(_, index) in Math.min(
+                                6,
+                                props.latestPortfolio.length
+                            )"
+                            :key="index"
+                            @click="currentMobileIndex = index"
+                            :class="[
+                                'w-2.5 h-2.5 rounded-full transition-all duration-300',
+                                currentMobileIndex === index
+                                    ? 'bg-pink-600 scale-110'
+                                    : 'bg-gray-300 hover:bg-gray-400',
+                            ]"
+                            :aria-label="`Image ${index + 1}`"
+                        ></button>
+                    </div>
+                </div>
+
                 <!-- Lien vers le portfolio complet -->
                 <div class="text-center mt-8">
                     <a
@@ -440,7 +576,7 @@ function handleImageError() {
                         <!-- Desktop: 3 avis par ligne -->
                         <div class="hidden md:grid md:grid-cols-3 gap-6">
                             <div
-                                v-for="avis in visibleAvis"
+                                v-for="avis in desktopVisibleAvis"
                                 :key="avis.id"
                                 class="bg-white rounded-xl shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                             >
@@ -524,12 +660,10 @@ function handleImageError() {
                             </div>
                         </div>
 
-                        <!-- Mobile: 1 colonne avec 2 avis -->
+                        <!-- Mobile: 1 avis à la fois -->
                         <div class="md:hidden grid grid-cols-1 gap-4">
                             <div
-                                v-for="i in 2"
-                                :key="i"
-                                v-if="avisMock[currentAvisIndex + i - 1]"
+                                v-if="avisMock[currentAvisIndex]"
                                 class="bg-white rounded-xl shadow-md overflow-hidden"
                             >
                                 <div class="p-4">
@@ -540,29 +674,26 @@ function handleImageError() {
                                         >
                                             <span
                                                 v-if="
-                                                    !avisMock[
-                                                        currentAvisIndex + i - 1
-                                                    ].photo
+                                                    !avisMock[currentAvisIndex]
+                                                        .photo
                                                 "
                                                 class="text-white text-lg font-semibold"
                                             >
                                                 {{
                                                     avisMock[
-                                                        currentAvisIndex + i - 1
+                                                        currentAvisIndex
                                                     ].nom.charAt(0)
                                                 }}
                                             </span>
                                             <img
                                                 v-else
                                                 :src="
-                                                    avisMock[
-                                                        currentAvisIndex + i - 1
-                                                    ].photo
+                                                    avisMock[currentAvisIndex]
+                                                        .photo
                                                 "
                                                 :alt="
-                                                    avisMock[
-                                                        currentAvisIndex + i - 1
-                                                    ].nom
+                                                    avisMock[currentAvisIndex]
+                                                        .nom
                                                 "
                                                 class="w-full h-full object-cover"
                                             />
@@ -572,16 +703,14 @@ function handleImageError() {
                                                 class="font-semibold text-gray-800 text-sm"
                                             >
                                                 {{
-                                                    avisMock[
-                                                        currentAvisIndex + i - 1
-                                                    ].nom
+                                                    avisMock[currentAvisIndex]
+                                                        .nom
                                                 }}
                                             </h3>
                                             <p class="text-xs text-gray-500">
                                                 {{
-                                                    avisMock[
-                                                        currentAvisIndex + i - 1
-                                                    ].date
+                                                    avisMock[currentAvisIndex]
+                                                        .date
                                                 }}
                                             </p>
                                         </div>
@@ -593,9 +722,8 @@ function handleImageError() {
                                             class="inline-block bg-pastel-peach px-2 py-0.5 rounded-full text-xs"
                                         >
                                             {{
-                                                avisMock[
-                                                    currentAvisIndex + i - 1
-                                                ].service
+                                                avisMock[currentAvisIndex]
+                                                    .service
                                             }}
                                         </span>
                                     </div>
@@ -604,9 +732,7 @@ function handleImageError() {
                                     <div class="flex mb-2">
                                         <template
                                             v-for="(filled, index) in getStars(
-                                                avisMock[
-                                                    currentAvisIndex + i - 1
-                                                ].note
+                                                avisMock[currentAvisIndex].note
                                             )"
                                             :key="index"
                                         >
@@ -638,7 +764,7 @@ function handleImageError() {
                                     <!-- Commentaire -->
                                     <p class="text-gray-600 italic text-xs">
                                         {{
-                                            avisMock[currentAvisIndex + i - 1]
+                                            avisMock[currentAvisIndex]
                                                 .commentaire
                                         }}
                                     </p>
@@ -671,27 +797,53 @@ function handleImageError() {
 
                     <!-- Indicateurs de pagination (points) -->
                     <div class="flex justify-center mt-6 space-x-2">
-                        <template
-                            v-for="(_, index) in Math.ceil(
-                                avisMock.length / avisPagination.desktop
-                            )"
-                            :key="index"
-                        >
-                            <button
-                                @click="
-                                    currentAvisIndex =
-                                        index * avisPagination.desktop
-                                "
-                                :class="[
-                                    'w-2.5 h-2.5 rounded-full transition-all duration-300',
-                                    currentAvisIndex ===
-                                    index * avisPagination.desktop
-                                        ? 'bg-pink-600 scale-110'
-                                        : 'bg-gray-300 hover:bg-gray-400',
-                                ]"
-                                :aria-label="`Page d'avis ${index + 1}`"
-                            ></button>
-                        </template>
+                        <!-- Points de pagination pour mobile (tous les avis) -->
+                        <div class="md:hidden flex space-x-2">
+                            <template
+                                v-for="(_, index) in mobileTotalPages"
+                                :key="`mobile-${index}`"
+                            >
+                                <button
+                                    @click="currentAvisIndex = index"
+                                    :class="[
+                                        'w-2.5 h-2.5 rounded-full transition-all duration-300',
+                                        currentAvisIndex === index
+                                            ? 'bg-pink-600 scale-110'
+                                            : 'bg-gray-300 hover:bg-gray-400',
+                                    ]"
+                                    :aria-label="`Page d'avis mobile ${
+                                        index + 1
+                                    }`"
+                                ></button>
+                            </template>
+                        </div>
+
+                        <!-- Points de pagination pour desktop (groupés par 3) -->
+                        <div class="hidden md:flex space-x-2">
+                            <template
+                                v-for="(_, index) in desktopTotalPages"
+                                :key="`desktop-${index}`"
+                            >
+                                <button
+                                    @click="
+                                        currentAvisIndex =
+                                            index * AVIS_PER_PAGE_DESKTOP
+                                    "
+                                    :class="[
+                                        'w-2.5 h-2.5 rounded-full transition-all duration-300',
+                                        Math.floor(
+                                            currentAvisIndex /
+                                                AVIS_PER_PAGE_DESKTOP
+                                        ) === index
+                                            ? 'bg-pink-600 scale-110'
+                                            : 'bg-gray-300 hover:bg-gray-400',
+                                    ]"
+                                    :aria-label="`Page d'avis desktop ${
+                                        index + 1
+                                    }`"
+                                ></button>
+                            </template>
+                        </div>
                     </div>
                 </div>
 

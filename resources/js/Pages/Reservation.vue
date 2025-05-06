@@ -50,7 +50,7 @@ onMounted(() => {
         elementOrSelector: "#my-cal-inline",
         config: {
             layout: "month_view",
-            theme: "light"
+            theme: "light",
         },
         calLink: "effynailss",
     });
@@ -60,6 +60,45 @@ onMounted(() => {
         hideEventTypeDetails: false,
         layout: "month_view",
     });
+
+    // Ajouter des styles CSS personnalisés pour l'affichage mobile
+    setTimeout(() => {
+        // Sélectionner et corriger les éléments problématiques après le chargement
+        const timeSlotContainers = document.querySelectorAll(
+            ".cal-timeslots-container"
+        );
+        if (timeSlotContainers.length > 0) {
+            timeSlotContainers.forEach((container) => {
+                container.style.maxHeight = "60vh";
+                container.style.overflowY = "auto";
+                container.style.WebkitOverflowScrolling = "touch";
+            });
+        }
+
+        // Ajouter un observateur pour détecter les futurs éléments de créneau horaire
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.addedNodes.length) {
+                    const timeSlots = document.querySelectorAll(
+                        ".cal-timeslots-container"
+                    );
+                    if (timeSlots.length > 0) {
+                        timeSlots.forEach((container) => {
+                            container.style.maxHeight = "60vh";
+                            container.style.overflowY = "auto";
+                            container.style.WebkitOverflowScrolling = "touch";
+                        });
+                    }
+                }
+            });
+        });
+
+        // Observer le conteneur Cal.com
+        const calContainer = document.getElementById("my-cal-inline");
+        if (calContainer) {
+            observer.observe(calContainer, { childList: true, subtree: true });
+        }
+    }, 1000); // Attendre que Cal.com soit chargé
 });
 </script>
 
@@ -114,3 +153,35 @@ onMounted(() => {
         </div>
     </AppLayout>
 </template>
+
+<style>
+/* Styles pour améliorer l'affichage mobile de Cal.com */
+@media (max-width: 768px) {
+    /* Style pour le conteneur principal */
+    #my-cal-inline {
+        height: 100% !important;
+        overflow: visible !important;
+    }
+
+    /* Styles pour les sélecteurs Cal.com */
+    :deep(.Cal__Timeslots__timeslotsContainer),
+    :deep(.cal-timeslots-container) {
+        max-height: 60vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+    }
+
+    /* Style pour les boutons de créneau */
+    :deep(.Cal__TimeSlot__timeSlot) {
+        margin-bottom: 8px !important;
+    }
+
+    /* Assurer que le conteneur de sélection d'heure est scrollable */
+    :deep([role="dialog"]),
+    :deep(.Cal__Dialog__dialog) {
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+    }
+}
+</style>

@@ -142,7 +142,8 @@ async function deleteTarif(id) {
                         Liste des tarifs
                     </h3>
 
-                    <div class="overflow-x-auto">
+                    <!-- Vue tablette/desktop -->
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="min-w-full divide-y divide-pink-100">
                             <thead class="bg-pink-50">
                                 <tr>
@@ -234,6 +235,74 @@ async function deleteTarif(id) {
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Vue mobile (cartes) -->
+                    <div class="md:hidden">
+                        <div
+                            v-if="tarifs.length === 0 && !loading"
+                            class="py-8 text-center text-gray-500"
+                        >
+                            <div class="flex flex-col items-center">
+                                <i
+                                    class="fas fa-list text-4xl text-pink-200 mb-2"
+                                ></i>
+                                Aucun tarif disponible
+                            </div>
+                        </div>
+
+                        <div v-else class="space-y-4">
+                            <div
+                                v-for="tarif in tarifs"
+                                :key="tarif.id"
+                                class="bg-white border border-pink-100 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
+                            >
+                                <div
+                                    class="flex justify-between items-start mb-2"
+                                >
+                                    <h4
+                                        class="font-semibold text-lg text-gray-800"
+                                    >
+                                        {{ tarif.nom }}
+                                    </h4>
+                                    <span class="text-pink-500 font-bold"
+                                        >{{ tarif.prix }} €</span
+                                    >
+                                </div>
+
+                                <div
+                                    class="flex items-center text-gray-600 mb-2"
+                                >
+                                    <i
+                                        class="fas fa-clock text-pastel-pink mr-2"
+                                    ></i>
+                                    <span>{{ tarif.duree }} min</span>
+                                </div>
+
+                                <p class="text-gray-600 text-sm mb-4">
+                                    {{ tarif.description }}
+                                </p>
+
+                                <div
+                                    class="flex space-x-2 pt-2 border-t border-pink-50"
+                                >
+                                    <button
+                                        @click="editTarif(tarif)"
+                                        class="flex-1 px-3 py-2 bg-pink-100 text-pink-700 rounded-full hover:bg-pink-200 transition-colors text-sm flex justify-center items-center"
+                                    >
+                                        <i class="fas fa-edit mr-1"></i>
+                                        Modifier
+                                    </button>
+                                    <button
+                                        @click="deleteTarif(tarif.id)"
+                                        class="flex-1 px-3 py-2 bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors text-sm flex justify-center items-center"
+                                    >
+                                        <i class="fas fa-trash-alt mr-1"></i>
+                                        Supprimer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
