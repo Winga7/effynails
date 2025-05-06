@@ -32,6 +32,14 @@ class DatabaseSeeder extends Seeder
             'role' => 'owner',
         ]);
 
+        // Création d'un compte jury
+        User::create([
+            'name' => 'Jury',
+            'email' => 'jury@ifosupwavre.be',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+        ]);
+
         // Seed des tarifs
         $this->call(TarifSeeder::class);
     }
