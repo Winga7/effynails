@@ -4,7 +4,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-center space-x-6">
                 <a
-                    href="https://facebook.com"
+                    href="https://www.facebook.com/profile.php?id=61576011179310"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-700 hover:text-gray-900"
@@ -19,14 +19,14 @@
                 >
                     <i class="fab fa-whatsapp text-2xl"></i>
                 </a>
-                <a
+                <!-- <a
                     href="https://threads.net"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-700 hover:text-gray-900"
                 >
                     <i class="fab fa-threads text-2xl"></i>
-                </a>
+                </a> -->
                 <a
                     href="https://www.instagram.com/nailseffy/"
                     target="_blank"
