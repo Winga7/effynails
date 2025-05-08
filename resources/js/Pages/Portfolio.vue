@@ -1,6 +1,8 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
+import { Waterfall } from "vue-waterfall-plugin-next";
+import "vue-waterfall-plugin-next/dist/style.css";
 
 // Définition des props pour recevoir les albums depuis le contrôleur
 const props = defineProps({
@@ -52,7 +54,7 @@ const getImageUrl = (imagePath) => {
                     <div class="p-6 lg:p-8">
                         <!-- Titre de la section -->
                         <h3
-                            class="text-xl font-caveat text-pink-600 mb-6 text-center"
+                            class="text-2xl font-caveat text-pink-600 mb-6 text-center"
                         >
                             Nos plus belles réalisations
                         </h3>
@@ -97,15 +99,13 @@ const getImageUrl = (imagePath) => {
 
                         <!-- Contenu dynamique - quand des albums existent -->
                         <div v-else>
-                            <!-- Grille d'albums -->
-                            <div
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+                            <!-- Grille d'albums avec Waterfall -->
+                            <Waterfall
+                                :list="albums"
+                                :column-width="320"
+                                :gutter="24"
                             >
-                                <div
-                                    v-for="album in albums"
-                                    :key="album.id"
-                                    class="group"
-                                >
+                                <template #item="{ item: album }">
                                     <a
                                         :href="
                                             route('portfolio.show', album.id)
@@ -115,35 +115,137 @@ const getImageUrl = (imagePath) => {
                                         <div
                                             class="relative overflow-hidden rounded-lg shadow-lg"
                                         >
+                                            <!-- Album Images Grid -->
+                                            <div
+                                                class="grid grid-cols-2 grid-rows-2 gap-1 w-full aspect-square relative h-full min-h-0 min-w-0"
+                                                :class="'sm:aspect-square aspect-[4/3]'"
+                                            >
+                                                <template
+                                                    v-if="
+                                                        album.portfolios
+                                                            .length === 1
+                                                    "
+                                                >
+                                                    <div
+                                                        class="col-span-2 row-span-2 aspect-square overflow-hidden h-full w-full min-h-0 min-w-0 group"
+                                                    >
+                                                        <img
+                                                            :src="
+                                                                getImageUrl(
+                                                                    album
+                                                                        .portfolios[0]
+                                                                        .image_path
+                                                                )
+                                                            "
+                                                            :alt="
+                                                                album
+                                                                    .portfolios[0]
+                                                                    .title
+                                                            "
+                                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                                        />
+                                                    </div>
+                                                </template>
+                                                <template
+                                                    v-else-if="
+                                                        album.portfolios
+                                                            .length === 2
+                                                    "
+                                                >
+                                                    <div
+                                                        v-for="(
+                                                            portfolio, idx
+                                                        ) in album.portfolios"
+                                                        :key="portfolio.id"
+                                                        class="col-span-2 row-span-1 aspect-auto overflow-hidden h-full w-full min-h-0 min-w-0 group"
+                                                    >
+                                                        <img
+                                                            :src="
+                                                                getImageUrl(
+                                                                    portfolio.image_path
+                                                                )
+                                                            "
+                                                            :alt="
+                                                                portfolio.title
+                                                            "
+                                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                                        />
+                                                    </div>
+                                                </template>
+                                                <template
+                                                    v-else-if="
+                                                        album.portfolios
+                                                            .length === 3
+                                                    "
+                                                >
+                                                    <div
+                                                        v-for="(
+                                                            portfolio, idx
+                                                        ) in album.portfolios"
+                                                        :key="portfolio.id"
+                                                        :class="
+                                                            (idx < 2
+                                                                ? 'col-span-1 row-span-1'
+                                                                : 'col-span-2 row-span-1') +
+                                                            ' aspect-auto overflow-hidden h-full w-full min-h-0 min-w-0 group'
+                                                        "
+                                                    >
+                                                        <img
+                                                            :src="
+                                                                getImageUrl(
+                                                                    portfolio.image_path
+                                                                )
+                                                            "
+                                                            :alt="
+                                                                portfolio.title
+                                                            "
+                                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                                        />
+                                                    </div>
+                                                </template>
+                                                <template v-else>
+                                                    <div
+                                                        v-for="portfolio in album.portfolios.slice(
+                                                            0,
+                                                            4
+                                                        )"
+                                                        :key="portfolio.id"
+                                                        class="col-span-1 row-span-1 aspect-square overflow-hidden h-full w-full min-h-0 min-w-0 group"
+                                                    >
+                                                        <img
+                                                            :src="
+                                                                getImageUrl(
+                                                                    portfolio.image_path
+                                                                )
+                                                            "
+                                                            :alt="
+                                                                portfolio.title
+                                                            "
+                                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                                        />
+                                                    </div>
+                                                </template>
+                                                <!-- Badge '+X photos' si plus de 4 images -->
+                                                <div
+                                                    v-if="
+                                                        album.portfolios
+                                                            .length > 4
+                                                    "
+                                                    class="absolute bottom-2 right-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded shadow-lg z-20"
+                                                >
+                                                    +{{
+                                                        album.portfolios
+                                                            .length - 4
+                                                    }}
+                                                    photos
+                                                </div>
+                                            </div>
                                             <!-- Album Title -->
                                             <h4
-                                                class="absolute top-0 left-0 right-0 bg-black/50 text-white p-4 z-10"
+                                                class="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm text-white p-4 z-10 text-center"
                                             >
                                                 {{ album.title }}
                                             </h4>
-
-                                            <!-- Album Images Grid -->
-                                            <div class="grid grid-cols-2 gap-1">
-                                                <div
-                                                    v-for="portfolio in album.portfolios.slice(
-                                                        0,
-                                                        4
-                                                    )"
-                                                    :key="portfolio.id"
-                                                    class="aspect-square overflow-hidden"
-                                                >
-                                                    <img
-                                                        :src="
-                                                            getImageUrl(
-                                                                portfolio.image_path
-                                                            )
-                                                        "
-                                                        :alt="portfolio.title"
-                                                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                                    />
-                                                </div>
-                                            </div>
-
                                             <!-- Album Info Overlay -->
                                             <div
                                                 class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-white p-4"
@@ -165,9 +267,8 @@ const getImageUrl = (imagePath) => {
                                             </div>
                                         </div>
                                     </a>
-                                </div>
-                            </div>
-
+                                </template>
+                            </Waterfall>
                             <!-- Pagination -->
                             <div
                                 v-if="hasPagination()"

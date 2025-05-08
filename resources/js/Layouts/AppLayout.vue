@@ -102,11 +102,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div>
+    <div class="flex flex-col min-h-screen">
         <Head :title="title" />
         <Banner />
 
-        <div class="min-h-screen">
+        <div class="flex-grow flex flex-col">
             <nav
                 :class="[
                     headerBackgroundClass,
@@ -394,7 +394,7 @@ onUnmounted(() => {
             </nav>
 
             <!-- Page Content -->
-            <main class="bg-transparent">
+            <main class="bg-transparent flex-grow flex flex-col">
                 <div v-if="$slots.header" class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         <slot name="header" />
@@ -402,9 +402,10 @@ onUnmounted(() => {
                 </div>
                 <slot />
             </main>
+
+            <Footer />
         </div>
 
-        <Footer />
         <CookieConsent />
 
         <!-- Bouton retour en haut -->

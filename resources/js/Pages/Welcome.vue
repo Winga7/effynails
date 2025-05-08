@@ -225,7 +225,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[0].title
@@ -246,7 +246,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[1].title
@@ -267,7 +267,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[2].title
@@ -292,7 +292,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[3].title
@@ -313,7 +313,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[4].title
@@ -334,7 +334,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[5].title
@@ -359,7 +359,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[6].title
@@ -380,7 +380,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[7].title
@@ -401,7 +401,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     latestPortfolio[8].title
@@ -464,7 +464,7 @@ const nextAvis = () => {
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div
-                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white"
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white rounded-md transform scale-95"
                             >
                                 <span class="text-sm">{{
                                     props.latestPortfolio[currentMobileIndex]

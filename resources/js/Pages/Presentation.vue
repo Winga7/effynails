@@ -40,7 +40,12 @@ defineProps({
                                     }}
                                 </p>
                             </div>
-                            <div class="flex justify-center">
+                            <div class="flex justify-end gap-4">
+                                <img
+                                    src="/images/Sam-Jayne.jpg"
+                                    alt="Photo du salon"
+                                    class="max-h-[400px] w-auto object-contain rounded-lg border-4 border-pastel-purple/30 shadow-lg"
+                                />
                                 <img
                                     src="/images/Fifi.jpg"
                                     alt="Photo de présentation"

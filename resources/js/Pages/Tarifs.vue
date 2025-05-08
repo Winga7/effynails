@@ -35,8 +35,8 @@ onMounted(async () => {
             </h2>
         </template>
 
-        <div class="py-12 min-h-screen">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="flex-grow py-12 flex flex-col justify-between">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 w-full">
                 <!-- Indicateur de chargement -->
                 <div
                     v-if="loading"

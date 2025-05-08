@@ -56,4 +56,23 @@
             display: flex;
         }
     }
+
+    .masonry {
+        column-count: 3;
+        column-gap: 24px;
+    }
+    @media (max-width: 1100px) {
+        .masonry {
+            column-count: 2;
+        }
+    }
+    @media (max-width: 700px) {
+        .masonry {
+            column-count: 1;
+        }
+    }
+    .masonry-item {
+        break-inside: avoid;
+        margin-bottom: 24px;
+    }
 }
