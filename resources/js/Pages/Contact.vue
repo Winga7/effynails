@@ -11,8 +11,11 @@ const props = defineProps({
 });
 
 const form = useForm({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
+    phone: "",
+    subject: "",
     message: "",
 });
 
@@ -99,7 +102,14 @@ const submit = () => {
                                 <div class="space-y-4 text-gray-700">
                                     <p class="flex items-center">
                                         <svg
-                                            class="w-5 h-5 mr-2 text-pink-500"
+                                            class="w-5 h-5 text-pink-400 z-10"
+                                            style="
+                                                color: #ec4899;
+                                                opacity: 1;
+                                                width: 20px;
+                                                height: 20px;
+                                                z-index: 10;
+                                            "
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -117,11 +127,19 @@ const submit = () => {
                                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                                             />
                                         </svg>
-                                        Adresse du salon
+                                        Effynails, Rue de la manucure 1, 1300
+                                        Wavre
                                     </p>
                                     <p class="flex items-center">
                                         <svg
-                                            class="w-5 h-5 mr-2 text-pink-500"
+                                            class="w-5 h-5 text-pink-400 z-10"
+                                            style="
+                                                color: #ec4899;
+                                                opacity: 1;
+                                                width: 20px;
+                                                height: 20px;
+                                                z-index: 10;
+                                            "
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -133,75 +151,285 @@ const submit = () => {
                                                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                                             />
                                         </svg>
-                                        Téléphone
+                                        <a
+                                            href="tel:+324XXXXXXXX"
+                                            class="hover:text-pink-600 transition-colors"
+                                            >+32 4XXXXXXXX</a
+                                        >
                                     </p>
+                                </div>
+
+                                <!-- Google Maps -->
+                                <div class="mt-6">
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d795.7288750944803!2d4.601806313951563!3d50.71471786475913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c17dcb3d2be3a5%3A0x1ba7122e08fb20cf!2sLa%20Sucrerie!5e0!3m2!1sfr!2sbe!4v1746707711436!5m2!1sfr!2sbe"
+                                        width="100%"
+                                        height="300"
+                                        style="border: 0"
+                                        allowfullscreen=""
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade"
+                                        class="rounded-lg shadow-md"
+                                    >
+                                    </iframe>
                                 </div>
                             </div>
 
                             <!-- Formulaire de contact -->
                             <form @submit.prevent="submit" class="space-y-6">
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
-                                    >
-                                        Nom
-                                    </label>
-                                    <input
-                                        type="text"
-                                        v-model="form.name"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-300 bg-white/70"
-                                        :class="{
-                                            'border-red-500': form.errors.name,
-                                        }"
-                                    />
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Prénom</label>
+                                        <div class="relative">
+                                            <svg
+                                                class="input-icon w-5 h-5 text-pink-400 z-10"
+                                                style="
+                                                    color: #ec4899;
+                                                    opacity: 1;
+                                                    width: 20px;
+                                                    height: 20px;
+                                                    z-index: 10;
+                                                "
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                                />
+                                            </svg>
+                                            <input
+                                                type="text"
+                                                v-model="form.firstName"
+                                                class="form-input input-with-icon"
+                                                :class="{
+                                                    'border-red-500':
+                                                        form.errors.firstName,
+                                                }"
+                                                placeholder="Votre prénom"
+                                            />
+                                        </div>
+                                        <p
+                                            v-if="form.errors.firstName"
+                                            class="form-error"
+                                        >
+                                            {{ form.errors.firstName }}
+                                        </p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Nom</label>
+                                        <div class="relative">
+                                            <svg
+                                                class="input-icon w-5 h-5 text-pink-400 z-10"
+                                                style="
+                                                    color: #ec4899;
+                                                    opacity: 1;
+                                                    width: 20px;
+                                                    height: 20px;
+                                                    z-index: 10;
+                                                "
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                                />
+                                            </svg>
+                                            <input
+                                                type="text"
+                                                v-model="form.lastName"
+                                                class="form-input input-with-icon"
+                                                :class="{
+                                                    'border-red-500':
+                                                        form.errors.lastName,
+                                                }"
+                                                placeholder="Votre nom"
+                                            />
+                                        </div>
+                                        <p
+                                            v-if="form.errors.lastName"
+                                            class="form-error"
+                                        >
+                                            {{ form.errors.lastName }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <div class="relative">
+                                            <svg
+                                                class="input-icon w-5 h-5 text-pink-400 z-10"
+                                                style="
+                                                    color: #ec4899;
+                                                    opacity: 1;
+                                                    width: 20px;
+                                                    height: 20px;
+                                                    z-index: 10;
+                                                "
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                                />
+                                            </svg>
+                                            <input
+                                                type="email"
+                                                v-model="form.email"
+                                                class="form-input input-with-icon"
+                                                :class="{
+                                                    'border-red-500':
+                                                        form.errors.email,
+                                                }"
+                                                placeholder="votre@email.com"
+                                            />
+                                        </div>
+                                        <p
+                                            v-if="form.errors.email"
+                                            class="form-error"
+                                        >
+                                            {{ form.errors.email }}
+                                        </p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label"
+                                            >Téléphone</label
+                                        >
+                                        <div class="relative">
+                                            <svg
+                                                class="input-icon w-5 h-5 text-pink-400 z-10"
+                                                style="
+                                                    color: #ec4899;
+                                                    opacity: 1;
+                                                    width: 20px;
+                                                    height: 20px;
+                                                    z-index: 10;
+                                                "
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                                                />
+                                            </svg>
+                                            <input
+                                                type="tel"
+                                                v-model="form.phone"
+                                                class="form-input input-with-icon"
+                                                :class="{
+                                                    'border-red-500':
+                                                        form.errors.phone,
+                                                }"
+                                                placeholder="+32 4XX XX XX XX"
+                                            />
+                                        </div>
+                                        <p
+                                            v-if="form.errors.phone"
+                                            class="form-error"
+                                        >
+                                            {{ form.errors.phone }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Sujet</label>
+                                    <div class="relative">
+                                        <svg
+                                            class="input-icon w-5 h-5 text-pink-400 z-10"
+                                            style="
+                                                color: #ec4899;
+                                                opacity: 1;
+                                                width: 20px;
+                                                height: 20px;
+                                                z-index: 10;
+                                            "
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                            />
+                                        </svg>
+                                        <input
+                                            type="text"
+                                            v-model="form.subject"
+                                            class="form-input input-with-icon"
+                                            :class="{
+                                                'border-red-500':
+                                                    form.errors.subject,
+                                            }"
+                                            placeholder="Sujet de votre message"
+                                        />
+                                    </div>
                                     <p
-                                        v-if="form.errors.name"
-                                        class="mt-1 text-sm text-red-600"
+                                        v-if="form.errors.subject"
+                                        class="form-error"
                                     >
-                                        {{ form.errors.name }}
+                                        {{ form.errors.subject }}
                                     </p>
                                 </div>
 
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
-                                    >
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        v-model="form.email"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-300 bg-white/70"
-                                        :class="{
-                                            'border-red-500': form.errors.email,
-                                        }"
-                                    />
-                                    <p
-                                        v-if="form.errors.email"
-                                        class="mt-1 text-sm text-red-600"
-                                    >
-                                        {{ form.errors.email }}
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
-                                    >
-                                        Message
-                                    </label>
-                                    <textarea
-                                        v-model="form.message"
-                                        rows="4"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-300 bg-white/70"
-                                        :class="{
-                                            'border-red-500':
-                                                form.errors.message,
-                                        }"
-                                    ></textarea>
+                                <div class="form-group">
+                                    <label class="form-label">Message</label>
+                                    <div class="relative">
+                                        <svg
+                                            class="input-icon w-5 h-5 text-pink-400 z-10"
+                                            style="
+                                                color: #ec4899;
+                                                opacity: 1;
+                                                width: 20px;
+                                                height: 20px;
+                                                z-index: 10;
+                                            "
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                                            />
+                                        </svg>
+                                        <textarea
+                                            v-model="form.message"
+                                            rows="4"
+                                            class="form-input input-with-icon"
+                                            :class="{
+                                                'border-red-500':
+                                                    form.errors.message,
+                                            }"
+                                            placeholder="Votre message..."
+                                        ></textarea>
+                                    </div>
                                     <p
                                         v-if="form.errors.message"
-                                        class="mt-1 text-sm text-red-600"
+                                        class="form-error"
                                     >
                                         {{ form.errors.message }}
                                     </p>
@@ -209,35 +437,39 @@ const submit = () => {
 
                                 <button
                                     type="submit"
-                                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-800 bg-pastel-yellow-btn hover:bg-pastel-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pastel-yellow transition-colors duration-300"
+                                    class="submit-btn"
                                     :disabled="isSubmitting"
                                 >
-                                    <svg
-                                        v-if="isSubmitting"
-                                        class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-800"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
+                                    <div
+                                        class="flex items-center justify-center"
                                     >
-                                        <circle
-                                            class="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            stroke-width="4"
-                                        ></circle>
-                                        <path
-                                            class="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                        ></path>
-                                    </svg>
-                                    {{
-                                        isSubmitting
-                                            ? "Envoi en cours..."
-                                            : "Envoyer"
-                                    }}
+                                        <svg
+                                            v-if="isSubmitting"
+                                            class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-800"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <circle
+                                                class="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                stroke-width="4"
+                                            ></circle>
+                                            <path
+                                                class="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                            ></path>
+                                        </svg>
+                                        {{
+                                            isSubmitting
+                                                ? "Envoi en cours..."
+                                                : "Envoyer"
+                                        }}
+                                    </div>
                                 </button>
                             </form>
                         </div>
@@ -247,3 +479,42 @@ const submit = () => {
         </div>
     </AppLayout>
 </template>
+
+<style scoped>
+.form-input {
+    @apply w-full px-4 py-3 bg-white/50 border-0 rounded-lg shadow-sm focus:ring-2 focus:ring-pink-300 focus:bg-white/80 transition-all duration-300;
+    backdrop-filter: blur(4px);
+}
+
+.form-input::placeholder {
+    @apply text-gray-400;
+}
+
+.form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+}
+
+.form-group {
+    @apply relative;
+}
+
+.form-error {
+    @apply mt-1 text-sm text-red-600;
+}
+
+.input-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+}
+
+.input-with-icon {
+    @apply pl-10;
+}
+
+.submit-btn {
+    @apply w-full py-3 px-6 text-gray-800 bg-pastel-yellow-btn hover:bg-pastel-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pastel-yellow transition-all duration-300 rounded-lg font-medium shadow-sm hover:shadow-md;
+}
+
+.submit-btn:disabled {
+    @apply opacity-70 cursor-not-allowed;
+}
+</style>

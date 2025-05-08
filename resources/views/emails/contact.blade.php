@@ -6,7 +6,7 @@
     <title>Nouveau message de contact</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
-        
+
         body {
             font-family: 'Montserrat', Helvetica, Arial, sans-serif;
             color: #333;
@@ -74,7 +74,7 @@
             font-weight: bold;
             color: #e91e63;
             display: inline-block;
-            width: 60px;
+            width: 100px;
         }
         .btn {
             display: inline-block;
@@ -103,22 +103,24 @@
         </div>
         <div class="content">
             <h2>Formulaire de contact - {{ config('app.name') }}</h2>
-            
+
             <div class="details">
-                <p><span class="label">Nom :</span> {{ $formData['name'] }}</p>
+                <p><span class="label">Nom :</span> {{ $formData['firstName'] }} {{ $formData['lastName'] }}</p>
                 <p><span class="label">Email :</span> <a href="mailto:{{ $formData['email'] }}" style="color: #e91e63; text-decoration: none;">{{ $formData['email'] }}</a></p>
+                <p><span class="label">Téléphone :</span> <a href="tel:{{ $formData['phone'] }}" style="color: #e91e63; text-decoration: none;">{{ $formData['phone'] }}</a></p>
+                <p><span class="label">Sujet :</span> {{ $formData['subject'] }}</p>
                 <p><span class="label">Date :</span> {{ date('d/m/Y H:i') }}</p>
             </div>
-            
+
             <div class="message">
                 <p class="label">Message :</p>
                 <p>{{ $formData['message'] }}</p>
             </div>
-            
+
             <div style="text-align: center; margin-top: 20px;">
                 <a href="mailto:{{ $formData['email'] }}" class="btn">Répondre</a>
             </div>
-            
+
             <div class="footer">
                 <p>Ce message a été envoyé depuis le formulaire de contact du site {{ config('app.name') }}.</p>
                 <p>© {{ date('Y') }} {{ config('app.name') }} - Tous droits réservés</p>
@@ -126,4 +128,4 @@
         </div>
     </div>
 </body>
-</html> 
+</html>

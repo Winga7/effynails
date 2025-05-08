@@ -31,14 +31,13 @@ defineProps({
                     <div class="p-6 lg:p-8">
                         <div class="grid md:grid-cols-2 gap-8 items-center">
                             <div>
-                                <p
-                                    class="text-gray-600 leading-relaxed whitespace-pre-line"
-                                >
-                                    {{
+                                <div
+                                    class="text-gray-600 leading-relaxed prose max-w-none"
+                                    v-html="
                                         presentation.content ||
-                                        "Contenu à venir..."
-                                    }}
-                                </p>
+                                        'Contenu à venir...'
+                                    "
+                                ></div>
                             </div>
                             <div class="flex justify-end gap-4">
                                 <img
@@ -63,14 +62,13 @@ defineProps({
                             {{ presentation.about_title || "À propos" }}
                         </h3>
                         <div class="prose max-w-none">
-                            <p
-                                class="text-gray-600 leading-relaxed whitespace-pre-line"
-                            >
-                                {{
+                            <div
+                                class="text-gray-600 leading-relaxed prose max-w-none"
+                                v-html="
                                     presentation.about_content ||
-                                    "Contenu à venir..."
-                                }}
-                            </p>
+                                    'Contenu à venir...'
+                                "
+                            ></div>
                         </div>
                     </div>
 
@@ -80,9 +78,7 @@ defineProps({
                             {{ presentation.experience_title || "Mon expérience" }}
                         </h3>
                         <div class="prose max-w-none">
-                            <p class="text-gray-600 leading-relaxed whitespace-pre-line">
-                                {{ presentation.experience_content || "Contenu à venir..." }}
-                            </p>
+                            <div class="text-gray-600 leading-relaxed prose max-w-none" v-html="presentation.experience_content || 'Contenu à venir...'"></div>
                         </div>
                     </div> -->
                 </div>

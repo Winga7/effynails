@@ -5,6 +5,8 @@ import { ref } from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
 const props = defineProps({
     presentation: Object,
@@ -19,12 +21,13 @@ const form = useForm({
 });
 
 const submit = () => {
+    console.log(form);
     form.put(route("admin.presentation.update"));
 };
 </script>
 
 <template>
-    <AppLayout>
+    <AppLayout class="bg-gradient-to-br from-white to-pastel-purple">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Gestion de la Présentation
@@ -43,12 +46,18 @@ const submit = () => {
                                 for="content"
                                 value="Introduction générale"
                             />
-                            <textarea
-                                id="content"
-                                v-model="form.content"
+                            <QuillEditor
+                                :content="form.content"
+                                @update:content="form.content = $event"
+                                theme="snow"
+                                contentType="html"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50"
-                                rows="4"
-                            ></textarea>
+                                :toolbar="[
+                                    ['bold', 'italic', 'underline'],
+                                    [{ list: 'ordered' }, { list: 'bullet' }],
+                                    ['link'],
+                                ]"
+                            />
                         </div>
 
                         <!-- À propos -->
@@ -70,17 +79,26 @@ const submit = () => {
                                 for="about_content"
                                 value="Contenu de la section À propos"
                             />
-                            <textarea
-                                id="about_content"
-                                v-model="form.about_content"
+                            <QuillEditor
+                                :content="form.about_content"
+                                @update:content="form.about_content = $event"
+                                theme="snow"
+                                contentType="html"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50"
-                                rows="6"
-                            ></textarea>
+                                :toolbar="[
+                                    ['bold', 'italic', 'underline'],
+                                    [{ list: 'ordered' }, { list: 'bullet' }],
+                                    ['link'],
+                                ]"
+                            />
                         </div>
 
                         <!-- Expérience -->
                         <!-- <div>
-                            <InputLabel for="experience_title" value="Titre de la section Expérience" />
+                            <InputLabel
+                                for="experience_title"
+                                value="Titre de la section Expérience"
+                            />
                             <TextInput
                                 id="experience_title"
                                 v-model="form.experience_title"
@@ -90,13 +108,22 @@ const submit = () => {
                         </div>
 
                         <div>
-                            <InputLabel for="experience_content" value="Contenu de la section Expérience" />
-                            <textarea
-                                id="experience_content"
-                                v-model="form.experience_content"
+                            <InputLabel
+                                for="experience_content"
+                                value="Contenu de la section Expérience"
+                            />
+                            <QuillEditor
+                                :content="form.experience_content"
+                                @update:content="form.experience_content = $event"
+                                theme="snow"
+                                contentType="html"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50"
-                                rows="6"
-                            ></textarea>
+                                :toolbar="[
+                                    ['bold', 'italic', 'underline'],
+                                    [{ list: 'ordered' }, { list: 'bullet' }],
+                                    ['link'],
+                                ]"
+                            />
                         </div> -->
 
                         <div class="flex items-center justify-end">

@@ -6,32 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Models\Presentation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
 class PresentationController extends Controller
 {
-  public function edit()
-  {
-    $presentation = Presentation::first() ?? new Presentation();
+    public function edit()
+    {
+        $presentation = Presentation::first() ?? new Presentation();
 
-    return Inertia::render('Admin/PresentationAdmin', [
-      'presentation' => $presentation
-    ]);
-  }
+        return Inertia::render('Admin/PresentationAdmin', [
+            'presentation' => $presentation
+        ]);
+    }
 
-  public function update(Request $request)
-  {
-    $request->validate([
-      'content' => 'nullable|string',
-      'about_title' => 'nullable|string',
-      'about_content' => 'nullable|string',
-      'experience_title' => 'nullable|string',
-      'experience_content' => 'nullable|string',
-    ]);
+    public function update(Request $request)
+    {
+        Log::info('Présentation update', $request->all());
+        $request->validate([
+            'content' => 'nullable|string',
+            'about_title' => 'nullable|string',
+            'about_content' => 'nullable|string',
+            'experience_title' => 'nullable|string',
+            'experience_content' => 'nullable|string',
+        ]);
 
-    $presentation = Presentation::first() ?? new Presentation();
-    $presentation->fill($request->all());
-    $presentation->save();
+        $presentation = Presentation::first() ?? new Presentation();
+        $presentation->fill($request->all());
+        $presentation->save();
 
-    return redirect()->back()->with('success', 'Présentation mise à jour avec succès');
-  }
+        return redirect()->back()->with('success', 'Présentation mise à jour avec succès');
+    }
 }

@@ -24,8 +24,11 @@ class ContactController extends Controller
     public function send(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'subject' => 'required|string|max:255',
             'message' => 'required|string',
         ]);
 
@@ -35,18 +38,23 @@ class ContactController extends Controller
                 'to' => config('mail.to_address'),
                 'from' => config('mail.from.address'),
                 'mailer' => config('mail.default'),
-                'name' => $validated['name'],
+                'firstName' => $validated['firstName'],
+                'lastName' => $validated['lastName'],
                 'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'subject' => $validated['subject'],
             ]);
-            
+
             // Solution de contournement - écrire directement dans les logs
             Log::info('CONTENU DU MESSAGE DE CONTACT', [
-                'nom' => $validated['name'],
+                'nom' => $validated['firstName'] . ' ' . $validated['lastName'],
                 'email' => $validated['email'],
+                'telephone' => $validated['phone'],
+                'sujet' => $validated['subject'],
                 'message' => $validated['message'],
                 'date' => now()->format('d/m/Y H:i:s')
             ]);
-            
+
             // Envoi de l'email
             Mail::to(config('mail.to_address'))->send(new ContactFormMail($validated));
 
@@ -64,9 +72,9 @@ class ContactController extends Controller
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
-            
+
             // Redirection avec message d'erreur
             return redirect()->route('contact')->with('error', 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer ultérieurement. Erreur: ' . $e->getMessage());
         }
     }
-} 
+}
