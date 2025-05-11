@@ -20,6 +20,8 @@ const form = useForm({
     experience_content: props.presentation?.experience_content || "",
 });
 
+console.log(form.content);
+
 const submit = () => {
     console.log(form);
     form.put(route("admin.presentation.update"));
@@ -53,7 +55,19 @@ const submit = () => {
                                 contentType="html"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50"
                                 :toolbar="[
-                                    ['bold', 'italic', 'underline'],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ color: [] }, { background: [] }],
+                                    [{ align: [] }],
+                                    [
+                                        {
+                                            size: [
+                                                'small',
+                                                false,
+                                                'large',
+                                                'huge',
+                                            ],
+                                        },
+                                    ],
                                     [{ list: 'ordered' }, { list: 'bullet' }],
                                     ['link'],
                                 ]"
@@ -86,7 +100,19 @@ const submit = () => {
                                 contentType="html"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50"
                                 :toolbar="[
-                                    ['bold', 'italic', 'underline'],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ color: [] }, { background: [] }],
+                                    [{ align: [] }],
+                                    [
+                                        {
+                                            size: [
+                                                'small',
+                                                false,
+                                                'large',
+                                                'huge',
+                                            ],
+                                        },
+                                    ],
                                     [{ list: 'ordered' }, { list: 'bullet' }],
                                     ['link'],
                                 ]"

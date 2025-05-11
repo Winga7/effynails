@@ -139,7 +139,18 @@ const nextAvis = () => {
 
 <template>
     <AppLayout class="bg-gradient-to-br from-white to-pastel-peach">
-        <Head title="Accueil - EFFYNAILS" />
+        <Head
+            title="Manucure Wavre - EFFYNAILS | Salon de Nail Art et Pose d'Ongles en Gel"
+        >
+            <meta
+                name="description"
+                content="Salon de manucure à Wavre par Steffi Ledoux. Découvrez nos services de nail art et pose d'ongles en gel. Expert en beauté des ongles à Wavre."
+            />
+            <meta
+                name="keywords"
+                content="Manucure Wavre, Nail art Wavre, Pose d'ongles en gel Wavre, Steffi Ledoux, Salon manucure Wavre"
+            />
+        </Head>
 
         <!-- Section Héro -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -171,20 +182,26 @@ const nextAvis = () => {
 
                 <!-- Contenu à droite -->
                 <div class="space-y-7">
-                    <h1 class="text-5xl font-caveat">EFFYNAILS</h1>
+                    <h1 class="text-5xl font-caveat">
+                        EFFYNAILS - Manucure Wavre
+                    </h1>
                     <div class="space-y-4 text-gray-600 text-justif">
                         <p>
-                            Bienvenue dans mon univers dédié à la beauté des
-                            ongles !
+                            Bienvenue dans mon salon de manucure à Wavre, votre
+                            destination pour une beauté des ongles
+                            exceptionnelle !
                         </p>
                         <p>
-                            Je suis une prothésiste ongulaire passionnée et
-                            fraîchement diplômée, prête à sublimer vos mains
-                            avec des poses d'ongles soignées et personnalisées.
+                            Je suis Steffi Ledoux, prothésiste ongulaire
+                            passionnée et fraîchement diplômée, spécialisée en
+                            nail art et pose d'ongles en gel à Wavre. Je suis
+                            prête à sublimer vos mains avec des poses d'ongles
+                            soignées et personnalisées.
                         </p>
                         <p>
-                            Découvrez mes services et n'hésitez pas à me
-                            contacter pour prendre rendez-vous!
+                            Découvrez mes services de manucure et n'hésitez pas
+                            à me contacter pour prendre rendez-vous dans mon
+                            salon de Wavre !
                         </p>
                     </div>
                     <Link
@@ -243,6 +260,7 @@ const nextAvis = () => {
                                     getImageUrl(latestPortfolio[1].image_path)
                                 "
                                 :alt="latestPortfolio[1].title"
+                                loading="lazy"
                                 class="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
                             />
                             <div

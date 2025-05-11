@@ -2,6 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 // Récupérer les messages flash éventuels
 const props = defineProps({
@@ -46,6 +47,11 @@ const submit = () => {
         },
     });
 };
+
+const breadcrumbItems = [
+    { label: "Accueil", route: "home" },
+    { label: "Contact", route: "contact" },
+];
 </script>
 
 <template>
@@ -62,6 +68,13 @@ const submit = () => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- Breadcrumbs -->
+                <div
+                    class="p-6 border-b bg-white/90 backdrop-blur-sm rounded-t-lg border border-pink-100"
+                >
+                    <Breadcrumbs :items="breadcrumbItems" />
+                </div>
+
                 <!-- Messages de notification -->
                 <div
                     v-if="showSuccessMessage || success"
@@ -90,7 +103,7 @@ const submit = () => {
                 </div>
 
                 <div
-                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg border border-pink-100"
+                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg border border-pink-100 border-t-0"
                 >
                     <div class="p-6 lg:p-8">
                         <div class="grid md:grid-cols-2 gap-6">

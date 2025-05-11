@@ -2,11 +2,17 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { onMounted } from "vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 // Configuration Cal.com - à personnaliser avec votre compte
 const CAL_USERNAME = "cal.com/effynailss"; // Remplacez par votre nom d'utilisateur Cal.com
 const CAL_EVENT_TYPE = "manucure"; // Remplacez par le nom de votre service
 const CAL_URL = "https://cal.com"; // URL de Cal.com (ou votre instance personnalisée)
+
+const breadcrumbItems = [
+    { label: "Accueil", route: "home" },
+    { label: "Réservation", route: "reservation" },
+];
 
 onMounted(() => {
     // Cal.com Embed initialization
@@ -103,7 +109,16 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Réservation" />
+    <Head title="Réservation - EFFYNAILS | Manucure et Nail Art à Wavre">
+        <meta
+            name="description"
+            content="Réservez votre séance de manucure ou nail art à Wavre. Prenez rendez-vous en ligne pour vos soins des ongles chez EFFYNAILS."
+        />
+        <meta
+            name="keywords"
+            content="Réservation manucure Wavre, Rendez-vous nail art Wavre, Prendre RDV manucure Wavre"
+        />
+    </Head>
 
     <AppLayout class="bg-gradient-to-br from-white to-pastel-pink">
         <template #header>
@@ -116,8 +131,15 @@ onMounted(() => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- Breadcrumbs -->
                 <div
-                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg border border-pink-100"
+                    class="p-6 border-b bg-white/90 backdrop-blur-sm rounded-t-lg border border-pink-100"
+                >
+                    <Breadcrumbs :items="breadcrumbItems" />
+                </div>
+
+                <div
+                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg border border-pink-100 border-t-0"
                 >
                     <div class="p-6 lg:p-8">
                         <h3

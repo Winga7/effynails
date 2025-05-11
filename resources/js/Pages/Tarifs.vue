@@ -3,11 +3,17 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref, onMounted } from "vue";
 import tarifService from "@/Services/tarifService";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 // Charger les tarifs depuis le service partagé
 const tarifs = ref([]);
 const loading = ref(false);
 const error = ref(null);
+
+const breadcrumbItems = [
+    { label: "Accueil", route: "home" },
+    { label: "Tarifs", route: "tarifs" },
+];
 
 onMounted(async () => {
     // Charger les tarifs depuis l'API
@@ -24,19 +30,35 @@ onMounted(async () => {
 </script>
 
 <template>
-    <Head title="Tarifs" />
+    <Head
+        title="Tarifs Manucure Wavre | EFFYNAILS - Pose d'Ongles en Gel et Nail Art"
+    >
+        <meta
+            name="description"
+            content="Découvrez nos tarifs pour la manucure, pose d'ongles en gel et nail art à Wavre. Prix compétitifs pour tous nos services de beauté des ongles."
+        />
+        <meta
+            name="keywords"
+            content="Tarifs manucure Wavre, Prix pose ongles gel Wavre, Tarifs nail art Wavre, Steffi Ledoux tarifs"
+        />
+    </Head>
 
     <AppLayout class="bg-gradient-to-br from-white to-pastel-pink">
         <template #header>
             <h2
                 class="font-semibold text-2xl text-gray-800 leading-tight font-caveat"
             >
-                Nos Tarifs
+                Tarifs Manucure et Nail Art à Wavre
             </h2>
         </template>
 
         <div class="flex-grow py-12 flex flex-col justify-between">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 w-full">
+                <!-- Breadcrumbs -->
+                <div class="p-6 border-b">
+                    <Breadcrumbs :items="breadcrumbItems" />
+                </div>
+
                 <!-- Indicateur de chargement -->
                 <div
                     v-if="loading"

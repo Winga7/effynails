@@ -3,6 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref } from "vue";
 import ImageModal from "@/Components/ImageModal.vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 const props = defineProps({
     album: {
@@ -10,6 +11,12 @@ const props = defineProps({
         required: true,
     },
 });
+
+const breadcrumbItems = [
+    { label: "Accueil", route: "home" },
+    { label: "Portfolio", route: "portfolio" },
+    { label: props.album.title, route: "portfolio.show" },
+];
 
 // État pour le modal
 const showModal = ref(false);
@@ -69,6 +76,11 @@ const closeModal = () => {
                 <div
                     class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg border border-pink-100"
                 >
+                    <!-- Breadcrumbs -->
+                    <div class="p-6 border-b">
+                        <Breadcrumbs :items="breadcrumbItems" />
+                    </div>
+
                     <div class="p-6 lg:p-8">
                         <!-- Description de l'album -->
                         <p class="text-gray-600 mb-8 text-center">
@@ -88,6 +100,7 @@ const closeModal = () => {
                                 <img
                                     :src="getImageUrl(portfolio.image_path)"
                                     :alt="portfolio.title"
+                                    loading="lazy"
                                     class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                                 />
 

@@ -3,6 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { Waterfall } from "vue-waterfall-plugin-next";
 import "vue-waterfall-plugin-next/dist/style.css";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 // Définition des props pour recevoir les albums depuis le contrôleur
 const props = defineProps({
@@ -32,10 +33,24 @@ const hasPagination = () => {
 const getImageUrl = (imagePath) => {
     return `/storage/${imagePath}`;
 };
+
+const breadcrumbItems = [
+    { label: "Accueil", route: "home" },
+    { label: "Portfolio", route: "portfolio" },
+];
 </script>
 
 <template>
-    <Head title="Portfolio" />
+    <Head title="Portfolio - EFFYNAILS | Manucure et Nail Art à Wavre">
+        <meta
+            name="description"
+            content="Découvrez notre portfolio de manucure et nail art à Wavre. Retrouvez nos plus belles réalisations en pose d'ongles en gel et nail art personnalisé."
+        />
+        <meta
+            name="keywords"
+            content="Portfolio manucure Wavre, Nail art Wavre, Pose d'ongles en gel Wavre, Galerie photos manucure"
+        />
+    </Head>
 
     <AppLayout class="bg-gradient-to-br from-white to-pastel-peach">
         <template #header>
@@ -48,8 +63,15 @@ const getImageUrl = (imagePath) => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- Breadcrumbs -->
                 <div
-                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg border border-pink-100"
+                    class="p-6 border-b bg-white/90 backdrop-blur-sm rounded-t-lg border border-pink-100"
+                >
+                    <Breadcrumbs :items="breadcrumbItems" />
+                </div>
+
+                <div
+                    class="bg-white/90 backdrop-blur-sm overflow-hidden shadow-xl sm:rounded-lg border border-pink-100 border-t-0"
                 >
                     <div class="p-6 lg:p-8">
                         <!-- Titre de la section -->

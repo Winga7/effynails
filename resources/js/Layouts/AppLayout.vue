@@ -7,7 +7,7 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import Footer from "@/Components/Footer.vue";
+import Footer from "@/Components/footer.vue";
 import CookieConsent from "@/Components/CookieConsent.vue";
 
 defineProps({
@@ -99,11 +99,113 @@ onUnmounted(() => {
     document.removeEventListener("click", handleClickOutside);
     window.removeEventListener("scroll", handleScroll);
 });
+
+// Schema.org markup
+const schemaMarkup = {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    name: "EFFYNAILS",
+    image: "/images/hero-nails.jpg",
+    description:
+        "Salon de manucure à Wavre par Steffi Ledoux. Découvrez nos services de nail art et pose d'ongles en gel.",
+    address: {
+        "@type": "PostalAddress",
+        addressLocality: "Wavre",
+        addressCountry: "BE",
+    },
+    url: "https://effynails.be",
+    priceRange: "€€",
+    openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ],
+        opens: "09:00",
+        closes: "18:00",
+    },
+    sameAs: [
+        "https://www.facebook.com/profile.php?id=61576011179310",
+        "https://www.instagram.com/nailseffy/",
+        "https://wa.me/324XXXXXXXX",
+    ],
+    hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Services de Manucure",
+        itemListElement: [
+            {
+                "@type": "Offer",
+                itemOffered: {
+                    "@type": "Service",
+                    name: "Manucure",
+                },
+            },
+            {
+                "@type": "Offer",
+                itemOffered: {
+                    "@type": "Service",
+                    name: "Pose d'ongles en gel",
+                },
+            },
+            {
+                "@type": "Offer",
+                itemOffered: {
+                    "@type": "Service",
+                    name: "Nail Art",
+                },
+            },
+        ],
+    },
+    areaServed: {
+        "@type": "City",
+        name: "Wavre",
+    },
+    keywords:
+        "manucure, nail art, pose d'ongles en gel, beauté des ongles, Wavre",
+    slogan: "Votre expert en beauté des ongles à Wavre",
+};
 </script>
 
 <template>
     <div class="flex flex-col min-h-screen">
-        <Head :title="title" />
+        <Head :title="title">
+            <!-- Meta tags de base -->
+            <meta charset="utf-8" />
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1"
+            />
+            <meta name="robots" content="index, follow" />
+            <meta name="language" content="French" />
+            <meta name="revisit-after" content="7 days" />
+            <meta name="author" content="Steffi Ledoux" />
+
+            <!-- Open Graph / Facebook -->
+            <meta property="og:type" content="website" />
+            <meta
+                property="og:url"
+                :content="'https://effynails.be' + route().current()"
+            />
+            <meta property="og:title" :content="title" />
+            <meta
+                property="og:description"
+                content="Salon de manucure à Wavre par Steffi Ledoux. Découvrez nos services de nail art et pose d'ongles en gel. Expert en beauté des ongles à Wavre."
+            />
+            <meta property="og:image" content="/images/hero-nails.jpg" />
+            <meta property="og:locale" content="fr_BE" />
+            <meta property="og:site_name" content="EFFYNAILS" />
+
+            <!-- Schema.org markup -->
+            <component
+                :is="'script'"
+                type="application/ld+json"
+                v-html="JSON.stringify(schemaMarkup)"
+            />
+        </Head>
         <Banner />
 
         <div class="flex-grow flex flex-col">
