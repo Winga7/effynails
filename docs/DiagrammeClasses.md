@@ -11,7 +11,7 @@ classDiagram
         email_verified_at: timestamp
         password: string
         remember_token: string
-        is_admin: boolean
+        role: enum (admin, owner)
         phone: string
         created_at: timestamp
         updated_at: timestamp
@@ -46,6 +46,7 @@ classDiagram
         is_featured: boolean
         created_at: timestamp
         updated_at: timestamp
+        user_id: bigint
     }
 
     class GoogleIntegration {
@@ -100,11 +101,11 @@ classDiagram
         updated_at: timestamp
     }
 
-    User "1" -- "*" Portfolio: gère
     Service "*" -- "1" Categorie: appartient
-    GoogleIntegration "1" -- "1" AvisConfig: configure
+    GoogleIntegration "n" -- "n" AvisConfig: configure
     CalComIntegration "1" -- "*" Service: synchronise
     Service "1" -- "*" CalComAppointment: concerne
+    User "1" -- "*" Portfolio: crée/modifie
 ```
 
 ## Description des Entités
@@ -112,8 +113,9 @@ classDiagram
 ### User (Utilisateur)
 
 -   Représente les administrateurs du site
--   `is_admin` détermine les droits d'administration
+-   Par défaut, tous les utilisateurs sont des administrateurs (`role = 'admin'`)
 -   Gère le contenu du site (portfolio, services)
+-   L'inscription est ouverte à tous
 
 ### Service
 
