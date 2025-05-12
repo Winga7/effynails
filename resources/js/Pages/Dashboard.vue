@@ -2,6 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { ref, onMounted } from "vue";
 import { Head } from "@inertiajs/vue3";
+import axios from "axios";
 import {
     useMockData,
     statsMock,
@@ -12,6 +13,23 @@ import {
 const stats = ref({});
 const derniersRendezVous = ref([]);
 const servicesPopulaires = ref([]);
+const prochainRendezVous = ref(null);
+const showModal = ref(false);
+const showDernierRdvModal = ref(false);
+const selectedDernierRdv = ref(null);
+const prochainsRendezVous = ref([]);
+
+const fetchDashboardData = async () => {
+    try {
+        const response = await axios.get("/api/dashboard");
+        stats.value = response.data.stats;
+        prochainsRendezVous.value = response.data.prochainsRendezVous;
+        servicesPopulaires.value = response.data.servicesPopulaires;
+        prochainRendezVous.value = response.data.prochainRendezVous;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des données:", error);
+    }
+};
 
 onMounted(() => {
     if (useMockData) {
@@ -19,11 +37,25 @@ onMounted(() => {
         derniersRendezVous.value = derniersRendezVousMock;
         servicesPopulaires.value = servicesPopulairesMock;
     } else {
-        // Ici tu mets l'appel à l'API Google Calendar ou Cal.com
-        // Exemple :
-        // fetchDashboardDataFromAPI();
+        fetchDashboardData();
     }
 });
+
+const openModal = () => {
+    showModal.value = true;
+};
+const closeModal = () => {
+    showModal.value = false;
+};
+
+const openDernierRdvModal = (rdv) => {
+    selectedDernierRdv.value = rdv;
+    showDernierRdvModal.value = true;
+};
+const closeDernierRdvModal = () => {
+    showDernierRdvModal.value = false;
+    selectedDernierRdv.value = null;
+};
 </script>
 
 <template>
@@ -112,7 +144,8 @@ onMounted(() => {
                     </div>
 
                     <div
-                        class="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6"
+                        class="bg-white/80 backdrop-blur-sm rounded-lg shadow p-6 transition cursor-pointer hover:shadow-lg hover:bg-yellow-50"
+                        @click="prochainRendezVous && openModal()"
                     >
                         <div class="flex items-center">
                             <div
@@ -134,11 +167,36 @@ onMounted(() => {
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">
-                                    Nouveaux clients
+                                    Prochain rendez-vous à venir
                                 </p>
-                                <p class="text-2xl font-semibold text-gray-900">
-                                    {{ stats.clientsNouveaux }}
-                                </p>
+                                <div v-if="prochainRendezVous">
+                                    <p
+                                        class="text-base text-gray-900 font-semibold"
+                                    >
+                                        {{ prochainRendezVous.type }}
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        Client :
+                                        <span
+                                            class="font-medium text-gray-800"
+                                            >{{
+                                                prochainRendezVous.client
+                                            }}</span
+                                        >
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        Date :
+                                        <span
+                                            class="font-medium text-gray-800"
+                                            >{{ prochainRendezVous.date }}</span
+                                        >
+                                    </p>
+                                </div>
+                                <div v-else>
+                                    <p class="text-gray-400 text-sm">
+                                        Aucun rendez-vous à venir
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,26 +236,31 @@ onMounted(() => {
 
                 <!-- Derniers rendez-vous et Services populaires -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Derniers rendez-vous -->
+                    <!-- Prochains rendez-vous -->
                     <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow">
                         <div class="p-6">
                             <h3
                                 class="text-lg font-semibold text-gray-900 mb-4"
                             >
-                                Derniers rendez-vous
+                                Prochains rendez-vous
                             </h3>
                             <div class="space-y-4">
                                 <div
-                                    v-for="rdv in derniersRendezVous"
+                                    v-for="rdv in prochainsRendezVous"
                                     :key="rdv.id"
-                                    class="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                                    class="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-pink-100 transition"
+                                    @click="openDernierRdvModal(rdv)"
                                 >
                                     <div>
                                         <p class="font-medium text-gray-900">
-                                            {{ rdv.client }}
+                                            {{ rdv.type }}
                                         </p>
                                         <p class="text-sm text-gray-500">
-                                            {{ rdv.service }}
+                                            Client :
+                                            <span
+                                                class="font-medium text-gray-800"
+                                                >{{ rdv.client }}</span
+                                            >
                                         </p>
                                     </div>
                                     <div class="text-right">
@@ -242,6 +305,156 @@ onMounted(() => {
                                         {{ service.nombre }} rendez-vous
                                     </p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modale détails rendez-vous -->
+                <div
+                    v-if="showModal"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+                    @click.self="closeModal"
+                >
+                    <div
+                        class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4 p-6 relative animate-fade-in"
+                    >
+                        <button
+                            @click="closeModal"
+                            class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
+                        >
+                            &times;
+                        </button>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                            Détails du rendez-vous
+                        </h3>
+                        <div v-if="prochainRendezVous">
+                            <p>
+                                <span class="font-semibold">Type :</span>
+                                {{ prochainRendezVous.type }}
+                            </p>
+                            <p>
+                                <span class="font-semibold">Client :</span>
+                                {{ prochainRendezVous.client }}
+                            </p>
+                            <p v-if="prochainRendezVous.email">
+                                <span class="font-semibold">Email :</span>
+                                <a
+                                    :href="`mailto:${prochainRendezVous.email}`"
+                                    class="text-blue-600 underline hover:text-blue-800"
+                                    >{{ prochainRendezVous.email }}</a
+                                >
+                            </p>
+                            <p v-if="prochainRendezVous.telephone">
+                                <span class="font-semibold">Téléphone :</span>
+                                <a
+                                    :href="`tel:${prochainRendezVous.telephone.replace(
+                                        /\s+/g,
+                                        ''
+                                    )}`"
+                                    class="text-blue-600 underline hover:text-blue-800"
+                                    >{{ prochainRendezVous.telephone }}</a
+                                >
+                            </p>
+                            <p>
+                                <span class="font-semibold">Date :</span>
+                                {{ prochainRendezVous.date }}
+                            </p>
+                            <p v-if="prochainRendezVous.message" class="mt-2">
+                                <span class="font-semibold"
+                                    >Message du client :</span
+                                ><br /><span class="italic">{{
+                                    prochainRendezVous.message
+                                }}</span>
+                            </p>
+                            <p v-else class="text-gray-400 mt-2">
+                                Aucun message laissé par le client.
+                            </p>
+                            <div
+                                v-if="prochainRendezVous.annulation_url"
+                                class="mt-4"
+                            >
+                                <a
+                                    :href="prochainRendezVous.annulation_url"
+                                    target="_blank"
+                                    class="inline-block bg-red-100 text-red-700 px-4 py-2 rounded hover:bg-red-200 font-semibold transition"
+                                    >Annuler ou replanifiez le rendez-vous</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modale détails dernier rendez-vous -->
+                <div
+                    v-if="showDernierRdvModal"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+                    @click.self="closeDernierRdvModal"
+                >
+                    <div
+                        class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4 p-6 relative animate-fade-in"
+                    >
+                        <button
+                            @click="closeDernierRdvModal"
+                            class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
+                        >
+                            &times;
+                        </button>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                            Détails du rendez-vous
+                        </h3>
+                        <div v-if="selectedDernierRdv">
+                            <p>
+                                <span class="font-semibold">Type :</span>
+                                {{ selectedDernierRdv.type }}
+                            </p>
+                            <p>
+                                <span class="font-semibold">Client :</span>
+                                {{ selectedDernierRdv.client }}
+                            </p>
+                            <p v-if="selectedDernierRdv.email">
+                                <span class="font-semibold">Email :</span>
+                                <a
+                                    :href="`mailto:${selectedDernierRdv.email}`"
+                                    class="text-blue-600 underline hover:text-blue-800"
+                                    >{{ selectedDernierRdv.email }}</a
+                                >
+                            </p>
+                            <p v-if="selectedDernierRdv.telephone">
+                                <span class="font-semibold">Téléphone :</span>
+                                <a
+                                    :href="`tel:${selectedDernierRdv.telephone.replace(
+                                        /\s+/g,
+                                        ''
+                                    )}`"
+                                    class="text-blue-600 underline hover:text-blue-800"
+                                    >{{ selectedDernierRdv.telephone }}</a
+                                >
+                            </p>
+                            <p>
+                                <span class="font-semibold">Date :</span>
+                                {{ selectedDernierRdv.date }}
+                            </p>
+                            <p v-if="selectedDernierRdv.message" class="mt-2">
+                                <span class="font-semibold"
+                                    >Message du client :</span
+                                ><br /><span class="italic">{{
+                                    selectedDernierRdv.message
+                                }}</span>
+                            </p>
+                            <p v-else class="text-gray-400 mt-2">
+                                Aucun message laissé par le client.
+                            </p>
+                            <div
+                                v-if="selectedDernierRdv.annulation_url"
+                                class="mt-4"
+                            >
+                                <a
+                                    :href="selectedDernierRdv.annulation_url"
+                                    target="_blank"
+                                    class="inline-block bg-red-100 text-red-700 px-4 py-2 rounded hover:bg-red-200 font-semibold transition"
+                                    >Annuler ou replanifiez le rendez-vous</a
+                                >
                             </div>
                         </div>
                     </div>

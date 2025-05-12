@@ -73,7 +73,14 @@
         <!-- Made with ❤️ -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center text-sm text-gray-600">
-                Made with ❤️ by <a href="https://www.winga.be">Winga</a> &copy;
+                Made with ❤️ by
+                <a
+                    href="https://www.winga.be"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Winga</a
+                >
+                &copy;
                 {{ new Date().getFullYear() }}
             </div>
         </div>

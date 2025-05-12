@@ -1,5 +1,5 @@
 // Paramètre global pour activer/désactiver les données mock
-export const useMockData = true;
+export const useMockData = false;
 
 // Données factices pour le dashboard Effynails
 
