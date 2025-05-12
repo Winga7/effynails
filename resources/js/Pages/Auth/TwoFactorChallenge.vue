@@ -38,78 +38,88 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Confirmation de la double authentification" />
+    <div
+        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-pastel-peach"
+    >
+        <Head title="Confirmation de la double authentification" />
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            <template v-if="!recovery">
-                Veuillez confirmer l'accès à votre compte en entrant le code
-                d'authentification fourni par votre application
-                d'authentification.
+        <AuthenticationCard>
+            <template #logo>
+                <AuthenticationCardLogo />
             </template>
 
-            <template v-else>
-                Veuillez confirmer l'accès à votre compte en entrant l'un de vos
-                codes de récupération d'urgence.
-            </template>
-        </div>
+            <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                <template v-if="!recovery">
+                    Veuillez confirmer l'accès à votre compte en entrant le code
+                    d'authentification fourni par votre application
+                    d'authentification.
+                </template>
 
-        <form @submit.prevent="submit">
-            <div v-if="!recovery">
-                <InputLabel for="code" value="Code" />
-                <TextInput
-                    id="code"
-                    ref="codeInput"
-                    v-model="form.code"
-                    type="text"
-                    inputmode="numeric"
-                    class="mt-1 block w-full"
-                    autofocus
-                    autocomplete="one-time-code"
-                />
-                <InputError class="mt-2" :message="form.errors.code" />
+                <template v-else>
+                    Veuillez confirmer l'accès à votre compte en entrant l'un de
+                    vos codes de récupération d'urgence.
+                </template>
             </div>
 
-            <div v-else>
-                <InputLabel for="recovery_code" value="Code de récupération" />
-                <TextInput
-                    id="recovery_code"
-                    ref="recoveryCodeInput"
-                    v-model="form.recovery_code"
-                    type="text"
-                    class="mt-1 block w-full"
-                    autocomplete="one-time-code"
-                />
-                <InputError class="mt-2" :message="form.errors.recovery_code" />
-            </div>
+            <form @submit.prevent="submit">
+                <div v-if="!recovery">
+                    <InputLabel for="code" value="Code" />
+                    <TextInput
+                        id="code"
+                        ref="codeInput"
+                        v-model="form.code"
+                        type="text"
+                        inputmode="numeric"
+                        class="mt-1 block w-full"
+                        autofocus
+                        autocomplete="one-time-code"
+                    />
+                    <InputError class="mt-2" :message="form.errors.code" />
+                </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <button
-                    type="button"
-                    class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 underline cursor-pointer"
-                    @click.prevent="toggleRecovery"
-                >
-                    <template v-if="!recovery">
-                        Utiliser un code de récupération
-                    </template>
+                <div v-else>
+                    <InputLabel
+                        for="recovery_code"
+                        value="Code de récupération"
+                    />
+                    <TextInput
+                        id="recovery_code"
+                        ref="recoveryCodeInput"
+                        v-model="form.recovery_code"
+                        type="text"
+                        class="mt-1 block w-full"
+                        autocomplete="one-time-code"
+                    />
+                    <InputError
+                        class="mt-2"
+                        :message="form.errors.recovery_code"
+                    />
+                </div>
 
-                    <template v-else>
-                        Utiliser un code d'authentification
-                    </template>
-                </button>
+                <div class="flex items-center justify-end mt-4">
+                    <button
+                        type="button"
+                        class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 underline cursor-pointer"
+                        @click.prevent="toggleRecovery"
+                    >
+                        <template v-if="!recovery">
+                            Utiliser un code de récupération
+                        </template>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Connexion
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+                        <template v-else>
+                            Utiliser un code d'authentification
+                        </template>
+                    </button>
+
+                    <PrimaryButton
+                        class="ms-4"
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                    >
+                        Connexion
+                    </PrimaryButton>
+                </div>
+            </form>
+        </AuthenticationCard>
+    </div>
 </template>
