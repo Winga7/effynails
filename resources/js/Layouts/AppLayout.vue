@@ -353,16 +353,16 @@ const schemaMarkup = {
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
                                     {
+                                        name: 'Présentation',
+                                        route: 'admin.presentation.edit',
+                                    },
+                                    {
                                         name: 'Tarifs Admin',
                                         route: 'admin.tarifsadmin',
                                     },
                                     {
                                         name: 'Portfolio Admin',
                                         route: 'admin.portfolioadmin',
-                                    },
-                                    {
-                                        name: 'Présentation',
-                                        route: 'admin.presentation.edit',
                                     },
                                 ]"
                                 :key="'admin-' + index"
@@ -427,16 +427,16 @@ const schemaMarkup = {
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
                                     {
+                                        name: 'Présentation',
+                                        route: 'admin.presentation.edit',
+                                    },
+                                    {
                                         name: 'Tarifs Admin',
                                         route: 'admin.tarifsadmin',
                                     },
                                     {
                                         name: 'Portfolio Admin',
                                         route: 'admin.portfolioadmin',
-                                    },
-                                    {
-                                        name: 'Présentation',
-                                        route: 'admin.presentation.edit',
                                     },
                                 ]"
                                 :key="index"
