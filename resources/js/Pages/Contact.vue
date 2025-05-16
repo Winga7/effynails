@@ -1,34 +1,61 @@
 <script setup>
+/**
+ * 📞 Page de Contact
+ *
+ * Interface de contact avec formulaire et informations de localisation.
+ * Permet aux utilisateurs d'envoyer des messages avec validation en temps réel.
+ * Intègre Google Maps et affiche les coordonnées de l'établissement.
+ *
+ * @component
+ * @requires AppLayout
+ * @requires Head
+ * @requires useForm
+ * @requires Breadcrumbs
+ */
+
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
-// Récupérer les messages flash éventuels
+// 📨 Props pour la gestion des messages flash
 const props = defineProps({
-    errors: Object,
-    success: String,
-    error: String,
+    errors: Object, // Erreurs de validation
+    success: String, // Message de succès
+    error: String, // Message d'erreur
 });
 
+// 📝 Formulaire de contact avec validation
 const form = useForm({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
+    firstName: "", // Prénom du contact
+    lastName: "", // Nom du contact
+    email: "", // Email du contact
+    phone: "", // Téléphone du contact
+    subject: "", // Sujet du message
+    message: "", // Contenu du message
 });
 
-const isSubmitting = ref(false);
-const showSuccessMessage = ref(!!props.success);
-const showErrorMessage = ref(!!props.error);
+// 🔄 États réactifs pour la gestion du formulaire
+const isSubmitting = ref(false); // État de soumission
+const showSuccessMessage = ref(!!props.success); // Affichage message succès
+const showErrorMessage = ref(!!props.error); // Affichage message erreur
 
-// Vérifier si le formulaire a des erreurs
+/**
+ * 🔍 Vérification des erreurs de formulaire
+ *
+ * @computed hasErrors
+ * @returns {boolean} True si le formulaire contient des erreurs
+ */
 const hasErrors = computed(() => {
     return Object.keys(form.errors).length > 0;
 });
 
+/**
+ * 📤 Soumission du formulaire de contact
+ *
+ * @function submit
+ * @description Envoie les données du formulaire au serveur
+ */
 const submit = () => {
     isSubmitting.value = true;
     showSuccessMessage.value = false;
@@ -48,6 +75,7 @@ const submit = () => {
     });
 };
 
+// 🗺️ Configuration des éléments de navigation
 const breadcrumbItems = [
     { label: "Accueil", route: "home" },
     { label: "Contact", route: "contact" },

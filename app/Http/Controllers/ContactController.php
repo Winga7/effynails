@@ -8,10 +8,19 @@ use App\Mail\ContactFormMail;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * 📞 ContactController
+ *
+ * Gère le formulaire de contact et l'envoi des messages
+ * Assure la validation des données et la journalisation des messages
+ * Gère les erreurs et les confirmations pour l'utilisateur
+ */
 class ContactController extends Controller
 {
     /**
-     * Afficher la page de contact.
+     * 📄 Afficher la page de contact
+     *
+     * @return \Inertia\Response
      */
     public function index()
     {
@@ -19,21 +28,40 @@ class ContactController extends Controller
     }
 
     /**
-     * Traiter l'envoi du formulaire de contact.
+     * 📨 Traiter l'envoi du formulaire de contact
+     *
+     * Valide les données du formulaire, envoie l'email et journalise l'activité
+     * En cas d'erreur, capture l'exception et informe l'utilisateur
+     *
+     * @param Request $request Les données du formulaire
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function send(Request $request)
     {
+        // ✅ Validation des données avec messages d'erreur personnalisés
         $validated = $request->validate([
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
+            'firstName' => 'required|string|min:2|max:255',
+            'lastName' => 'required|string|min:2|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string',
+            'subject' => 'required|string|min:3|max:255',
+            'message' => 'required|string|min:10',
+        ], [
+            'firstName.required' => 'Le prénom est obligatoire.',
+            'firstName.min' => 'Le prénom doit avoir au moins 2 caractères.',
+            'lastName.required' => 'Le nom est obligatoire.',
+            'lastName.min' => 'Le nom doit avoir au moins 2 caractères.',
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.email' => 'Veuillez saisir une adresse e-mail valide.',
+            'phone.required' => 'Le numéro de téléphone est obligatoire.',
+            'subject.required' => 'Le sujet est obligatoire.',
+            'subject.min' => 'Le sujet doit avoir au moins 3 caractères.',
+            'message.required' => 'Le message est obligatoire.',
+            'message.min' => 'Le message doit avoir au moins 10 caractères.',
         ]);
 
         try {
-            // Log détaillé avant l'envoi
+            // 📝 Journalisation détaillée avant l'envoi
             Log::info('Configuration de l\'email avant envoi', [
                 'to' => config('mail.to_address'),
                 'from' => config('mail.from.address'),
@@ -45,7 +73,7 @@ class ContactController extends Controller
                 'subject' => $validated['subject'],
             ]);
 
-            // Solution de contournement - écrire directement dans les logs
+            // 📋 Solution de contournement - écriture directe dans les logs
             Log::info('CONTENU DU MESSAGE DE CONTACT', [
                 'nom' => $validated['firstName'] . ' ' . $validated['lastName'],
                 'email' => $validated['email'],
@@ -55,16 +83,16 @@ class ContactController extends Controller
                 'date' => now()->format('d/m/Y H:i:s')
             ]);
 
-            // Envoi de l'email
+            // 📧 Envoi de l'email via le système de mail Laravel
             Mail::to(config('mail.to_address'))->send(new ContactFormMail($validated));
 
-            // Log de succès
+            // ✅ Journalisation du succès
             Log::info('Email envoyé avec succès');
 
-            // Redirection avec message de succès
+            // 🔙 Redirection avec message de succès
             return redirect()->route('contact')->with('success', 'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
         } catch (\Exception $e) {
-            // Log détaillé de l'erreur
+            // ❌ Journalisation détaillée de l'erreur
             Log::error('Erreur lors de l\'envoi du mail de contact', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -73,7 +101,7 @@ class ContactController extends Controller
                 'line' => $e->getLine(),
             ]);
 
-            // Redirection avec message d'erreur
+            // 🔙 Redirection avec message d'erreur
             return redirect()->route('contact')->with('error', 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer ultérieurement. Erreur: ' . $e->getMessage());
         }
     }

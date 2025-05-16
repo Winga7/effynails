@@ -23,4 +23,12 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./resources/js"),
         },
     },
+    build: {
+        charset: "utf8",
+    },
+    server: {
+        fs: {
+            strict: false,
+        },
+    },
 });

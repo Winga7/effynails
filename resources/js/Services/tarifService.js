@@ -1,47 +1,61 @@
 // Service de gestion des tarifs avec API
 import axios from "axios";
 
-export const tarifService = {
-    // Récupérer tous les tarifs
+/**
+ * Service de gestion des tarifs
+ * Gère toutes les opérations CRUD liées aux tarifs
+ */
+const tarifService = {
+    /**
+     * Récupère la liste des tarifs
+     * @returns {Promise<Array>} Liste des tarifs
+     */
     async getTarifs() {
         try {
             const response = await axios.get("/api/tarifs");
             return response.data;
         } catch (error) {
-            console.error("Erreur lors de la récupération des tarifs:", error);
-            return [];
+            throw error;
         }
     },
 
-    // Ajouter un tarif
+    /**
+     * Ajoute un nouveau tarif
+     * @param {Object} tarif - Données du tarif à ajouter
+     * @returns {Promise<Object>} Tarif créé
+     */
     async addTarif(tarif) {
         try {
             const response = await axios.post("/api/tarifs", tarif);
             return response.data;
         } catch (error) {
-            console.error("Erreur lors de l'ajout du tarif:", error);
             throw error;
         }
     },
 
-    // Mettre à jour un tarif
+    /**
+     * Met à jour un tarif existant
+     * @param {Object} tarif - Données du tarif à mettre à jour
+     * @returns {Promise<Object>} Tarif mis à jour
+     */
     async updateTarif(tarif) {
         try {
             const response = await axios.put(`/api/tarifs/${tarif.id}`, tarif);
             return response.data;
         } catch (error) {
-            console.error("Erreur lors de la mise à jour du tarif:", error);
             throw error;
         }
     },
 
-    // Supprimer un tarif
+    /**
+     * Supprime un tarif
+     * @param {number} id - ID du tarif à supprimer
+     * @returns {Promise<void>}
+     */
     async deleteTarif(id) {
         try {
             await axios.delete(`/api/tarifs/${id}`);
-            return true;
         } catch (error) {
-            console.error("Erreur lors de la suppression du tarif:", error);
             throw error;
         }
     },

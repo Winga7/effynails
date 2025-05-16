@@ -11,8 +11,24 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * 📸 PortfolioController
+ *
+ * Gère toutes les opérations CRUD liées aux photos du portfolio
+ * Ce contrôleur permet de créer, mettre à jour et supprimer des photos
+ * avec optimisation automatique (redimensionnement et conversion WebP)
+ */
 class PortfolioController extends Controller
 {
+    /**
+     * 📝 Création d'une nouvelle photo dans le portfolio
+     *
+     * @param Request $request Les données de la photo (image, titre, description, etc.)
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * Note: L'image est automatiquement redimensionnée (1280px de largeur max)
+     * et convertie au format WebP pour optimiser les performances
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -32,16 +48,16 @@ class PortfolioController extends Controller
 
                 Log::info('Nom du fichier généré : ' . $filename);
 
-                // Créer les dossiers s'ils n'existent pas
+                // 📁 Créer les dossiers s'ils n'existent pas
                 if (!file_exists(storage_path('app/public/portfolio'))) {
                     mkdir(storage_path('app/public/portfolio'), 0755, true);
                 }
 
-                // Initialiser le gestionnaire d'image
+                // 🖼️ Initialiser le gestionnaire d'image
                 $manager = new ImageManager(new Driver());
                 Log::info('ImageManager initialisé');
 
-                // Traiter l'image
+                // 🔄 Traiter l'image (redimensionnement + conversion WebP)
                 $img = $manager->read($image->getRealPath())
                     ->resize(1280, null, function ($constraint) {
                         $constraint->aspectRatio();
@@ -51,14 +67,14 @@ class PortfolioController extends Controller
 
                 Log::info('Image redimensionnée et convertie en WebP');
 
-                // Sauvegarder directement dans le dossier storage
+                // 💾 Sauvegarder l'image
                 $savePath = storage_path('app/public/portfolio/' . $filename);
                 file_put_contents($savePath, $img->toString());
 
                 Log::info('Image sauvegardée dans : ' . $savePath);
                 Log::info('Le fichier existe : ' . (file_exists($savePath) ? 'Oui' : 'Non'));
 
-                // Créer l'entrée dans la base de données
+                // 📊 Créer l'entrée dans la base de données
                 $portfolio = Portfolio::create([
                     'title' => $request->title,
                     'image_path' => 'portfolio/' . $filename,
@@ -78,6 +94,16 @@ class PortfolioController extends Controller
         }
     }
 
+    /**
+     * 🔄 Mise à jour d'une photo existante du portfolio
+     *
+     * @param Request $request Les nouvelles données de la photo
+     * @param Portfolio $portfolio La photo à mettre à jour
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * Note: Si une nouvelle image est fournie, l'ancienne est automatiquement supprimée
+     * La nouvelle image est optimisée selon les mêmes critères que lors de la création
+     */
     public function update(Request $request, Portfolio $portfolio)
     {
         $request->validate([
@@ -93,16 +119,16 @@ class PortfolioController extends Controller
                 'has_image' => $request->hasFile('image')
             ]);
 
-            // Mise à jour des données textuelles
+            // 📝 Mise à jour des données textuelles
             $portfolio->title = $request->title;
             $portfolio->description = $request->description;
             $portfolio->is_featured = $request->is_featured ?? false;
 
-            // Traitement de l'image si elle est fournie
+            // 🖼️ Traitement de l'image si elle est fournie
             if ($request->hasFile('image')) {
                 Log::info("Mise à jour de l'image pour le portfolio ID: {$portfolio->id}");
 
-                // Supprimer l'ancienne image si elle existe
+                // 🗑️ Supprimer l'ancienne image si elle existe
                 if ($portfolio->image_path) {
                     $oldImagePath = storage_path('app/public/' . $portfolio->image_path);
                     if (file_exists($oldImagePath)) {
@@ -114,15 +140,15 @@ class PortfolioController extends Controller
                 $image = $request->file('image');
                 $filename = Str::uuid() . '.webp';
 
-                // Créer les dossiers s'ils n'existent pas
+                // 📁 Créer les dossiers s'ils n'existent pas
                 if (!file_exists(storage_path('app/public/portfolio'))) {
                     mkdir(storage_path('app/public/portfolio'), 0755, true);
                 }
 
-                // Initialiser le gestionnaire d'image
+                // 🖼️ Initialiser le gestionnaire d'image
                 $manager = new ImageManager(new Driver());
 
-                // Traiter l'image
+                // 🔄 Traiter la nouvelle image
                 $img = $manager->read($image->getRealPath())
                     ->resize(1280, null, function ($constraint) {
                         $constraint->aspectRatio();
@@ -130,11 +156,11 @@ class PortfolioController extends Controller
                     })
                     ->toWebp(90);
 
-                // Sauvegarder directement dans le dossier storage
+                // 💾 Sauvegarder la nouvelle image
                 $savePath = storage_path('app/public/portfolio/' . $filename);
                 file_put_contents($savePath, $img->toString());
 
-                // Mettre à jour le chemin de l'image
+                // 📊 Mettre à jour le chemin de l'image
                 $portfolio->image_path = 'portfolio/' . $filename;
                 Log::info("Nouvelle image sauvegardée: {$filename}");
             }
@@ -153,6 +179,15 @@ class PortfolioController extends Controller
         }
     }
 
+    /**
+     * 🗑️ Suppression d'une photo du portfolio
+     *
+     * @param Portfolio $portfolio La photo à supprimer
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * Note: Supprime à la fois l'enregistrement en base de données
+     * et le fichier image associé du système de fichiers
+     */
     public function destroy(Portfolio $portfolio)
     {
         try {
@@ -161,7 +196,7 @@ class PortfolioController extends Controller
                 'image_path' => $portfolio->image_path
             ]);
 
-            // Supprimer l'image associée
+            // 🗑️ Supprimer l'image associée
             if ($portfolio->image_path) {
                 $imagePath = storage_path('app/public/' . $portfolio->image_path);
                 if (file_exists($imagePath)) {
@@ -172,7 +207,7 @@ class PortfolioController extends Controller
                 }
             }
 
-            // Supprimer l'enregistrement de la base de données
+            // 📊 Supprimer l'enregistrement de la base de données
             $portfolio->delete();
             Log::info("Portfolio supprimé avec succès");
 

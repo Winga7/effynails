@@ -1,4 +1,18 @@
 <script setup>
+/**
+ * 📝 Administration de la Présentation
+ *
+ * Interface d'administration pour gérer le contenu de la page de présentation.
+ * Permet la modification du texte d'introduction et de la section "À propos"
+ * avec un éditeur de texte riche (QuillEditor).
+ *
+ * @component
+ * @requires AppLayout
+ * @requires Head
+ * @requires useForm
+ * @requires QuillEditor
+ */
+
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
@@ -8,28 +22,35 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
+// 📊 Props reçues du serveur
 const props = defineProps({
-    presentation: Object,
+    presentation: Object, // Données de présentation existantes
 });
 
+// 📝 Formulaire réactif avec les données existantes
 const form = useForm({
-    content: props.presentation?.content || "",
-    about_title: props.presentation?.about_title || "",
-    about_content: props.presentation?.about_content || "",
-    experience_title: props.presentation?.experience_title || "",
-    experience_content: props.presentation?.experience_content || "",
+    content: props.presentation?.content || "", // Contenu de l'introduction
+    about_title: props.presentation?.about_title || "", // Titre de la section À propos
+    about_content: props.presentation?.about_content || "", // Contenu de la section À propos
+    experience_title: props.presentation?.experience_title || "", // Titre de la section Expérience (futur)
+    experience_content: props.presentation?.experience_content || "", // Contenu de la section Expérience (futur)
 });
 
-console.log(form.content);
-
+/**
+ * 💾 Soumission du formulaire
+ *
+ * @function submit
+ * @description Envoie les modifications au serveur via une requête PUT
+ */
 const submit = () => {
-    console.log(form);
     form.put(route("admin.presentation.update"));
 };
 </script>
 
 <template>
+    <!-- 🏗️ Layout avec dégradé violet -->
     <AppLayout class="bg-gradient-to-br from-white to-pastel-purple">
+        <!-- 📊 En-tête de page -->
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Gestion de la Présentation
@@ -41,8 +62,9 @@ const submit = () => {
                 <div
                     class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6"
                 >
+                    <!-- 📝 Formulaire principal -->
                     <form @submit.prevent="submit" class="space-y-6">
-                        <!-- Introduction générale -->
+                        <!-- 📄 Section Introduction générale -->
                         <div>
                             <InputLabel
                                 for="content"
@@ -74,7 +96,7 @@ const submit = () => {
                             />
                         </div>
 
-                        <!-- À propos -->
+                        <!-- 🏷️ Section À propos - Titre -->
                         <div>
                             <InputLabel
                                 for="about_title"
@@ -88,6 +110,7 @@ const submit = () => {
                             />
                         </div>
 
+                        <!-- 📝 Section À propos - Contenu -->
                         <div>
                             <InputLabel
                                 for="about_content"
@@ -119,8 +142,9 @@ const submit = () => {
                             />
                         </div>
 
-                        <!-- Expérience -->
-                        <!-- <div>
+                        <!-- 💡 Section Expérience (commentée pour usage futur) -->
+                        <!--
+                        <div>
                             <InputLabel
                                 for="experience_title"
                                 value="Titre de la section Expérience"
@@ -150,8 +174,10 @@ const submit = () => {
                                     ['link'],
                                 ]"
                             />
-                        </div> -->
+                        </div>
+                        -->
 
+                        <!-- 💾 Bouton de sauvegarde -->
                         <div class="flex items-center justify-end">
                             <PrimaryButton
                                 :class="{ 'opacity-25': form.processing }"

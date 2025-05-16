@@ -1,4 +1,17 @@
 <script setup>
+/**
+ * 📊 Tableau de Bord
+ *
+ * Interface d'administration principale affichant les statistiques
+ * et les informations importantes pour la gestion du salon.
+ * Inclut les rendez-vous, les revenus et les services populaires.
+ *
+ * @component
+ * @requires AppLayout
+ * @requires Head
+ * @requires axios
+ */
+
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { ref, onMounted } from "vue";
 import { Head } from "@inertiajs/vue3";
@@ -10,27 +23,47 @@ import {
     servicesPopulairesMock,
 } from "@/mocks/mockDashboardData";
 
-const stats = ref({});
-const derniersRendezVous = ref([]);
-const servicesPopulaires = ref([]);
-const prochainRendezVous = ref(null);
-const showModal = ref(false);
-const showDernierRdvModal = ref(false);
-const selectedDernierRdv = ref(null);
-const prochainsRendezVous = ref([]);
+// 📊 État réactif des données du tableau de bord
+const stats = ref({}); // Statistiques générales
+const derniersRendezVous = ref([]); // Liste des derniers rendez-vous
+const servicesPopulaires = ref([]); // Services les plus demandés
+const prochainRendezVous = ref(null); // Prochain rendez-vous à venir
+const showModal = ref(false); // État de la modale principale
+const showDernierRdvModal = ref(false); // État de la modale des derniers RDV
+const selectedDernierRdv = ref(null); // RDV sélectionné pour la modale
+const prochainsRendezVous = ref([]); // Liste des prochains rendez-vous
+const dashboardData = ref({}); // Pour stocker les données du tableau de bord
+const errorMessage = ref(""); // Pour stocker les messages d'erreur
 
+/**
+ * 📥 Récupération des données du tableau de bord
+ *
+ * @function fetchDashboardData
+ * @description Charge les données depuis l'API du tableau de bord
+ * @returns {Promise<void>}
+ */
 const fetchDashboardData = async () => {
     try {
         const response = await axios.get("/api/dashboard");
+        dashboardData.value = response.data;
         stats.value = response.data.stats;
         prochainsRendezVous.value = response.data.prochainsRendezVous;
         servicesPopulaires.value = response.data.servicesPopulaires;
         prochainRendezVous.value = response.data.prochainRendezVous;
     } catch (error) {
-        console.error("Erreur lors de la récupération des données:", error);
+        // Afficher un message d'erreur à l'utilisateur
+        errorMessage.value =
+            "Une erreur est survenue lors du chargement des données. Veuillez réessayer plus tard.";
+        throw error;
     }
 };
 
+/**
+ * 🚀 Initialisation du composant
+ *
+ * @function onMounted
+ * @description Charge les données au montage du composant
+ */
 onMounted(() => {
     if (useMockData) {
         stats.value = statsMock;
@@ -41,17 +74,43 @@ onMounted(() => {
     }
 });
 
+/**
+ * 🎯 Gestion des modales
+ *
+ * @function openModal
+ * @description Ouvre la modale principale
+ */
 const openModal = () => {
     showModal.value = true;
 };
+
+/**
+ * 🎯 Fermeture de la modale principale
+ *
+ * @function closeModal
+ * @description Ferme la modale principale
+ */
 const closeModal = () => {
     showModal.value = false;
 };
 
+/**
+ * 🎯 Ouverture de la modale des derniers RDV
+ *
+ * @function openDernierRdvModal
+ * @param {Object} rdv - Le rendez-vous sélectionné
+ */
 const openDernierRdvModal = (rdv) => {
     selectedDernierRdv.value = rdv;
     showDernierRdvModal.value = true;
 };
+
+/**
+ * 🎯 Fermeture de la modale des derniers RDV
+ *
+ * @function closeDernierRdvModal
+ * @description Ferme la modale et réinitialise la sélection
+ */
 const closeDernierRdvModal = () => {
     showDernierRdvModal.value = false;
     selectedDernierRdv.value = null;

@@ -6,10 +6,22 @@ use App\Models\Tarif;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * 💰 TarifController
+ *
+ * Gère la gestion des tarifs et services
+ * Permet l'administration et l'affichage public des tarifs
+ * Assure la validation et la persistance des données
+ */
 class TarifController extends Controller
 {
     /**
-     * Afficher tous les tarifs.
+     * 📋 Liste des tarifs
+     *
+     * Récupère et retourne tous les tarifs disponibles
+     * Format JSON pour l'API
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -18,7 +30,13 @@ class TarifController extends Controller
     }
 
     /**
-     * Enregistrer un nouveau tarif.
+     * ➕ Création d'un nouveau tarif
+     *
+     * Valide et enregistre un nouveau tarif
+     * Vérifie les contraintes de données
+     *
+     * @param Request $request Données du tarif
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -34,7 +52,12 @@ class TarifController extends Controller
     }
 
     /**
-     * Afficher un tarif spécifique.
+     * 👁️ Affichage d'un tarif
+     *
+     * Récupère et affiche les détails d'un tarif spécifique
+     *
+     * @param Tarif $tarif Le tarif à afficher
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Tarif $tarif)
     {
@@ -42,7 +65,14 @@ class TarifController extends Controller
     }
 
     /**
-     * Mettre à jour un tarif existant.
+     * ✏️ Mise à jour d'un tarif
+     *
+     * Modifie les informations d'un tarif existant
+     * Valide les nouvelles données
+     *
+     * @param Request $request Nouvelles données
+     * @param Tarif $tarif Tarif à modifier
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Tarif $tarif)
     {
@@ -58,7 +88,12 @@ class TarifController extends Controller
     }
 
     /**
-     * Supprimer un tarif.
+     * 🗑️ Suppression d'un tarif
+     *
+     * Supprime définitivement un tarif de la base de données
+     *
+     * @param Tarif $tarif Tarif à supprimer
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Tarif $tarif)
     {
@@ -67,7 +102,11 @@ class TarifController extends Controller
     }
 
     /**
-     * Afficher la page d'administration des tarifs.
+     * 👨‍💼 Page d'administration des tarifs
+     *
+     * Interface d'administration pour la gestion des tarifs
+     *
+     * @return \Inertia\Response
      */
     public function adminPage()
     {
@@ -75,10 +114,14 @@ class TarifController extends Controller
     }
 
     /**
-     * Afficher la page publique des tarifs.
+     * 👥 Page publique des tarifs
+     *
+     * Affichage public des tarifs pour les clients
+     *
+     * @return \Inertia\Response
      */
     public function publicPage()
     {
         return Inertia::render('Tarifs');
     }
-} 
+}

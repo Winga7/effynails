@@ -3,14 +3,15 @@
 ## Table des Matières
 
 1. [Accès au Site](#1-accès-au-site)
-2. [Gestion de Votre Page Google Business](#2-gestion-de-votre-page-google-business)
-3. [Gestion des Rendez-vous avec Cal.com](#3-gestion-des-rendez-vous-avec-calcom)
-4. [Gestion du Portfolio](#4-gestion-du-portfolio)
-5. [Mise à jour des Services et Tarifs](#5-mise-à-jour-des-services-et-tarifs)
-6. [Gestion des Avis Google](#6-gestion-des-avis-google)
-7. [Personnalisation du Site](#7-personnalisation-du-site)
-8. [Astuces et Bonnes Pratiques](#8-astuces-et-bonnes-pratiques)
-9. [Résolution des Problèmes Courants](#9-résolution-des-problèmes-courants)
+2. [Tableau de bord](#2-tableau-de-bord)
+3. [Gestion de Votre Page Google Business](#3-gestion-de-votre-page-google-business)
+4. [Gestion des Rendez-vous avec Cal.com](#4-gestion-des-rendez-vous-avec-calcom)
+5. [Gestion du Portfolio](#5-gestion-du-portfolio)
+6. [Mise à jour des Services et Tarifs](#6-mise-à-jour-des-services-et-tarifs)
+7. [Gestion des Avis Google](#7-gestion-des-avis-google)
+8. [Personnalisation du Site](#8-personnalisation-du-site)
+9. [Astuces et Bonnes Pratiques](#9-astuces-et-bonnes-pratiques)
+10. [Résolution des Problèmes Courants](#10-résolution-des-problèmes-courants)
 
 ---
 
@@ -33,7 +34,43 @@
 
 ---
 
-## 2. Gestion de Votre Page Google Business
+## 2. Tableau de bord
+
+### Vue d'ensemble du tableau de bord
+
+Une fois connectée, vous accédez automatiquement au tableau de bord. Cette page vous donne un aperçu complet de votre activité.
+
+### Statistiques en temps réel
+
+Le tableau de bord affiche 4 cartes de statistiques importantes :
+
+1. **Rendez-vous aujourd'hui** : Nombre de clients prévus dans la journée
+2. **Rendez-vous cette semaine** : Total des rendez-vous pour la semaine en cours
+3. **Prochain rendez-vous à venir** : Détails du prochain client attendu
+4. **Revenus du mois** : Montant généré pendant le mois en cours
+
+### Consulter les détails d'un rendez-vous
+
+- Cliquez sur la carte "Prochain rendez-vous à venir" pour voir les détails complets
+- Une fenêtre s'ouvrira avec :
+  - Le type de prestation
+  - Le nom du client
+  - L'email et téléphone (si fournis)
+  - La date et heure
+  - Le message laissé par le client (si applicable)
+  - Un lien pour annuler/replanifier le rendez-vous
+
+### Liste des prochains rendez-vous
+
+La section "Prochains rendez-vous" vous montre tous vos rendez-vous à venir. Cliquez sur n'importe quel rendez-vous pour voir ses détails complets.
+
+### Services populaires
+
+Cette section vous indique quels services sont les plus demandés par vos clients, vous aidant à mieux comprendre votre activité.
+
+---
+
+## 3. Gestion de Votre Page Google Business
 
 Vos avis clients sont gérés via Google Business, pas directement sur votre site.
 
@@ -61,7 +98,7 @@ Vos avis clients sont gérés via Google Business, pas directement sur votre sit
 
 ---
 
-## 3. Gestion des Rendez-vous avec Cal.com
+## 4. Gestion des Rendez-vous avec Cal.com
 
 Votre système de réservation utilise Cal.com, un outil externe au site.
 
@@ -89,7 +126,7 @@ Votre système de réservation utilise Cal.com, un outil externe au site.
 
 ---
 
-## 4. Gestion du Portfolio
+## 5. Gestion du Portfolio
 
 ### Mettre à jour votre portfolio
 
@@ -111,7 +148,7 @@ Votre système de réservation utilise Cal.com, un outil externe au site.
 
 ---
 
-## 5. Mise à jour des Services et Tarifs
+## 6. Mise à jour des Services et Tarifs
 
 ### Modifier vos services et tarifs
 
@@ -132,7 +169,7 @@ Votre système de réservation utilise Cal.com, un outil externe au site.
 
 ---
 
-## 6. Gestion des Avis Google
+## 7. Gestion des Avis Google
 
 ### Afficher les avis Google sur votre site
 
@@ -152,17 +189,30 @@ Vous ne pouvez pas supprimer directement les avis Google, mais vous pouvez :
 
 ---
 
-## 7. Personnalisation du Site
+## 8. Personnalisation du Site
 
 ### Mise à jour de la page Présentation
 
 1. Connectez-vous à votre site
-2. Accédez à la section "Présentation"
+2. Dans le menu de navigation, cliquez sur "Présentation"
 3. Vous pouvez modifier :
-   - Le texte de présentation de votre activité
-   - Les informations sur vos services
-   - Vos coordonnées professionnelles
-4. Enregistrez vos modifications
+   - **L'introduction générale** : Texte principal de votre page de présentation
+   - **La section À propos** : Titre et contenu détaillé sur vous et votre activité
+
+### Utiliser l'éditeur de texte
+
+L'éditeur de texte vous permet de :
+- Mettre en forme votre texte (gras, italique, souligné)
+- Changer les couleurs du texte et de l'arrière-plan
+- Créer des listes à puces ou numérotées
+- Ajuster la taille du texte
+- Ajouter des liens
+
+### Enregistrer vos modifications
+
+1. Une fois vos modifications terminées, cliquez sur le bouton "Enregistrer les modifications"
+2. Vos changements seront immédiatement visibles sur votre site
+3. Vérifiez toujours le résultat final en visitant votre page de présentation
 
 ### Modifier vos informations de contact
 
@@ -181,7 +231,7 @@ Si vous souhaitez apporter des modifications importantes à la page d'accueil (c
 
 ---
 
-## 8. Astuces et Bonnes Pratiques
+## 9. Astuces et Bonnes Pratiques
 
 ### Pour une gestion efficace
 
@@ -206,7 +256,7 @@ Si vous souhaitez apporter des modifications importantes à la page d'accueil (c
 
 ---
 
-## 9. Résolution des Problèmes Courants
+## 10. Résolution des Problèmes Courants
 
 ### "Je ne peux pas me connecter au site"
 

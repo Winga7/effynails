@@ -7,10 +7,23 @@ use App\Models\Album;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * 🎨 AlbumController
+ *
+ * Gère toutes les opérations CRUD liées aux albums de photos
+ * Permet la création, modification et suppression des albums
+ * Assure la gestion de l'ordre d'affichage et des albums mis en avant
+ */
 class AlbumController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * 📝 Création d'un nouvel album
+     *
+     * Valide et enregistre un nouvel album avec ses métadonnées
+     * Gère le titre, la description, l'ordre et le statut "mis en avant"
+     *
+     * @param Request $request Les données validées de l'album
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -26,7 +39,17 @@ class AlbumController extends Controller
         return redirect()->back();
     }
 
-    // Nouvelle méthode pour la mise à jour
+    /**
+     * 🔄 Mise à jour d'un album existant
+     *
+     * Modifie les informations d'un album existant
+     * Permet de changer le titre, la description, l'ordre et le statut
+     * Retourne un message de succès après la mise à jour
+     *
+     * @param Request $request Les nouvelles données de l'album
+     * @param Album $album L'album à mettre à jour
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, Album $album)
     {
         $validated = $request->validate([
@@ -41,12 +64,18 @@ class AlbumController extends Controller
         return redirect()->back()->with('success', 'Album mis à jour avec succès');
     }
 
-    // Nouvelle méthode pour la suppression
+    /**
+     * 🗑️ Suppression d'un album
+     *
+     * Supprime définitivement un album et ses ressources associées
+     * La suppression des images est gérée automatiquement via les relations
+     * Retourne un message de confirmation après la suppression
+     *
+     * @param Album $album L'album à supprimer
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Album $album)
     {
-        // Vous pouvez ajouter une logique pour supprimer les images associées
-        // ou laisser la suppression en cascade gérer cela via votre migration
-
         $album->delete();
 
         return redirect()->back()->with('success', 'Album supprimé avec succès');

@@ -1,4 +1,13 @@
 <script setup>
+/**
+ * 🏗️ AppLayout - Layout Principal de l'Application
+ *
+ * Composant layout principal qui contient la navigation, les header dynamiques,
+ * et la structure générale de toutes les pages du site.
+ * Inclut la gestion de la navigation mobile, des couleurs par page,
+ * et les fonctionnalités d'administration.
+ */
+
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import ApplicationMark from "@/Components/ApplicationMark.vue";
@@ -14,14 +23,19 @@ defineProps({
     title: String,
 });
 
+// 📱 État de la navigation mobile
 const showingNavigationDropdown = ref(false);
+// 🚀 État du bouton "retour en haut"
 const showScrollButton = ref(false);
 
-// Obtenir la route actuelle
+// 🎯 Obtenir la route actuelle
 const page = usePage();
 const currentRoute = computed(() => route().current());
 
-// Définir les couleurs de fond pour chaque page
+/**
+ * 🎨 Définir les couleurs de fond dynamiques pour chaque page
+ * Chaque route a sa propre couleur de dégradé dans la navigation
+ */
 const headerBackgroundClass = computed(() => {
     switch (currentRoute.value) {
         case "home":
@@ -41,6 +55,9 @@ const headerBackgroundClass = computed(() => {
     }
 });
 
+/**
+ * 👥 Fonction pour changer d'équipe (si utilisé)
+ */
 const switchToTeam = (team) => {
     router.put(
         route("current-team.update"),
@@ -53,11 +70,17 @@ const switchToTeam = (team) => {
     );
 };
 
+/**
+ * 🚪 Fonction de déconnexion
+ */
 const logout = () => {
     router.post(route("logout"));
 };
 
-// Fonction pour fermer le menu
+/**
+ * 📱 Fonctions de gestion du menu mobile
+ */
+// Fermer le menu
 const closeMenu = () => {
     showingNavigationDropdown.value = false;
 };
@@ -76,12 +99,15 @@ const handleClickOutside = (event) => {
     }
 };
 
-// Fonction pour gérer l'affichage du bouton de retour en haut
+/**
+ * 🔝 Fonctions pour le bouton "retour en haut"
+ */
+// Gérer l'affichage du bouton selon le scroll
 const handleScroll = () => {
     showScrollButton.value = window.scrollY > 300;
 };
 
-// Fonction pour remonter en haut
+// Remonter en haut de page
 const scrollToTop = () => {
     window.scrollTo({
         top: 0,
@@ -89,7 +115,9 @@ const scrollToTop = () => {
     });
 };
 
-// Ajout/suppression des event listeners
+/**
+ * 🔧 Gestion des event listeners
+ */
 onMounted(() => {
     document.addEventListener("click", handleClickOutside);
     window.addEventListener("scroll", handleScroll);
@@ -100,7 +128,10 @@ onUnmounted(() => {
     window.removeEventListener("scroll", handleScroll);
 });
 
-// Schema.org markup
+/**
+ * 🏷️ Schema.org markup pour le SEO
+ * Structure les données du salon de beauté pour les moteurs de recherche
+ */
 const schemaMarkup = {
     "@context": "https://schema.org",
     "@type": "BeautySalon",
@@ -171,7 +202,9 @@ const schemaMarkup = {
 </script>
 
 <template>
+    <!-- 🏗️ Structure principale en flexbox -->
     <div class="flex flex-col min-h-screen">
+        <!-- 🏷️ Métadonnées globales et SEO -->
         <Head :title="title">
             <!-- Meta tags de base -->
             <meta charset="utf-8" />
@@ -184,7 +217,7 @@ const schemaMarkup = {
             <meta name="revisit-after" content="7 days" />
             <meta name="author" content="Steffi Ledoux" />
 
-            <!-- Open Graph / Facebook -->
+            <!-- 📱 Open Graph / Facebook -->
             <meta property="og:type" content="website" />
             <meta
                 property="og:url"
@@ -199,16 +232,19 @@ const schemaMarkup = {
             <meta property="og:locale" content="fr_BE" />
             <meta property="og:site_name" content="EFFYNAILS" />
 
-            <!-- Schema.org markup -->
+            <!-- 🏷️ Schema.org markup -->
             <component
                 :is="'script'"
                 type="application/ld+json"
                 v-html="JSON.stringify(schemaMarkup)"
             />
         </Head>
+
+        <!-- 📢 Bannière -->
         <Banner />
 
         <div class="flex-grow flex flex-col">
+            <!-- 🧭 Navigation principale -->
             <nav
                 :class="[
                     headerBackgroundClass,
@@ -217,7 +253,7 @@ const schemaMarkup = {
             >
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
-                        <!-- Logo et Nom -->
+                        <!-- 🏷️ Logo et Nom -->
                         <div class="flex items-center">
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('home')">
@@ -233,7 +269,7 @@ const schemaMarkup = {
                             >
                         </div>
 
-                        <!-- Bouton hamburger -->
+                        <!-- 🍔 Bouton hamburger mobile -->
                         <div class="min-[770px]:hidden flex items-center">
                             <button
                                 id="hamburger-button"
@@ -275,10 +311,11 @@ const schemaMarkup = {
                             </button>
                         </div>
 
-                        <!-- Navigation Links Desktop -->
+                        <!-- 🖥️ Navigation Desktop -->
                         <div
                             class="hidden min-[770px]:flex space-x-8 items-center"
                         >
+                            <!-- 🔗 Liens de navigation principaux -->
                             <NavLink
                                 v-for="(link, index) in [
                                     { name: 'Accueil', route: 'home' },
@@ -296,6 +333,7 @@ const schemaMarkup = {
                             >
                                 {{ link.name }}
                             </NavLink>
+                            <!-- 📅 Bouton de réservation spécial -->
                             <Link
                                 :href="route('reservation')"
                                 class="ml-4 px-4 py-2 bg-pastel-yellow-btn text-sm font-medium rounded-md hover:bg-pastel-yellow transition-colors duration-300"
@@ -306,7 +344,7 @@ const schemaMarkup = {
                     </div>
                 </div>
 
-                <!-- Menu Mobile -->
+                <!-- 📱 Menu Mobile -->
                 <div
                     id="mobile-menu"
                     :class="{
@@ -316,6 +354,7 @@ const schemaMarkup = {
                     class="min-[770px]:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
+                        <!-- 🔗 Liens principaux mobile -->
                         <ResponsiveNavLink
                             v-for="(link, index) in [
                                 { name: 'Accueil', route: 'home' },
@@ -330,6 +369,8 @@ const schemaMarkup = {
                         >
                             {{ link.name }}
                         </ResponsiveNavLink>
+
+                        <!-- 📅 Réservation mobile -->
                         <ResponsiveNavLink
                             :href="route('reservation')"
                             class="bg-pastel-yellow-btn hover:bg-pastel-yellow"
@@ -337,7 +378,7 @@ const schemaMarkup = {
                             Réservation
                         </ResponsiveNavLink>
 
-                        <!-- Séparation Administrative -->
+                        <!-- ⚙️ Section Administration Mobile -->
                         <div v-if="$page.props.auth.user" class="my-3">
                             <div class="border-t-4 border-pink-200"></div>
                             <div
@@ -349,6 +390,7 @@ const schemaMarkup = {
                                     Mode Administration
                                 </div>
                             </div>
+                            <!-- 🔗 Liens d'administration mobile -->
                             <ResponsiveNavLink
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
@@ -374,6 +416,7 @@ const schemaMarkup = {
                             </ResponsiveNavLink>
                         </div>
 
+                        <!-- 👤 Section utilisateur mobile -->
                         <div
                             v-if="$page.props.auth.user"
                             class="pt-4 pb-1 border-t border-gray-200"
@@ -400,7 +443,7 @@ const schemaMarkup = {
                                     Profile
                                 </ResponsiveNavLink>
 
-                                <!-- Déconnexion -->
+                                <!-- 🚪 Déconnexion -->
                                 <form method="POST" @submit.prevent="logout">
                                     <ResponsiveNavLink as="button">
                                         Déconnexion
@@ -412,7 +455,7 @@ const schemaMarkup = {
                 </div>
             </nav>
 
-            <!-- Navigation Administrative Desktop -->
+            <!-- ⚙️ Navigation Administrative Desktop -->
             <nav
                 v-if="$page.props.auth.user"
                 class="hidden min-[770px]:block border-b border-gray-100 bg-gradient-to-r from-pink-100 to-purple-100"
@@ -423,6 +466,7 @@ const schemaMarkup = {
                             <span class="text-sm font-semibold text-gray-700"
                                 >Mode Administration</span
                             >
+                            <!-- 🔗 Liens d'administration desktop -->
                             <NavLink
                                 v-for="(link, index) in [
                                     { name: 'Dashboard', route: 'dashboard' },
@@ -448,6 +492,7 @@ const schemaMarkup = {
                             </NavLink>
                         </div>
 
+                        <!-- 👤 Menu utilisateur desktop -->
                         <div class="flex items-center">
                             <Dropdown align="right" width="48">
                                 <template #trigger>
@@ -475,12 +520,12 @@ const schemaMarkup = {
                                 </template>
 
                                 <template #content>
-                                    <!-- Profile -->
+                                    <!-- 👤 Profile -->
                                     <DropdownLink :href="route('profile.show')">
                                         Profile
                                     </DropdownLink>
 
-                                    <!-- Déconnexion -->
+                                    <!-- 🚪 Déconnexion -->
                                     <div class="border-t border-gray-200" />
 
                                     <form @submit.prevent="logout">
@@ -495,22 +540,26 @@ const schemaMarkup = {
                 </div>
             </nav>
 
-            <!-- Page Content -->
+            <!-- 📄 Contenu des pages -->
             <main class="bg-transparent flex-grow flex flex-col">
+                <!-- 📊 En-tête conditionnel des pages -->
                 <div v-if="$slots.header" class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         <slot name="header" />
                     </div>
                 </div>
+                <!-- 🎯 Contenu principal de la page -->
                 <slot />
             </main>
 
+            <!-- 🦶 Pied de page -->
             <Footer />
         </div>
 
+        <!-- 🍪 Consentement des cookies -->
         <CookieConsent />
 
-        <!-- Bouton retour en haut -->
+        <!-- 🔝 Bouton retour en haut avec animation -->
         <transition
             enter-active-class="transition duration-300 ease-out"
             enter-from-class="transform translate-y-10 opacity-0"

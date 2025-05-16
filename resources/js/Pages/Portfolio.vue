@@ -1,39 +1,70 @@
 <script setup>
+/**
+ * 🎨 Page Portfolio
+ *
+ * Galerie dynamique des réalisations de manucure et nail art.
+ * Utilise vue-waterfall-plugin-next pour une mise en page responsive.
+ * Affiche les albums avec leurs photos dans une grille adaptative.
+ *
+ * @component
+ * @requires AppLayout
+ * @requires Head
+ * @requires Waterfall
+ * @requires Breadcrumbs
+ */
+
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { Waterfall } from "vue-waterfall-plugin-next";
 import "vue-waterfall-plugin-next/dist/style.css";
 import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
-// Définition des props pour recevoir les albums depuis le contrôleur
+// 📚 Props pour la gestion des données
 const props = defineProps({
     albums: {
         type: Array,
-        default: () => [],
+        default: () => [], // Liste des albums avec leurs photos
     },
     pagination: {
         type: Object,
-        default: () => ({}),
+        default: () => ({}), // Configuration de la pagination
     },
 });
 
-// Vérifier si des albums sont disponibles
+/**
+ * 🔍 Vérification de la disponibilité des albums
+ *
+ * @function hasAlbums
+ * @returns {boolean} True si des albums sont disponibles
+ */
 const hasAlbums = () => {
     return props.albums && props.albums.length > 0;
 };
 
-// Vérifier si la pagination est nécessaire
+/**
+ * 📄 Vérification de la nécessité de pagination
+ *
+ * @function hasPagination
+ * @returns {boolean} True si la pagination est nécessaire
+ */
 const hasPagination = () => {
     return (
         props.pagination && props.pagination.total > props.pagination.per_page
     );
 };
 
-// Fonction pour générer l'URL de l'image
+/**
+ * 🖼️ Génération de l'URL de l'image
+ *
+ * @function getImageUrl
+ * @param {string} imagePath - Chemin de l'image
+ * @returns {string} URL complète de l'image
+ */
 const getImageUrl = (imagePath) => {
     return `/storage/${imagePath}`;
 };
 
+// 🗺️ Configuration des éléments de navigation
 const breadcrumbItems = [
     { label: "Accueil", route: "home" },
     { label: "Portfolio", route: "portfolio" },

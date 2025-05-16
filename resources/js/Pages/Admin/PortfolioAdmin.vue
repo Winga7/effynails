@@ -1,4 +1,20 @@
 <script setup>
+/**
+ * 🎨 Administration du Portfolio
+ *
+ * Interface complète pour gérer les albums et photos du portfolio.
+ * Permet la création, modification et suppression d'albums et de photos.
+ * Gestion d'upload d'images avec prévisualisation et validation.
+ * Interface responsive avec modales pour les formulaires.
+ *
+ * @component
+ * @requires AppLayout
+ * @requires Head
+ * @requires useForm
+ * @requires router
+ * @requires axios
+ */
+
 import { ref, onMounted } from "vue";
 import { Head, useForm, router } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -11,55 +27,94 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import axios from "axios";
 
+// 📊 Props reçues du serveur
 const props = defineProps({
-    albums: Array,
-    portfolios: Array,
+    albums: Array, // Liste des albums existants
+    portfolios: Array, // Liste des photos du portfolio
 });
 
-const showingAlbumModal = ref(false);
-const showingPortfolioModal = ref(false);
-const showingEditAlbumModal = ref(false);
-const showingDeleteConfirmModal = ref(false);
-const selectedAlbum = ref(null);
-const albumToEdit = ref(null);
-const albumToDelete = ref(null);
-const showingEditPortfolioModal = ref(false);
-const showingDeletePortfolioConfirmModal = ref(false);
-const portfolioToEdit = ref(null);
-const portfolioToDelete = ref(null);
-const submitError = ref("");
+// 🔄 États réactifs pour les modales
+const showingAlbumModal = ref(false); // Modale de création d'album
+const showingPortfolioModal = ref(false); // Modale de création de photo
+const showingEditAlbumModal = ref(false); // Modale d'édition d'album
+const showingDeleteConfirmModal = ref(false); // Modale de confirmation de suppression
+const showingEditPortfolioModal = ref(false); // Modale d'édition de photo
+const showingDeletePortfolioConfirmModal = ref(false); // Modale de confirmation de suppression de photo
 
+// 📝 États pour la gestion des données
+const selectedAlbum = ref(null); // Album sélectionné pour ajouter des photos
+const albumToEdit = ref(null); // Album en cours d'édition
+const albumToDelete = ref(null); // Album à supprimer
+const portfolioToEdit = ref(null); // Photo en cours d'édition
+const portfolioToDelete = ref(null); // Photo à supprimer
+const submitError = ref(""); // Message d'erreur lors de la soumission
+
+// 📝 Formulaires réactifs avec Inertia
 const albumForm = useForm({
-    title: "",
-    description: "",
-    is_featured: false,
-    order: 0,
+    title: "", // Titre de l'album
+    description: "", // Description de l'album
+    is_featured: false, // Mise en avant de l'album
+    order: 0, // Ordre d'affichage
 });
 
 const editAlbumForm = useForm({
-    title: "",
-    description: "",
-    is_featured: false,
-    order: 0,
+    title: "", // Titre de l'album en édition
+    description: "", // Description de l'album en édition
+    is_featured: false, // Mise en avant de l'album en édition
+    order: 0, // Ordre d'affichage en édition
 });
 
 const portfolioForm = useForm({
-    title: "",
-    description: "",
-    image: null,
-    is_featured: false,
-    order: 0,
-    album_id: null,
+    title: "", // Titre de la photo
+    description: "", // Description de la photo
+    image: null, // Fichier image
+    is_featured: false, // Mise en avant de la photo
+    order: 0, // Ordre d'affichage
+    album_id: null, // ID de l'album parent
 });
 
 const editPortfolioForm = useForm({
-    title: "",
-    description: "",
-    image: null,
-    is_featured: false,
-    order: 0,
+    title: "", // Titre de la photo en édition
+    description: "", // Description de la photo en édition
+    image: null, // Nouvelle image (optionnelle)
+    is_featured: false, // Mise en avant de la photo en édition
+    order: 0, // Ordre d'affichage en édition
 });
 
+// 📊 État réactif des données
+const albums = ref([]); // Liste des albums
+const loading = ref(false); // État de chargement
+const errorMessage = ref(null); // Message d'erreur pour l'utilisateur
+
+/**
+ * Charge la liste des albums depuis l'API
+ */
+const loadAlbums = async () => {
+    loading.value = true;
+    errorMessage.value = null;
+    try {
+        const response = await axios.get("/api/albums");
+        albums.value = response.data;
+    } catch (error) {
+        // Afficher un message d'erreur à l'utilisateur
+        errorMessage.value =
+            "Une erreur est survenue lors du chargement des albums. Veuillez réessayer plus tard.";
+        throw error;
+    } finally {
+        loading.value = false;
+    }
+};
+
+/**
+ * 📁 Fonctions de gestion des albums
+ */
+
+/**
+ * ➕ Création d'un nouvel album
+ *
+ * @function createAlbum
+ * @description Envoie les données du formulaire pour créer un nouvel album
+ */
 const createAlbum = () => {
     albumForm.post("/admin/albums", {
         preserveScroll: true,
@@ -70,6 +125,13 @@ const createAlbum = () => {
     });
 };
 
+/**
+ * ✏️ Édition d'un album existant
+ *
+ * @function editAlbum
+ * @param {Object} album - L'album à éditer
+ * @description Prépare le formulaire d'édition avec les données de l'album
+ */
 const editAlbum = (album) => {
     albumToEdit.value = album;
     editAlbumForm.title = album.title;
@@ -79,6 +141,12 @@ const editAlbum = (album) => {
     showingEditAlbumModal.value = true;
 };
 
+/**
+ * 💾 Mise à jour d'un album
+ *
+ * @function updateAlbum
+ * @description Envoie les modifications de l'album au serveur
+ */
 const updateAlbum = () => {
     editAlbumForm.put(`/admin/portfolioadmin/album/${albumToEdit.value.id}`, {
         preserveScroll: true,
@@ -89,11 +157,24 @@ const updateAlbum = () => {
     });
 };
 
+/**
+ * 🗑️ Confirmation de suppression d'un album
+ *
+ * @function confirmDeleteAlbum
+ * @param {Object} album - L'album à supprimer
+ * @description Affiche la modale de confirmation de suppression
+ */
 const confirmDeleteAlbum = (album) => {
     albumToDelete.value = album;
     showingDeleteConfirmModal.value = true;
 };
 
+/**
+ * 🗑️ Suppression d'un album
+ *
+ * @function deleteAlbum
+ * @description Supprime l'album sélectionné après confirmation
+ */
 const deleteAlbum = () => {
     if (albumToDelete.value) {
         useForm({}).delete(
@@ -118,15 +199,22 @@ const deleteAlbum = () => {
     }
 };
 
+/**
+ * 📸 Fonctions de gestion des photos du portfolio
+ */
+
+/**
+ * ➕ Création d'une nouvelle photo
+ *
+ * @function createPortfolio
+ * @description Envoie les données du formulaire pour créer une nouvelle photo
+ */
 const createPortfolio = () => {
-    // Utilisons l'URL directe plutôt que la fonction route()
     portfolioForm.post(`/admin/portfolios`, {
         preserveScroll: true,
         onSuccess: () => {
             showingPortfolioModal.value = false;
             portfolioForm.reset();
-
-            // Rechargement de la page
             window.location.reload();
         },
         onError: (errors) => {
@@ -142,45 +230,64 @@ const createPortfolio = () => {
     });
 };
 
+/**
+ * 🎯 Sélection d'un album pour ajouter des photos
+ *
+ * @function selectAlbum
+ * @param {Object} album - L'album sélectionné
+ * @description Met à jour l'album sélectionné et le formulaire
+ */
 const selectAlbum = (album) => {
     selectedAlbum.value = album;
     portfolioForm.album_id = album.id;
 };
 
+/**
+ * 📤 Gestion de l'upload d'image
+ *
+ * @function handleImageUpload
+ * @param {Event} event - L'événement de sélection de fichier
+ * @description Met à jour le formulaire avec le fichier sélectionné
+ */
 const handleImageUpload = (event) => {
     portfolioForm.image = event.target.files[0];
 };
 
+/**
+ * ✏️ Édition d'une photo existante
+ *
+ * @function editPortfolio
+ * @param {Object} portfolio - La photo à éditer
+ * @description Prépare le formulaire d'édition avec les données de la photo
+ */
 const editPortfolio = (portfolio) => {
     portfolioToEdit.value = portfolio;
-
-    // Réinitialiser le formulaire avant de le remplir
     editPortfolioForm.reset();
-
-    // S'assurer que le titre est toujours défini et non vide
     editPortfolioForm.title = portfolio.title || "Sans titre";
     editPortfolioForm.description = portfolio.description || "";
     editPortfolioForm.is_featured = portfolio.is_featured || false;
     editPortfolioForm.order = portfolio.order || 0;
-
-    // Réinitialiser l'erreur de soumission
     submitError.value = "";
-
     showingEditPortfolioModal.value = true;
 };
 
+/**
+ * 💾 Soumission du formulaire d'édition
+ *
+ * @function submitEditForm
+ * @param {Event} event - L'événement de soumission
+ * @description Envoie les modifications de la photo au serveur
+ */
 const submitEditForm = async (event) => {
     event.preventDefault();
     submitError.value = "";
 
-    // Validation côté client
     if (!editPortfolioForm.title || editPortfolioForm.title.trim() === "") {
         submitError.value = "Le titre est obligatoire";
         return;
     }
 
     try {
-        // Création d'un FormData pour l'envoi de fichiers
         const formData = new FormData();
         formData.append("_method", "PUT");
         formData.append("title", editPortfolioForm.title);
@@ -193,7 +300,6 @@ const submitEditForm = async (event) => {
             formData.append("image", editPortfolioForm.image);
         }
 
-        // Configuration de la requête avec axios
         const response = await axios.post(
             `/admin/portfolios/${portfolioToEdit.value.id}`,
             formData,
@@ -207,59 +313,34 @@ const submitEditForm = async (event) => {
 
         showingEditPortfolioModal.value = false;
         portfolioToEdit.value = null;
-
-        // Recharger la page pour afficher les changements
         window.location.reload();
     } catch (error) {
         console.error(
             "Erreur lors de la mise à jour:",
             error.response?.data || error.message
         );
-
-        if (error.response && error.response.data) {
-            if (error.response.data.errors) {
-                const errors = error.response.data.errors;
-                if (errors.title) {
-                    submitError.value = `Erreur de titre: ${errors.title[0]}`;
-                } else if (errors.image) {
-                    submitError.value = `Erreur d'image: ${errors.image[0]}`;
-                } else {
-                    submitError.value =
-                        "Erreur de validation. Vérifiez les champs du formulaire.";
-                }
-            } else if (error.response.data.message) {
-                submitError.value = error.response.data.message;
-            } else {
-                submitError.value =
-                    "Une erreur est survenue lors de la mise à jour.";
-            }
-        } else {
-            submitError.value =
-                "Erreur de connexion. Veuillez vérifier votre connexion Internet.";
-        }
     }
 };
 
+// Confirmer la suppression d'une photo
 const confirmDeletePortfolio = (portfolio) => {
     portfolioToDelete.value = portfolio;
     showingDeletePortfolioConfirmModal.value = true;
 };
 
+// Supprimer une photo
 const deletePortfolio = () => {
     if (portfolioToDelete.value) {
-        // Utilisons l'URL directe plutôt que la fonction route()
         useForm({}).delete(`/admin/portfolios/${portfolioToDelete.value.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 showingDeletePortfolioConfirmModal.value = false;
                 portfolioToDelete.value = null;
-
-                // Rechargement de la page après suppression
+                // 🔄 Rechargement après suppression
                 window.location.reload();
             },
             onError: (errors) => {
                 console.error("Erreur lors de la suppression:", errors);
-                // Affichons plus d'informations sur l'erreur
                 if (errors.message) {
                     alert(`Erreur: ${errors.message}`);
                 } else {
@@ -272,6 +353,7 @@ const deletePortfolio = () => {
     }
 };
 
+// Gérer l'upload d'image pour édition
 const handleEditImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -281,11 +363,17 @@ const handleEditImageUpload = (event) => {
     }
 };
 
+/**
+ * 🔧 Fonctions utilitaires
+ */
+
+// Debug portfolio (pour développement)
 const debugPortfolio = (portfolio) => {
-    // Garder cette fonction sans logs pour référence future si nécessaire
+    // Fonction de debug sans logs pour usage futur
     const imagePath = getImageUrl(portfolio);
 };
 
+// Générer l'URL de l'image avec fallback
 const getImageUrl = (portfolio) => {
     if (portfolio.image_path) {
         return `/storage/${portfolio.image_path}`;
@@ -302,20 +390,27 @@ const getImageUrl = (portfolio) => {
     return "/images/no-image.jpg";
 };
 
+// Gérer les erreurs de chargement d'image
 const handleImageError = (event) => {
-    // Remplacer l'image par un placeholder en cas d'erreur
+    // 🖼️ Remplacer par placeholder en cas d'erreur
     event.target.src = "/images/no-image.jpg";
 };
 
+/**
+ * 🚀 Initialisation du composant
+ */
 onMounted(() => {
-    // Initialiser la page - Aucun log nécessaire ici
+    // Initialisation de la page d'administration
 });
 </script>
 
 <template>
+    <!-- 🏷️ Métadonnées pour l'administration du portfolio -->
     <Head title="Gestion du Portfolio" />
 
+    <!-- 🏗️ Layout principal avec dégradé pêche -->
     <AppLayout class="bg-gradient-to-br from-white to-pastel-peach">
+        <!-- 📊 En-tête de page -->
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Gestion du Portfolio
@@ -324,7 +419,7 @@ onMounted(() => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <!-- Section Albums -->
+                <!-- 📁 Section Albums -->
                 <div
                     class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6 mb-6"
                 >
@@ -335,6 +430,7 @@ onMounted(() => {
                         </PrimaryButton>
                     </div>
 
+                    <!-- 🎨 Grille des albums -->
                     <div
                         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                     >
@@ -346,7 +442,9 @@ onMounted(() => {
                                 'bg-blue-50': selectedAlbum?.id === album.id,
                             }"
                         >
+                            <!-- 🛠️ Boutons d'action pour chaque album -->
                             <div class="absolute top-2 right-2 flex space-x-2">
+                                <!-- ✏️ Bouton modifier -->
                                 <button
                                     @click.stop="editAlbum(album)"
                                     class="text-blue-600 hover:text-blue-800"
@@ -366,6 +464,7 @@ onMounted(() => {
                                         />
                                     </svg>
                                 </button>
+                                <!-- 🗑️ Bouton supprimer -->
                                 <button
                                     @click.stop="confirmDeleteAlbum(album)"
                                     class="text-red-600 hover:text-red-800"
@@ -386,6 +485,8 @@ onMounted(() => {
                                     </svg>
                                 </button>
                             </div>
+
+                            <!-- 📝 Contenu de l'album (clic pour sélectionner) -->
                             <div
                                 @click="selectAlbum(album)"
                                 class="cursor-pointer mt-4"
@@ -402,7 +503,7 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <!-- Section Photos -->
+                <!-- 📸 Section Photos (affichée si un album est sélectionné) -->
                 <div
                     v-if="selectedAlbum"
                     class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6"
@@ -416,6 +517,7 @@ onMounted(() => {
                         </PrimaryButton>
                     </div>
 
+                    <!-- 🖼️ Grille des photos -->
                     <div
                         class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"
                     >
@@ -424,7 +526,9 @@ onMounted(() => {
                             :key="portfolio.id"
                             class="border p-4 rounded-lg relative"
                         >
+                            <!-- 🛠️ Boutons d'action pour chaque photo -->
                             <div class="absolute top-2 right-2 flex space-x-2">
+                                <!-- ✏️ Bouton modifier photo -->
                                 <button
                                     @click="editPortfolio(portfolio)"
                                     class="text-blue-600 hover:text-blue-800"
@@ -444,6 +548,7 @@ onMounted(() => {
                                         />
                                     </svg>
                                 </button>
+                                <!-- 🗑️ Bouton supprimer photo -->
                                 <button
                                     @click="confirmDeletePortfolio(portfolio)"
                                     class="text-red-600 hover:text-red-800"
@@ -464,6 +569,8 @@ onMounted(() => {
                                     </svg>
                                 </button>
                             </div>
+
+                            <!-- 🖼️ Image et informations -->
                             <img
                                 :src="getImageUrl(portfolio)"
                                 class="w-full h-48 object-cover rounded"
@@ -482,7 +589,9 @@ onMounted(() => {
             </div>
         </div>
 
-        <!-- Modal Album -->
+        <!-- 📁 Modales pour la gestion des albums -->
+
+        <!-- ➕ Modal Créer Album -->
         <Modal :show="showingAlbumModal" @close="showingAlbumModal = false">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900">
@@ -528,7 +637,7 @@ onMounted(() => {
             </div>
         </Modal>
 
-        <!-- Modal Edit Album -->
+        <!-- ✏️ Modal Éditer Album -->
         <Modal
             :show="showingEditAlbumModal"
             @close="showingEditAlbumModal = false"
@@ -580,7 +689,7 @@ onMounted(() => {
             </div>
         </Modal>
 
-        <!-- Modal Delete Confirm -->
+        <!-- 🗑️ Modal Confirmer Suppression Album -->
         <Modal
             :show="showingDeleteConfirmModal"
             @close="showingDeleteConfirmModal = false"
@@ -604,7 +713,9 @@ onMounted(() => {
             </div>
         </Modal>
 
-        <!-- Modal Portfolio -->
+        <!-- 📸 Modales pour la gestion des photos -->
+
+        <!-- ➕ Modal Ajouter Photo -->
         <Modal
             :show="showingPortfolioModal"
             @close="showingPortfolioModal = false"
@@ -671,7 +782,7 @@ onMounted(() => {
             </div>
         </Modal>
 
-        <!-- Modal Edit Portfolio -->
+        <!-- ✏️ Modal Éditer Photo -->
         <Modal
             :show="showingEditPortfolioModal"
             @close="showingEditPortfolioModal = false"
@@ -681,7 +792,7 @@ onMounted(() => {
                     Modifier la photo
                 </h2>
 
-                <!-- Formulaire HTML natif pour contourner les problèmes avec Inertia -->
+                <!-- 📝 Formulaire HTML natif pour gérer l'upload de fichiers -->
                 <form @submit="submitEditForm" class="mt-6">
                     <div>
                         <InputLabel for="edit-portfolio-title" value="Titre" />
@@ -738,6 +849,7 @@ onMounted(() => {
                     </div>
 
                     <div class="mt-4">
+                        <!-- 🚨 Affichage des erreurs de soumission -->
                         <div class="text-red-600 mb-2" v-if="submitError">
                             {{ submitError }}
                         </div>
@@ -754,7 +866,7 @@ onMounted(() => {
             </div>
         </Modal>
 
-        <!-- Modal Delete Portfolio Confirm -->
+        <!-- 🗑️ Modal Confirmer Suppression Photo -->
         <Modal
             :show="showingDeletePortfolioConfirmModal"
             @close="showingDeletePortfolioConfirmModal = false"

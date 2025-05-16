@@ -4,13 +4,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Mailer
+    | 📧 Configuration du Mailer par Défaut
     |--------------------------------------------------------------------------
     |
-    | This option controls the default mailer that is used to send all email
-    | messages unless another mailer is explicitly specified when sending
-    | the message. All additional mailers can be configured within the
-    | "mailers" array. Examples of each type of mailer are provided.
+    | Cette option définit le mailer par défaut utilisé pour envoyer tous les emails
+    | sauf si un autre mailer est explicitement spécifié lors de l'envoi.
+    | Tous les mailers supplémentaires peuvent être configurés dans le tableau
+    | "mailers". Des exemples de chaque type de mailer sont fournis.
     |
     */
 
@@ -18,20 +18,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Mailer Configurations
+    | 📨 Configurations des Mailers
     |--------------------------------------------------------------------------
     |
-    | Here you may configure all of the mailers used by your application plus
-    | their respective settings. Several examples have been configured for
-    | you and you are free to add your own as your application requires.
+    | Ici, vous pouvez configurer tous les mailers utilisés par votre application
+    | ainsi que leurs paramètres respectifs. Plusieurs exemples sont configurés
+    | pour vous et vous êtes libre d'ajouter les vôtres selon vos besoins.
     |
-    | Laravel supports a variety of mail "transport" drivers that can be used
-    | when delivering an email. You may specify which one you're using for
-    | your mailers below. You may also add additional mailers if needed.
+    | Laravel prend en charge une variété de pilotes de "transport" mail qui peuvent
+    | être utilisés lors de l'envoi d'un email. Vous pouvez spécifier celui que vous
+    | utilisez pour vos mailers ci-dessous. Vous pouvez également ajouter des mailers
+    | supplémentaires si nécessaire.
     |
-    | Supported: "smtp", "sendmail", "mailgun", "ses", "ses-v2",
-    |            "postmark", "resend", "log", "array",
-    |            "failover", "roundrobin"
+    | Pilotes supportés : "smtp", "sendmail", "mailgun", "ses", "ses-v2",
+    |                    "postmark", "resend", "log", "array",
+    |                    "failover", "roundrobin"
     |
     */
 
@@ -99,12 +100,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Global "From" Address
+    | 📤 Adresse "From" Globale
     |--------------------------------------------------------------------------
     |
-    | You may wish for all emails sent by your application to be sent from
-    | the same address. Here you may specify a name and address that is
-    | used globally for all emails that are sent by your application.
+    | Vous pouvez souhaiter que tous les emails envoyés par votre application
+    | proviennent de la même adresse. Ici, vous pouvez spécifier un nom et
+    | une adresse qui seront utilisés globalement pour tous les emails
+    | envoyés par votre application.
     |
     */
 
@@ -115,12 +117,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Global "To" Address for Contact Form
+    | 📥 Adresse "To" Globale pour le Formulaire de Contact
     |--------------------------------------------------------------------------
     |
-    | This is the email address that will receive all contact form submissions.
-    | It is stored in the .env file to keep it secure and not expose it in
-    | the source code.
+    | Cette adresse email recevra toutes les soumissions du formulaire de contact.
+    | Elle est stockée dans le fichier .env pour la garder sécurisée et ne pas
+    | l'exposer dans le code source.
     |
     */
     'to_address' => env('MAIL_TO_ADDRESS', 'contact@example.com'),

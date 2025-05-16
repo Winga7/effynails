@@ -8,10 +8,23 @@ use Google_Service_Calendar;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * 📊 DashboardController
+ *
+ * Gère l'affichage et la logique du tableau de bord
+ * Intègre les données du calendrier Google et les statistiques
+ * Fournit les informations sur les rendez-vous à venir
+ */
 class DashboardController extends Controller
 {
     protected $calendarService;
 
+    /**
+     * 🔧 Constructeur
+     *
+     * Initialise la connexion avec l'API Google Calendar
+     * Configure les credentials et les scopes nécessaires
+     */
     public function __construct()
     {
         $client = new Google_Client();
@@ -20,22 +33,33 @@ class DashboardController extends Controller
         $this->calendarService = new Google_Service_Calendar($client);
     }
 
+    /**
+     * 📱 Page principale du tableau de bord
+     *
+     * Récupère et affiche :
+     * - Les rendez-vous du mois
+     * - Les statistiques (RDV aujourd'hui, semaine, revenus)
+     * - Les prochains rendez-vous
+     * - Les services populaires
+     *
+     * @return \Inertia\Response|\Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         Log::info('DashboardController index appelé');
-        // Afficher tous les événements du mois de mai 2025 pour le test
+        // 📅 Récupération des événements du mois de mai 2025 pour les tests
         $start = Carbon::create(2025, 5, 1, 0, 0, 0);
         $end = Carbon::create(2025, 5, 31, 23, 59, 59);
 
         $eventsMay = $this->getEvents($start, $end);
         Log::info('Events mai 2025', ['events' => $eventsMay]);
 
-        // Filtrer les événements du mois pour ne garder que ceux qui concernent Effynails
+        // 🔍 Filtrage des événements pour ne garder que ceux d'Effynails
         $filteredEvents = collect($eventsMay)->filter(function ($event) {
             return stripos($event->getSummary(), 'effynails') !== false;
         });
 
-        // Prochains rendez-vous (10 à venir, date >= maintenant, triés par date croissante)
+        // 📅 Prochains rendez-vous (10 à venir, triés par date)
         $now = Carbon::now();
         $prochainsRendezVous = $filteredEvents
             ->filter(function ($event) use ($now) {
@@ -47,6 +71,7 @@ class DashboardController extends Controller
             })
             ->take(10)
             ->map(function ($event) {
+                // 📝 Extraction des informations du rendez-vous
                 $summary = $event->getSummary();
                 $description = $event->getDescription() ?? '';
                 $typeRdv = $summary;
@@ -55,6 +80,8 @@ class DashboardController extends Controller
                 $telephoneClient = null;
                 $messageClient = null;
                 $annulationUrl = null;
+
+                // 🔍 Parsing des informations du rendez-vous
                 if (preg_match('/^(.*?) entre Effynails et (.*)$/i', $summary, $matches)) {
                     $typeRdv = trim($matches[1]);
                     $clientRdv = trim($matches[2]);
@@ -71,6 +98,7 @@ class DashboardController extends Controller
                 if (preg_match('/Besoin de replanifier ou d\'annuler \?\s*(https?:\/\/\S+)/i', $description, $matchesUrl)) {
                     $annulationUrl = trim($matchesUrl[1]);
                 }
+
                 return [
                     'id' => $event->getId(),
                     'type' => $typeRdv,
@@ -85,7 +113,7 @@ class DashboardController extends Controller
             })
             ->values();
 
-        // Les stats restent sur la période affichée (mai 2025)
+        // 📊 Calcul des statistiques pour la période affichée
         $today = Carbon::today();
         $eventsToday = $filteredEvents->filter(function ($event) use ($today) {
             $date = $event->getStart() && $event->getStart()->getDateTime() ? Carbon::parse($event->getStart()->getDateTime()) : null;
@@ -98,7 +126,7 @@ class DashboardController extends Controller
             return $date && $date->between($startOfWeek, $endOfWeek);
         });
 
-        // Prochain rendez-vous unique (pour le cadre principal)
+        // 📅 Prochain rendez-vous unique (pour le cadre principal)
         $nextRdv = $prochainsRendezVous->first();
         $prochainRendezVous = $nextRdv ? [
             'type' => $nextRdv['type'],
@@ -110,6 +138,7 @@ class DashboardController extends Controller
             'annulation_url' => $nextRdv['annulation_url'],
         ] : null;
 
+        // 📦 Préparation des données pour la vue
         $data = [
             'stats' => [
                 'rendezVousAujourdhui' => $eventsToday->count(),
@@ -121,15 +150,21 @@ class DashboardController extends Controller
             'servicesPopulaires' => [],
         ];
 
-        // Si c'est une requête API, retourne du JSON
+        // 🔄 Retourne JSON pour les requêtes API, sinon vue Inertia
         if (request()->wantsJson() || request()->is('api/*')) {
             return response()->json($data);
         }
 
-        // Sinon, vue Inertia classique
         return Inertia::render('Dashboard', $data);
     }
 
+    /**
+     * 📅 Récupère les événements du calendrier
+     *
+     * @param Carbon $start Date de début
+     * @param Carbon $end Date de fin
+     * @return array Liste des événements
+     */
     protected function getEvents($start, $end)
     {
         $events = $this->calendarService->events->listEvents(
@@ -144,9 +179,15 @@ class DashboardController extends Controller
         return $events->getItems();
     }
 
+    /**
+     * 📋 Récupère les derniers rendez-vous
+     *
+     * @param array|null $events Liste optionnelle d'événements
+     * @return \Illuminate\Support\Collection Collection des derniers rendez-vous
+     */
     protected function getDerniersRendezVous($events = null)
     {
-        // Si on passe une liste d'événements, on l'utilise, sinon on va chercher les 5 derniers
+        // 📥 Récupération des événements si non fournis
         if ($events === null) {
             $events = $this->calendarService->events->listEvents(
                 config('services.google.calendar_id'),
@@ -157,7 +198,8 @@ class DashboardController extends Controller
                 ]
             )->getItems();
         }
-        // On ne garde que les événements dont le résumé contient "effynails"
+
+        // 🔍 Filtrage et transformation des événements
         return collect($events)
             ->filter(function ($event) {
                 return stripos($event->getSummary(), 'effynails') !== false;
@@ -167,6 +209,7 @@ class DashboardController extends Controller
             })
             ->take(5)
             ->map(function ($event) {
+                // 📝 Extraction des informations du rendez-vous
                 $summary = $event->getSummary();
                 $description = $event->getDescription() ?? '';
                 $typeRdv = $summary;
@@ -174,6 +217,8 @@ class DashboardController extends Controller
                 $emailClient = null;
                 $telephoneClient = null;
                 $messageClient = null;
+
+                // 🔍 Parsing des informations
                 if (preg_match('/^(.*?) entre Effynails et (.*)$/i', $summary, $matches)) {
                     $typeRdv = trim($matches[1]);
                     $clientRdv = trim($matches[2]);
@@ -187,6 +232,7 @@ class DashboardController extends Controller
                 if (preg_match('/Notes supplémentaires:\s*(.*?)\n\n/s', $description, $matchesMsg)) {
                     $messageClient = trim($matchesMsg[1]);
                 }
+
                 return [
                     'id' => $event->getId(),
                     'type' => $typeRdv,
