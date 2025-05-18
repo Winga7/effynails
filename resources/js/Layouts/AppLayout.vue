@@ -236,8 +236,9 @@ const schemaMarkup = {
             <component
                 :is="'script'"
                 type="application/ld+json"
-                v-html="JSON.stringify(schemaMarkup)"
-            />
+            >
+                {{schemaMarkup}}
+            </component>
         </Head>
 
         <!-- 📢 Bannière -->
