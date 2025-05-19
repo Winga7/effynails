@@ -82,7 +82,6 @@ const editPortfolioForm = useForm({
 });
 
 // 📊 État réactif des données
-const albums = ref([]); // Liste des albums
 const loading = ref(false); // État de chargement
 const errorMessage = ref(null); // Message d'erreur pour l'utilisateur
 
@@ -148,7 +147,7 @@ const editAlbum = (album) => {
  * @description Envoie les modifications de l'album au serveur
  */
 const updateAlbum = () => {
-    editAlbumForm.put(`/admin/portfolioadmin/album/${albumToEdit.value.id}`, {
+    editAlbumForm.put(`/admin/albums/${albumToEdit.value.id}`, {
         preserveScroll: true,
         onSuccess: () => {
             showingEditAlbumModal.value = false;
@@ -177,25 +176,22 @@ const confirmDeleteAlbum = (album) => {
  */
 const deleteAlbum = () => {
     if (albumToDelete.value) {
-        useForm({}).delete(
-            `/admin/portfolioadmin/album/${albumToDelete.value.id}`,
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    showingDeleteConfirmModal.value = false;
-                    albumToDelete.value = null;
-                    if (selectedAlbum.value?.id === albumToDelete.value.id) {
-                        selectedAlbum.value = null;
-                    }
-                },
-                onError: (errors) => {
-                    console.error("Erreur lors de la suppression:", errors);
-                    alert(
-                        "Erreur lors de la suppression de l'album. Vérifiez la console pour plus d'informations."
-                    );
-                },
-            }
-        );
+        useForm({}).delete(`/admin/albums/${albumToDelete.value.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                showingDeleteConfirmModal.value = false;
+                albumToDelete.value = null;
+                if (selectedAlbum.value?.id === albumToDelete.value.id) {
+                    selectedAlbum.value = null;
+                }
+            },
+            onError: (errors) => {
+                console.error("Erreur lors de la suppression:", errors);
+                alert(
+                    "Erreur lors de la suppression de l'album. Vérifiez la console pour plus d'informations."
+                );
+            },
+        });
     }
 };
 
@@ -435,7 +431,7 @@ onMounted(() => {
                         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                     >
                         <div
-                            v-for="album in albums"
+                            v-for="album in props.albums"
                             :key="album.id"
                             class="border p-4 rounded-lg relative"
                             :class="{
