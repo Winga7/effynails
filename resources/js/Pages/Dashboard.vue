@@ -13,8 +13,8 @@
  */
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref, onMounted } from "vue";
-import { Head } from "@inertiajs/vue3";
+import { ref, onMounted, watch } from "vue";
+import { Head, router } from "@inertiajs/vue3";
 import axios from "axios";
 import {
     useMockData,
@@ -34,6 +34,12 @@ const selectedDernierRdv = ref(null); // RDV sélectionné pour la modale
 const prochainsRendezVous = ref([]); // Liste des prochains rendez-vous
 const dashboardData = ref({}); // Pour stocker les données du tableau de bord
 const errorMessage = ref(""); // Pour stocker les messages d'erreur
+const selectedPeriod = ref("3"); // Période sélectionnée en mois
+const periodOptions = [
+    { value: "3", label: "3 derniers mois" },
+    { value: "6", label: "6 derniers mois" },
+    { value: "12", label: "12 derniers mois" },
+];
 
 /**
  * 📥 Récupération des données du tableau de bord
@@ -59,6 +65,25 @@ const fetchDashboardData = async () => {
 };
 
 /**
+ * 📊 Mise à jour des services populaires
+ *
+ * @function updateServicesPopulaires
+ * @description Met à jour les services populaires en fonction de la période sélectionnée
+ */
+const updateServicesPopulaires = async () => {
+    try {
+        const response = await axios.get(
+            `/api/services-populaires?period=${selectedPeriod.value}`
+        );
+        servicesPopulaires.value = response.data;
+    } catch (error) {
+        errorMessage.value =
+            "Erreur lors de la récupération des services populaires";
+        console.error(error);
+    }
+};
+
+/**
  * 🚀 Initialisation du composant
  *
  * @function onMounted
@@ -70,9 +95,23 @@ onMounted(() => {
         derniersRendezVous.value = derniersRendezVousMock;
         servicesPopulaires.value = servicesPopulairesMock;
     } else {
+        selectedPeriod.value = "3";
         fetchDashboardData();
+        updateServicesPopulaires();
     }
 });
+
+// Ajouter un watcher sur selectedPeriod
+watch(selectedPeriod, () => {
+    updateServicesPopulaires();
+});
+
+// AJOUTE ceci pour forcer le rafraîchissement à chaque navigation Inertia
+if (typeof router !== "undefined") {
+    router.on("navigate", () => {
+        updateServicesPopulaires();
+    });
+}
 
 /**
  * 🎯 Gestion des modales
@@ -326,17 +365,6 @@ const closeDernierRdvModal = () => {
                                         <p class="font-medium text-gray-900">
                                             {{ rdv.date }}
                                         </p>
-                                        <span
-                                            :class="{
-                                                'px-2 py-1 text-xs rounded-full': true,
-                                                'bg-green-100 text-green-800':
-                                                    rdv.statut === 'confirmé',
-                                                'bg-yellow-100 text-yellow-800':
-                                                    rdv.statut === 'en attente',
-                                            }"
-                                        >
-                                            {{ rdv.statut }}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -346,23 +374,59 @@ const closeDernierRdvModal = () => {
                     <!-- Services populaires -->
                     <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow">
                         <div class="p-6">
-                            <h3
-                                class="text-lg font-semibold text-gray-900 mb-4"
-                            >
-                                Services populaires
-                            </h3>
-                            <div class="space-y-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">
+                                    Services populaires
+                                </h3>
+                                <select
+                                    v-model="selectedPeriod"
+                                    class="rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50"
+                                >
+                                    <option
+                                        v-for="option in periodOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                    >
+                                        {{ option.label }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="space-y-6">
                                 <div
                                     v-for="service in servicesPopulaires"
                                     :key="service.nom"
-                                    class="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                                    class="bg-gray-50 rounded-lg p-4"
                                 >
-                                    <p class="font-medium text-gray-900">
-                                        {{ service.nom }}
-                                    </p>
-                                    <p class="text-sm text-gray-500">
-                                        {{ service.nombre }} rendez-vous
-                                    </p>
+                                    <div
+                                        class="flex justify-between items-center mb-2"
+                                    >
+                                        <h4 class="font-medium text-gray-900">
+                                            {{ service.nom }}
+                                        </h4>
+                                        <span
+                                            class="text-sm font-semibold text-pink-600"
+                                        >
+                                            Total:
+                                            {{ service.total }} rendez-vous
+                                        </span>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div
+                                            v-for="(
+                                                count, month
+                                            ) in service.historique"
+                                            :key="month"
+                                            class="flex justify-between text-sm"
+                                        >
+                                            <span class="text-gray-600">{{
+                                                month
+                                            }}</span>
+                                            <span
+                                                class="text-gray-800 font-medium"
+                                                >{{ count }} rendez-vous</span
+                                            >
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

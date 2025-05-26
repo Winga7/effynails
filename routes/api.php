@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/services-populaires', [DashboardController::class, 'getServicesPopulaires']);
