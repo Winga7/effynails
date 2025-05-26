@@ -49,48 +49,52 @@ const breadcrumbItems = [
 
                     <!-- Introduction -->
                     <div class="p-6 lg:p-8">
-                        <div class="grid md:grid-cols-2 gap-8 items-center">
-                            <div>
+                        <h2
+                            class="text-gray-600 leading-relaxed prose max-w-none text-2xl font-semibold mb-8 text-center"
+                            v-html="
+                                presentation.content || 'Contenu à venir...'
+                            "
+                        ></h2>
+                        <div
+                            class="flex flex-col md:flex-row md:items-start gap-8"
+                        >
+                            <!-- À propos : sous les images sur mobile, à gauche sur desktop -->
+                            <div class="order-2 md:order-1 w-full">
                                 <div
-                                    class="text-gray-600 leading-relaxed prose max-w-none"
-                                    v-html="
-                                        presentation.content ||
-                                        'Contenu à venir...'
-                                    "
-                                ></div>
+                                    class="bg-white/90 rounded-xl shadow-lg p-6 md:p-8 mb-6 md:mb-0"
+                                >
+                                    <h3
+                                        class="text-2xl font-caveat text-gray-800 mb-4 text-center"
+                                    >
+                                        {{
+                                            presentation.about_title ||
+                                            "À propos"
+                                        }}
+                                    </h3>
+                                    <div
+                                        class="ql-editor text-gray-600 leading-relaxed"
+                                        v-html="
+                                            presentation.about_content ||
+                                            'Contenu à venir...'
+                                        "
+                                    ></div>
+                                </div>
                             </div>
+                            <!-- Images : en haut sur mobile, à droite sur desktop -->
                             <div
-                                class="flex flex-col items-center md:flex-row md:justify-end gap-4"
+                                class="flex flex-row justify-center gap-4 mb-4 md:mb-0 order-1 md:order-2"
                             >
                                 <img
                                     src="/images/Sam-Jayne.jpg"
                                     alt="Photo du salon"
-                                    class="max-h-[400px] w-auto object-contain rounded-lg border-4 border-pastel-purple/30 shadow-lg"
+                                    class="w-32 h-32 object-cover rounded-lg border-4 border-pastel-purple/30 shadow-lg md:w-auto md:h-[350px] md:object-cover md:max-w-xs"
                                 />
                                 <img
                                     src="/images/Fifi.jpg"
                                     alt="Photo de Steffi Ledoux"
-                                    class="max-h-[400px] w-auto object-contain rounded-lg border-4 border-pastel-purple/30 shadow-lg"
+                                    class="w-32 h-32 object-cover rounded-lg border-4 border-pastel-purple/30 shadow-lg md:w-auto md:h-[350px] md:object-cover md:max-w-xs"
                                 />
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- À propos -->
-                    <div
-                        class="border-t border-gray-200 p-6 lg:p-8 bg-gradient-to-r from-white to-pastel-purple/10"
-                    >
-                        <h3 class="text-2xl font-caveat text-gray-800 mb-4">
-                            {{ presentation.about_title || "À propos" }}
-                        </h3>
-                        <div class="prose max-w-none">
-                            <div
-                                class="text-gray-600 leading-relaxed prose max-w-none"
-                                v-html="
-                                    presentation.about_content ||
-                                    'Contenu à venir...'
-                                "
-                            ></div>
                         </div>
                     </div>
 
