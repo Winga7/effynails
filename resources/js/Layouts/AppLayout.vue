@@ -136,7 +136,7 @@ const schemaMarkup = {
     "@context": "https://schema.org",
     "@type": "BeautySalon",
     name: "EFFYNAILS",
-    image: "/images/hero-nails.jpg",
+    image: "/images/hero-nails.webp",
     description:
         "Salon de manucure à Wavre par Steffi Ledoux. Découvrez nos services de nail art et pose d'ongles en gel.",
     address: {
@@ -228,16 +228,13 @@ const schemaMarkup = {
                 property="og:description"
                 content="Salon de manucure à Wavre par Steffi Ledoux. Découvrez nos services de nail art et pose d'ongles en gel. Expert en beauté des ongles à Wavre."
             />
-            <meta property="og:image" content="/images/hero-nails.jpg" />
+            <meta property="og:image" content="/images/hero-nails.webp" />
             <meta property="og:locale" content="fr_BE" />
             <meta property="og:site_name" content="EFFYNAILS" />
 
             <!-- 🏷️ Schema.org markup -->
-            <component
-                :is="'script'"
-                type="application/ld+json"
-            >
-                {{schemaMarkup}}
+            <component :is="'script'" type="application/ld+json">
+                {{ schemaMarkup }}
             </component>
         </Head>
 
@@ -259,15 +256,17 @@ const schemaMarkup = {
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('home')">
                                     <img
-                                        src="/images/logo.png"
+                                        src="/images/logo.webp"
                                         alt="Effy Nails"
                                         class="h-8 w-auto"
                                     />
                                 </Link>
                             </div>
-                            <span class="ml-3 text-xl font-bold font-caveat"
-                                >EFFYNAILS</span
-                            >
+                            <Link :href="route('home')">
+                                <span class="ml-3 text-xl font-bold font-caveat"
+                                    >EFFYNAILS</span
+                                >
+                            </Link>
                         </div>
 
                         <!-- 🍔 Bouton hamburger mobile -->

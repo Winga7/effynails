@@ -1,7 +1,7 @@
 # EFFYNAILS - Site Web Professionnel de Prothèse Ongulaire
 
 <p align="center">
-  <img src="public/images/logo.png" alt="Logo EFFYNAILS" width="200">
+  <img src="public/images/logo.webp" alt="Logo de EFFYNAILS" width="200">
 </p>
 
 ## À propos

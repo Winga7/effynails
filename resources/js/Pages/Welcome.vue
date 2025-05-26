@@ -168,7 +168,7 @@ const nextAvis = () => {
                         "
                     >
                         <img
-                            src="/images/hero-nails.jpg"
+                            src="/images/hero-nails.webp"
                             alt="Manucure EFFYNAILS"
                             class="w-full h-full object-cover"
                         />

@@ -88,9 +88,9 @@ onMounted(async () => {
         </template>
 
         <div class="flex-grow py-12 flex flex-col justify-between">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 w-full">
+            <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 w-full">
                 <!-- 🍞 Fil d'Ariane -->
-                <div class="p-6 border-b">
+                <div class="p-6">
                     <Breadcrumbs :items="breadcrumbItems" />
                 </div>
 

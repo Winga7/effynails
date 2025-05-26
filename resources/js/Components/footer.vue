@@ -39,10 +39,12 @@
         </div>
 
         <!-- Ligne de séparation -->
-        <div class="border-t border-gray-800 my-6 mx-auto w-[15%]"></div>
+        <div
+            class="border-t border-gray-800 my-6 mx-auto w-[35%] md:w-[15%]"
+        ></div>
 
         <!-- Mentions légales -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8">
             <div class="flex justify-center space-x-4 text-sm">
                 <Link
                     :href="route('mentions-legales')"
@@ -68,7 +70,9 @@
         </div>
 
         <!-- Ligne de séparation -->
-        <div class="border-t border-gray-800 my-6 mx-auto w-[35%]"></div>
+        <div
+            class="border-t border-gray-800 my-6 mx-auto w-[75%] md:w-[35%]"
+        ></div>
 
         <!-- Made with ❤️ -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

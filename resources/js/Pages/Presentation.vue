@@ -85,12 +85,12 @@ const breadcrumbItems = [
                                 class="flex flex-row justify-center gap-4 mb-4 md:mb-0 order-1 md:order-2"
                             >
                                 <img
-                                    src="/images/Sam-Jayne.jpg"
+                                    src="/images/Sam-Jayne.webp"
                                     alt="Photo du salon"
                                     class="w-32 h-32 object-cover rounded-lg border-4 border-pastel-purple/30 shadow-lg md:w-auto md:h-[350px] md:object-cover md:max-w-xs"
                                 />
                                 <img
-                                    src="/images/Fifi.jpg"
+                                    src="/images/Fifi.webp"
                                     alt="Photo de Steffi Ledoux"
                                     class="w-32 h-32 object-cover rounded-lg border-4 border-pastel-purple/30 shadow-lg md:w-auto md:h-[350px] md:object-cover md:max-w-xs"
                                 />

@@ -5,7 +5,7 @@ import { Link } from "@inertiajs/vue3";
 <template>
     <Link :href="'/'">
         <img
-            src="/images/logo.png"
+            src="/images/logo.webp"
             alt="Logo"
             class="w-auto h-20 object-contain"
         />
