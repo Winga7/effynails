@@ -150,6 +150,14 @@ const nextAvis = () => {
                 name="keywords"
                 content="Manucure Wavre, Nail art Wavre, Pose d'ongles en gel Wavre, Steffi Ledoux, Salon manucure Wavre"
             />
+            <!-- Préchargement de l'image LCP responsive -->
+            <link
+                rel="preload"
+                as="image"
+                href="/images/hero-nails.webp"
+                imagesrcset="/images/hero-nails.webp 328w, /images/hero-nails.webp 550w"
+                imagesizes="(max-width: 640px) 328px, 550px"
+            />
         </Head>
 
         <!-- Section Héro -->
@@ -170,6 +178,13 @@ const nextAvis = () => {
                         <img
                             src="/images/hero-nails.webp"
                             alt="Manucure EFFYNAILS"
+                            width="550"
+                            height="341"
+                            srcset="
+                                /images/hero-nails.webp 328w,
+                                /images/hero-nails.webp 550w
+                            "
+                            sizes="(max-width: 640px) 328px, 550px"
                             class="w-full h-full object-cover"
                         />
                     </div>
