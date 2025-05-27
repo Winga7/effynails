@@ -113,25 +113,42 @@ const desktopVisibleAvis = computed(() => {
 
 // Fonction simplifiée pour naviguer vers les avis précédents
 const previousAvis = () => {
-    if (currentAvisIndex.value === 0) {
-        // Si on est au début, aller à la fin
-        currentAvisIndex.value = Math.max(
-            0,
-            avisMock.length - AVIS_PER_PAGE_DESKTOP
-        );
+    const currentPage = Math.floor(currentAvisIndex.value / AVIS_PER_PAGE_DESKTOP);
+    if (currentPage === 0) {
+        // Si on est à la première page, aller à la dernière page
+        const lastPage = desktopTotalPages.value - 1;
+        currentAvisIndex.value = lastPage * AVIS_PER_PAGE_DESKTOP;
     } else {
-        // Sinon reculer d'un élément
-        currentAvisIndex.value = Math.max(0, currentAvisIndex.value - 1);
+        // Sinon aller à la page précédente
+        currentAvisIndex.value = (currentPage - 1) * AVIS_PER_PAGE_DESKTOP;
     }
 };
 
 // Fonction simplifiée pour naviguer vers les avis suivants
 const nextAvis = () => {
-    if (currentAvisIndex.value + AVIS_PER_PAGE_DESKTOP >= avisMock.length) {
-        // Si on est à la fin, revenir au début
+    const currentPage = Math.floor(currentAvisIndex.value / AVIS_PER_PAGE_DESKTOP);
+    if (currentPage >= desktopTotalPages.value - 1) {
+        // Si on est à la dernière page, revenir à la première
         currentAvisIndex.value = 0;
     } else {
-        // Sinon avancer d'un élément
+        // Sinon aller à la page suivante
+        currentAvisIndex.value = (currentPage + 1) * AVIS_PER_PAGE_DESKTOP;
+    }
+};
+
+// Fonctions spécifiques pour mobile (navigation avis par avis)
+const previousAvisMobile = () => {
+    if (currentAvisIndex.value === 0) {
+        currentAvisIndex.value = avisMock.length - 1;
+    } else {
+        currentAvisIndex.value--;
+    }
+};
+
+const nextAvisMobile = () => {
+    if (currentAvisIndex.value >= avisMock.length - 1) {
+        currentAvisIndex.value = 0;
+    } else {
         currentAvisIndex.value++;
     }
 };
@@ -149,14 +166,6 @@ const nextAvis = () => {
             <meta
                 name="keywords"
                 content="Manucure Wavre, Nail art Wavre, Pose d'ongles en gel Wavre, Steffi Ledoux, Salon manucure Wavre"
-            />
-            <!-- Préchargement de l'image LCP responsive -->
-            <link
-                rel="preload"
-                as="image"
-                href="/images/hero-nails.webp"
-                imagesrcset="/images/hero-nails.webp 328w, /images/hero-nails.webp 550w"
-                imagesizes="(max-width: 640px) 328px, 550px"
             />
         </Head>
 
@@ -178,13 +187,6 @@ const nextAvis = () => {
                         <img
                             src="/images/hero-nails.webp"
                             alt="Manucure EFFYNAILS"
-                            width="550"
-                            height="341"
-                            srcset="
-                                /images/hero-nails.webp 328w,
-                                /images/hero-nails.webp 550w
-                            "
-                            sizes="(max-width: 640px) 328px, 550px"
                             class="w-full h-full object-cover"
                         />
                     </div>
@@ -582,11 +584,33 @@ const nextAvis = () => {
 
                 <!-- Carrousel d'avis clients -->
                 <div class="relative">
-                    <!-- Flèche gauche -->
+                    <!-- Flèches pour Desktop -->
                     <button
                         @click="previousAvis"
-                        class="absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        class="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
                         aria-label="Témoignages précédents"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 text-pink-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 19l-7-7 7-7"
+                            />
+                        </svg>
+                    </button>
+
+                    <!-- Flèches pour Mobile -->
+                    <button
+                        @click="previousAvisMobile"
+                        class="md:hidden absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        aria-label="Témoignage précédent"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -809,8 +833,30 @@ const nextAvis = () => {
                     <!-- Flèche droite -->
                     <button
                         @click="nextAvis"
-                        class="absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        class="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
                         aria-label="Témoignages suivants"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 text-pink-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
+                    </button>
+
+                    <!-- Flèche droite Mobile -->
+                    <button
+                        @click="nextAvisMobile"
+                        class="md:hidden absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors duration-300"
+                        aria-label="Témoignage suivant"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
