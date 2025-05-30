@@ -50,8 +50,10 @@ const headerBackgroundClass = computed(() => {
             return "bg-gradient-to-r from-white to-pastel-pink";
         case "reservation":
             return "bg-gradient-to-r from-white to-pastel-purple";
+        case "admin.tarifsadmin":
+            return "bg-white";
         default:
-            return "bg-white bg-opacity-50"; // Fallback pour les autres pages
+            return "bg-white"; // Fallback pour les autres pages, fond opaque
     }
 });
 
@@ -246,7 +248,7 @@ const schemaMarkup = {
             <nav
                 :class="[
                     headerBackgroundClass,
-                    'transition-colors duration-300',
+                    'transition-colors duration-300 fixed top-0 left-0 right-0 z-50',
                 ]"
             >
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -458,7 +460,7 @@ const schemaMarkup = {
             <!-- ⚙️ Navigation Administrative Desktop -->
             <nav
                 v-if="$page.props.auth.user"
-                class="hidden min-[770px]:block border-b border-gray-100 bg-gradient-to-r from-pink-100 to-purple-100"
+                class="hidden min-[770px]:block border-b border-gray-100 bg-gradient-to-r from-pink-100 to-purple-100 fixed top-16 left-0 right-0 z-40"
             >
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-12">
@@ -541,7 +543,13 @@ const schemaMarkup = {
             </nav>
 
             <!-- 📄 Contenu des pages -->
-            <main class="bg-transparent flex-grow flex flex-col">
+            <main
+                class="bg-transparent flex-grow flex flex-col"
+                :class="{
+                    'pt-28': $page.props.auth.user,
+                    'pt-16': !$page.props.auth.user,
+                }"
+            >
                 <!-- 📊 En-tête conditionnel des pages -->
                 <div v-if="$slots.header" class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

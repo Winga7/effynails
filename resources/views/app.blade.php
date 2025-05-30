@@ -39,6 +39,95 @@
             });
         </script>
 
+        <!-- Crédits Développeur -->
+        <script>
+            // 👨‍💻 Affichage des crédits développeurs
+            const creditStyle = 'font-size: 12px; font-weight: bold; color: #38ba9e; background: #333; padding: 4px 8px; border-radius: 4px;';
+            console.log(
+                '%c Application développée par Andy Petitjean - TFE Ifosup 2025',
+                creditStyle
+            );
+            console.log(
+                "%c Pour plus d'informations, tapez showCredits() dans cette console",
+                creditStyle
+            );
+
+            // 📋 Fonction détaillée des crédits accessibles via la console
+            window.showCredits = () => {
+                console.log(
+                    '%c EffyNails',
+                    'font-size: 16px; font-weight: bold; color: #38ba9e;'
+                );
+                console.log(
+                    '%c Développeur: Andy Petitjean',
+                    'font-size: 14px; color: #38ba9e;'
+                );
+                console.log('Email: andywinga@hotmail.be');
+                console.log('LinkedIn: https://www.linkedin.com/in/andy-petitjean-688b7211b/');
+                console.log('Site Web: https://winga.be');
+                console.log('GitHub: https://github.com/Winga7');
+                console.log(
+                    "%c Développé dans le cadre du Travail de Fin d'Études à l'Ifosup",
+                    'font-style: italic;'
+                );
+                console.log('Version: 1.0.0 - 2025');
+
+                return "Merci d'avoir consulté les crédits!";
+            };
+
+            // 🎮 Easter egg: Code Konami pour afficher les crédits
+            const secretCode = [
+                'ArrowUp',
+                'ArrowUp',
+                'ArrowDown',
+                'ArrowDown',
+                'ArrowLeft',
+                'ArrowRight',
+                'ArrowLeft',
+                'ArrowRight',
+                'b',
+                'a'
+            ];
+            let position = 0;
+
+            document.addEventListener('keydown', e => {
+                if (e.key === secretCode[position]) {
+                    position++;
+
+                    if (position === secretCode.length) {
+                        position = 0;
+                        window.showCredits();
+
+                        // 🍞 Affichage d'un toast de confirmation temporaire
+                        const toast = document.createElement('div');
+                        toast.style = `
+                            position: fixed;
+                            bottom: 20px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            background: rgba(56, 186, 158, 0.9);
+                            color: white;
+                            padding: 10px 20px;
+                            border-radius: 4px;
+                            z-index: 9999;
+                            font-size: 14px;
+                            transition: opacity 0.5s ease;
+                        `;
+                        toast.innerText = '💻 Crédits développeurs affichés dans la console';
+                        document.body.appendChild(toast);
+
+                        // Disparition progressive du toast après 3 secondes
+                        setTimeout(() => {
+                            toast.style.opacity = '0';
+                            setTimeout(() => document.body.removeChild(toast), 500);
+                        }, 3000);
+                    }
+                } else {
+                    position = 0;
+                }
+            });
+        </script>
+
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
